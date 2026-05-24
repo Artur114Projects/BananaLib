@@ -1,0 +1,11 @@
+plugins {
+    id 'maven-publish'
+    id 'java'
+}
+
+group = 'com.artur114.bananalib'
+version = project.mathVersion
+archivesBaseName = "BananaMath"
+
+apply from: rootProject.file('base.gradle')
+apply from: rootProject.file('publish.gradle')

@@ -1,0 +1,38 @@
+plugins {
+    id 'maven-publish'
+    id 'java'
+}
+
+group = 'com.artur114.bananalib'
+version = project.allVersion
+archivesBaseName = 'BananaLibAll'
+
+configurations {
+    include; implementation.extendsFrom(include)
+}
+
+dependencies {
+    include(project(":modules:math")) {
+        transitive = false
+    }
+    include(project(":modules:mc")) {
+        transitive = false
+    }
+}
+
+jar {
+    from {
+        configurations.include.collect {
+            it.isDirectory() ? it : zipTree(it)
+        }
+    }
+    manifest {
+        attributes([
+                "Implementation-Version"  : "${version}",
+                "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ"),
+                "Implementation-Vendor"   : author,
+                "Math-Module-Version": mathVersion,
+                "Mc-Module-Version": mcVersion
+        ])
+    }
+}

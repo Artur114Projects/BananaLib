@@ -1,0 +1,4 @@
+rootProject.name = 'bananalib'
+
+include 'modules:math'
+include 'modules:mc'
