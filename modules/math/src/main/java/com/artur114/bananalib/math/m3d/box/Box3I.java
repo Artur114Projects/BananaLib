@@ -8,12 +8,22 @@ import com.artur114.bananalib.math.m2d.vec.IVec2I;
 import com.artur114.bananalib.math.m3d.vec.IVec3D;
 import com.artur114.bananalib.math.m3d.vec.IVec3I;
 
-public class Box3D implements IBox3D {
-    public static final Box3D EMPTY = new Box3D(0, 0, 0, 0, 0, 0);
-    private final double minX, minY, minZ;
-    private final double maxX, maxY, maxZ;
+public class Box3I implements IBox3I {
+    public static final Box3I EMPTY = new Box3I(0, 0, 0, 0, 0, 0);
+    private final int minX, minY, minZ;
+    private final int maxX, maxY, maxZ;
 
-    public Box3D(double minX, double minY, double minZ, double maxX, double maxY, double maxZ) {
+    public Box3I(double minX, double minY, double minZ, double maxX, double maxY, double maxZ) {
+        this.minX = BananaMath.floor(Math.min(minX, maxX));
+        this.minY = BananaMath.floor(Math.min(minY, maxY));
+        this.minZ = BananaMath.floor(Math.min(minZ, maxZ));
+
+        this.maxX = BananaMath.floor(Math.max(minX, maxX));
+        this.maxY = BananaMath.floor(Math.max(minY, maxY));
+        this.maxZ = BananaMath.floor(Math.max(minZ, maxZ));
+    }
+
+    public Box3I(int minX, int minY, int minZ, int maxX, int maxY, int maxZ) {
         this.minX = Math.min(minX, maxX);
         this.minY = Math.min(minY, maxY);
         this.minZ = Math.min(minZ, maxZ);
@@ -23,80 +33,70 @@ public class Box3D implements IBox3D {
         this.maxZ = Math.max(minZ, maxZ);
     }
 
-    public Box3D(int minX, int minY, int minZ, int maxX, int maxY, int maxZ) {
-        this.minX = Math.min(minX, maxX);
-        this.minY = Math.min(minY, maxY);
-        this.minZ = Math.min(minZ, maxZ);
-
-        this.maxX = Math.max(minX, maxX);
-        this.maxY = Math.max(minY, maxY);
-        this.maxZ = Math.max(minZ, maxZ);
-    }
-
-    public Box3D(IBox3I box) {
+    public Box3I(IBox3I box) {
         this(box.minX(), box.minY(), box.minZ(), box.maxX(), box.maxY(), box.maxZ());
     }
 
-    public Box3D(IBox3D box) {
+    public Box3I(IBox3D box) {
         this(box.minX(), box.minY(), box.minZ(), box.maxX(), box.maxY(), box.maxZ());
     }
 
-    public Box3D(IBox2I box, int minZ, int maxZ) {
+    public Box3I(IBox2I box, int minZ, int maxZ) {
         this(box.minX(), box.minY(), minZ, box.maxX(), box.maxY(), maxZ);
     }
 
-    public Box3D(IBox2I box, double minZ, double maxZ) {
+    public Box3I(IBox2I box, double minZ, double maxZ) {
         this(box.minX(), box.minY(), minZ, box.maxX(), box.maxY(), maxZ);
     }
 
-    public Box3D(IBox2D box, int minZ, int maxZ) {
+    public Box3I(IBox2D box, int minZ, int maxZ) {
         this(box.minX(), box.minY(), minZ, box.maxX(), box.maxY(), maxZ);
     }
 
-    public Box3D(IBox2D box, double minZ, double maxZ) {
+    public Box3I(IBox2D box, double minZ, double maxZ) {
         this(box.minX(), box.minY(), minZ, box.maxX(), box.maxY(), maxZ);
     }
 
-    public Box3D(IBox2I box) {
+    public Box3I(IBox2I box) {
         this(box.minX(), box.minY(), 0, box.maxX(), box.maxY(), 0);
     }
 
-    public Box3D(IBox2D box) {
+    public Box3I(IBox2D box) {
         this(box.minX(), box.minY(), 0, box.maxX(), box.maxY(), 0.0D);
     }
 
     @Override
-    public double minX() {
+    public int minX() {
         return this.minX;
     }
 
     @Override
-    public double minY() {
+    public int minY() {
         return this.minY;
     }
 
     @Override
-    public double minZ() {
+    public int minZ() {
         return this.minZ;
     }
 
     @Override
-    public double maxX() {
+    public int maxX() {
         return this.maxX;
     }
 
     @Override
-    public double maxY() {
+    public int maxY() {
         return this.maxY;
     }
 
     @Override
-    public double maxZ() {
+    public int maxZ() {
         return this.maxZ;
     }
 
     @Override
-    public double size() {
+    public int size() {
         return (this.maxX - this.minX) * (this.maxY - this.minY) * (this.maxZ - this.minZ);
     }
 
@@ -251,358 +251,342 @@ public class Box3D implements IBox3D {
     }
 
     @Override
-    public IBox3D grow(double amount) {
-        return new Box3D(
+    public IBox3I grow(double amount) {
+        return new Box3I(
+            BananaMath.floor(this.minX - amount), BananaMath.floor(this.minY - amount), BananaMath.floor(this.minZ - amount),
+            BananaMath.ceil(this.maxX + amount), BananaMath.ceil(this.maxY + amount), BananaMath.ceil(this.maxZ + amount)
+        );
+    }
+
+    @Override
+    public IBox3I grow(double x, double y, double z) {
+        return new Box3I(
+            BananaMath.floor(this.minX - x), BananaMath.floor(this.minY - y), BananaMath.floor(this.minZ - z),
+            BananaMath.ceil(this.maxX + x), BananaMath.ceil(this.maxY + y), BananaMath.ceil(this.maxZ + z)
+        );
+    }
+
+    @Override
+    public IBox3I grow(int amount) {
+        return new Box3I(
             this.minX - amount, this.minY - amount, this.minZ - amount,
             this.maxX + amount, this.maxY + amount, this.maxZ + amount
         );
     }
 
     @Override
-    public IBox3D grow(double x, double y, double z) {
-        return new Box3D(
+    public IBox3I grow(int x, int y, int z) {
+        return new Box3I(
             this.minX - x, this.minY - y, this.minZ - z,
             this.maxX + x, this.maxY + y, this.maxZ + z
         );
     }
 
     @Override
-    public IBox3D grow(int amount) {
-        return new Box3D(
-            this.minX - amount, this.minY - amount, this.minZ - amount,
-            this.maxX + amount, this.maxY + amount, this.maxZ + amount
-        );
-    }
-
-    @Override
-    public IBox3D grow(int x, int y, int z) {
-        return new Box3D(
-            this.minX - x, this.minY - y, this.minZ - z,
-            this.maxX + x, this.maxY + y, this.maxZ + z
-        );
-    }
-
-    @Override
-    public IBox3D grow(IVec3I vec) {
+    public IBox3I grow(IVec3I vec) {
         return this.grow(vec.x(), vec.y(), vec.z());
     }
 
     @Override
-    public IBox3D grow(IVec3D vec) {
+    public IBox3I grow(IVec3D vec) {
         return this.grow(vec.x(), vec.y(), vec.z());
     }
 
     @Override
-    public IBox3D grow(IVec2I vec, int z) {
+    public IBox3I grow(IVec2I vec, int z) {
         return this.grow(vec.x(), vec.y(), z);
     }
 
     @Override
-    public IBox3D grow(IVec2I vec, double z) {
+    public IBox3I grow(IVec2I vec, double z) {
         return this.grow(vec.x(), vec.y(), z);
     }
 
     @Override
-    public IBox3D grow(IVec2D vec, int z) {
+    public IBox3I grow(IVec2D vec, int z) {
         return this.grow(vec.x(), vec.y(), z);
     }
 
     @Override
-    public IBox3D grow(IVec2D vec, double z) {
+    public IBox3I grow(IVec2D vec, double z) {
         return this.grow(vec.x(), vec.y(), z);
     }
 
     @Override
-    public IBox3D grow(IVec2I vec) {
+    public IBox3I grow(IVec2I vec) {
         return this.grow(vec.x(), vec.y(), 0);
     }
 
     @Override
-    public IBox3D grow(IVec2D vec) {
+    public IBox3I grow(IVec2D vec) {
         return this.grow(vec.x(), vec.y(), 0);
     }
 
     @Override
-    public IBox3D offset(int x, int y, int z) {
-        return new Box3D(
+    public IBox3I offset(int x, int y, int z) {
+        return new Box3I(
             this.minX + x, this.minY + y, this.minZ + z,
             this.maxX + x, this.maxY + y, this.maxZ + z
         );
     }
 
     @Override
-    public IBox3D offset(double x, double y, double z) {
-        return new Box3D(
-            this.minX + x, this.minY + y, this.minZ + z,
-            this.maxX + x, this.maxY + y, this.maxZ + z
+    public IBox3I offset(double x, double y, double z) {
+        return new Box3I(
+                BananaMath.floor(this.minX + x), BananaMath.floor(this.minY + y), BananaMath.floor(this.minZ + z),
+                BananaMath.ceil(this.maxX + x), BananaMath.ceil(this.maxY + y), BananaMath.ceil(this.maxZ + z)
         );
     }
 
     @Override
-    public IBox3D offset(IVec3I vec) {
+    public IBox3I offset(IVec3I vec) {
         return this.offset(vec.x(), vec.y(), vec.z());
     }
 
     @Override
-    public IBox3D offset(IVec3D vec) {
+    public IBox3I offset(IVec3D vec) {
         return this.offset(vec.x(), vec.y(), vec.z());
     }
 
     @Override
-    public IBox3D offset(IVec2I vec, int z) {
+    public IBox3I offset(IVec2I vec, int z) {
         return this.offset(vec.x(), vec.y(), z);
     }
 
     @Override
-    public IBox3D offset(IVec2I vec, double z) {
+    public IBox3I offset(IVec2I vec, double z) {
         return this.offset(vec.x(), vec.y(), z);
     }
 
     @Override
-    public IBox3D offset(IVec2D vec, int z) {
+    public IBox3I offset(IVec2D vec, int z) {
         return this.offset(vec.x(), vec.y(), z);
     }
 
     @Override
-    public IBox3D offset(IVec2D vec, double z) {
+    public IBox3I offset(IVec2D vec, double z) {
         return this.offset(vec.x(), vec.y(), z);
     }
 
     @Override
-    public IBox3D offset(IVec2I vec) {
+    public IBox3I offset(IVec2I vec) {
         return this.offset(vec.x(), vec.y(), 0);
     }
 
     @Override
-    public IBox3D offset(IVec2D vec) {
+    public IBox3I offset(IVec2D vec) {
         return this.offset(vec.x(), vec.y(), 0);
     }
 
     @Override
-    public IBox3D include(int x, int y, int z) {
+    public IBox3I include(int x, int y, int z) {
         if (this.contains(x, y, z)) return this;
-        return new Box3D(
+        return new Box3I(
             Math.min(this.minX, x), Math.min(this.minY, y), Math.min(this.minZ, z),
             Math.max(this.maxX, x), Math.max(this.maxY, y), Math.max(this.maxZ, z)
         );
     }
 
     @Override
-    public IBox3D include(double x, double y, double z) {
+    public IBox3I include(double x, double y, double z) {
         if (this.contains(x, y, z)) return this;
-        return new Box3D(
-            Math.min(this.minX, x), Math.min(this.minY, y), Math.min(this.minZ, z),
-            Math.max(this.maxX, x), Math.max(this.maxY, y), Math.max(this.maxZ, z)
+        return new Box3I(
+            BananaMath.floor(Math.min(this.minX, x)), BananaMath.floor(Math.min(this.minY, y)), BananaMath.floor(Math.min(this.minZ, z)),
+            BananaMath.ceil(Math.max(this.maxX, x)), BananaMath.ceil(Math.max(this.maxY, y)), BananaMath.ceil(Math.max(this.maxZ, z))
         );
     }
 
     @Override
-    public IBox3D include(IVec3I vec) {
+    public IBox3I include(IVec3I vec) {
         return this.include(vec.x(), vec.y(), vec.z());
     }
 
     @Override
-    public IBox3D include(IVec3D vec) {
+    public IBox3I include(IVec3D vec) {
         return this.include(vec.x(), vec.y(), vec.z());
     }
 
     @Override
-    public IBox3D include(IVec2I vec, int z) {
+    public IBox3I include(IVec2I vec, int z) {
         return this.include(vec.x(), vec.y(), z);
     }
 
     @Override
-    public IBox3D include(IVec2I vec, double z) {
+    public IBox3I include(IVec2I vec, double z) {
         return this.include(vec.x(), vec.y(), z);
     }
 
     @Override
-    public IBox3D include(IVec2D vec, int z) {
+    public IBox3I include(IVec2D vec, int z) {
         return this.include(vec.x(), vec.y(), z);
     }
 
     @Override
-    public IBox3D include(IVec2D vec, double z) {
+    public IBox3I include(IVec2D vec, double z) {
         return this.include(vec.x(), vec.y(), z);
     }
 
     @Override
-    public IBox3D include(IVec2I vec) {
+    public IBox3I include(IVec2I vec) {
         return this.include(vec.x(), vec.y(), 0);
     }
 
     @Override
-    public IBox3D include(IVec2D vec) {
+    public IBox3I include(IVec2D vec) {
         return this.include(vec.x(), vec.y(), 0);
     }
 
     @Override
-    public IBox3D union(int minX, int minY, int minZ, int maxX, int maxY, int maxZ) {
-        return new Box3D(
+    public IBox3I union(int minX, int minY, int minZ, int maxX, int maxY, int maxZ) {
+        return new Box3I(
             Math.min(this.minX, minX), Math.min(this.minY, minY), Math.min(this.minZ, minZ),
             Math.max(this.maxX, maxX), Math.max(this.maxY, maxY), Math.max(this.maxZ, maxZ)
         );
     }
 
     @Override
-    public IBox3D union(double minX, double minY, double minZ, double maxX, double maxY, double maxZ) {
-        return new Box3D(
-            Math.min(this.minX, minX), Math.min(this.minY, minY), Math.min(this.minZ, minZ),
-            Math.max(this.maxX, maxX), Math.max(this.maxY, maxY), Math.max(this.maxZ, maxZ)
+    public IBox3I union(double minX, double minY, double minZ, double maxX, double maxY, double maxZ) {
+        return new Box3I(
+            BananaMath.floor(Math.min(this.minX, minX)), BananaMath.floor(Math.min(this.minY, minY)), BananaMath.floor(Math.min(this.minZ, minZ)),
+            BananaMath.ceil(Math.max(this.maxX, maxX)), BananaMath.ceil(Math.max(this.maxY, maxY)), BananaMath.ceil(Math.max(this.maxZ, maxZ))
         );
     }
 
     @Override
-    public IBox3D union(IVec3D boxFrom, IVec3D boxTo) {
+    public IBox3I union(IVec3D boxFrom, IVec3D boxTo) {
         return this.union(boxFrom.x(), boxFrom.y(), boxFrom.z(), boxTo.x(), boxTo.y(), boxTo.z());
     }
 
     @Override
-    public IBox3D union(IVec3I boxFrom, IVec3I boxTo) {
+    public IBox3I union(IVec3I boxFrom, IVec3I boxTo) {
         return this.union(boxFrom.x(), boxFrom.y(), boxFrom.z(), boxTo.x(), boxTo.y(), boxTo.z());
     }
 
     @Override
-    public IBox3D union(IBox3D box) {
+    public IBox3I union(IBox3D box) {
         return this.union(box.minX(), box.minY(), box.minZ(), box.maxX(), box.maxY(), box.maxZ());
     }
 
     @Override
-    public IBox3D union(IBox3I box) {
+    public IBox3I union(IBox3I box) {
         return this.union(box.minX(), box.minY(), box.minZ(), box.maxX(), box.maxY(), box.maxZ());
     }
 
     @Override
-    public IBox3D union(IBox2I box, int minZ, int maxZ) {
+    public IBox3I union(IBox2I box, int minZ, int maxZ) {
         return this.union(box.minX(), box.minY(), minZ, box.maxX(), box.maxY(), maxZ);
     }
 
     @Override
-    public IBox3D union(IBox2I box, double minZ, double maxZ) {
+    public IBox3I union(IBox2I box, double minZ, double maxZ) {
         return this.union(box.minX(), box.minY(), minZ, box.maxX(), box.maxY(), maxZ);
     }
 
     @Override
-    public IBox3D union(IBox2D box, int minZ, int maxZ) {
+    public IBox3I union(IBox2D box, int minZ, int maxZ) {
         return this.union(box.minX(), box.minY(), minZ, box.maxX(), box.maxY(), maxZ);
     }
 
     @Override
-    public IBox3D union(IBox2D box, double minZ, double maxZ) {
+    public IBox3I union(IBox2D box, double minZ, double maxZ) {
         return this.union(box.minX(), box.minY(), minZ, box.maxX(), box.maxY(), maxZ);
     }
 
     @Override
-    public IBox3D union(IBox2I box) {
+    public IBox3I union(IBox2I box) {
         return this.union(box.minX(), box.minY(), 0, box.maxX(), box.maxY(), 0);
     }
 
     @Override
-    public IBox3D union(IBox2D box) {
+    public IBox3I union(IBox2D box) {
         return this.union(box.minX(), box.minY(), 0, box.maxX(), box.maxY(), 0);
     }
 
     @Override
-    public IBox3D intersection(int minX, int minY, int minZ, int maxX, int maxY, int maxZ) {
+    public IBox3I intersection(int minX, int minY, int minZ, int maxX, int maxY, int maxZ) {
         if (!this.intersects(minX, minY, minZ, maxX, maxY, maxZ)) return EMPTY;
-        return new Box3D(
+        return new Box3I(
             Math.max(this.minX, minX), Math.max(this.minY, minY), Math.max(this.minZ, minZ),
             Math.min(this.maxX, maxX), Math.min(this.maxY, maxY), Math.min(this.maxZ, maxZ)
         );
     }
 
     @Override
-    public IBox3D intersection(double minX, double minY, double minZ, double maxX, double maxY, double maxZ) {
+    public IBox3I intersection(double minX, double minY, double minZ, double maxX, double maxY, double maxZ) {
         if (!this.intersects(minX, minY, minZ, maxX, maxY, maxZ)) return EMPTY;
-        return new Box3D(
-            Math.max(this.minX, minX), Math.max(this.minY, minY), Math.max(this.minZ, minZ),
-            Math.min(this.maxX, maxX), Math.min(this.maxY, maxY), Math.min(this.maxZ, maxZ)
+        return new Box3I(
+            BananaMath.floor(Math.max(this.minX, minX)), BananaMath.floor(Math.max(this.minY, minY)), BananaMath.floor(Math.max(this.minZ, minZ)),
+            BananaMath.ceil(Math.min(this.maxX, maxX)), BananaMath.ceil(Math.min(this.maxY, maxY)), BananaMath.ceil(Math.min(this.maxZ, maxZ))
         );
     }
 
     @Override
-    public IBox3D intersection(IVec3D boxFrom, IVec3D boxTo) {
+    public IBox3I intersection(IVec3D boxFrom, IVec3D boxTo) {
         return this.intersection(boxFrom.x(), boxFrom.y(), boxFrom.z(), boxTo.x(), boxTo.y(), boxTo.z());
     }
 
     @Override
-    public IBox3D intersection(IVec3I boxFrom, IVec3I boxTo) {
+    public IBox3I intersection(IVec3I boxFrom, IVec3I boxTo) {
         return this.intersection(boxFrom.x(), boxFrom.y(), boxFrom.z(), boxTo.x(), boxTo.y(), boxTo.z());
     }
 
     @Override
-    public IBox3D intersection(IBox3D box) {
+    public IBox3I intersection(IBox3D box) {
         return this.intersection(box.minX(), box.minY(), box.minZ(), box.maxX(), box.maxY(), box.maxZ());
     }
 
     @Override
-    public IBox3D intersection(IBox3I box) {
+    public IBox3I intersection(IBox3I box) {
         return this.intersection(box.minX(), box.minY(), box.minZ(), box.maxX(), box.maxY(), box.maxZ());
     }
 
     @Override
-    public IBox3D intersection(IBox2I box, int minZ, int maxZ) {
+    public IBox3I intersection(IBox2I box, int minZ, int maxZ) {
         return this.intersection(box.minX(), box.minY(), minZ, box.maxX(), box.maxY(), maxZ);
     }
 
     @Override
-    public IBox3D intersection(IBox2I box, double minZ, double maxZ) {
+    public IBox3I intersection(IBox2I box, double minZ, double maxZ) {
         return this.intersection(box.minX(), box.minY(), minZ, box.maxX(), box.maxY(), maxZ);
     }
 
     @Override
-    public IBox3D intersection(IBox2D box, int minZ, int maxZ) {
+    public IBox3I intersection(IBox2D box, int minZ, int maxZ) {
         return this.intersection(box.minX(), box.minY(), minZ, box.maxX(), box.maxY(), maxZ);
     }
 
     @Override
-    public IBox3D intersection(IBox2D box, double minZ, double maxZ) {
+    public IBox3I intersection(IBox2D box, double minZ, double maxZ) {
         return this.intersection(box.minX(), box.minY(), minZ, box.maxX(), box.maxY(), maxZ);
     }
 
     @Override
-    public IBox3D intersection(IBox2I box) {
+    public IBox3I intersection(IBox2I box) {
         return this.intersection(box.minX(), box.minY(), 0, box.maxX(), box.maxY(), 0);
     }
 
     @Override
-    public IBox3D intersection(IBox2D box) {
+    public IBox3I intersection(IBox2D box) {
         return this.intersection(box.minX(), box.minY(), 0.0D, box.maxX(), box.maxY(), 0.0D);
     }
 
     @Override
-    public IBox3DM toMutable() {
-        return new Box3DM(this);
+    public IBox3IM toMutable() {
+        return new Box3IM(this);
     }
 
     @Override
-    public IBox3D toImmutable() {
+    public IBox3I toImmutable() {
         return this;
     }
 
     @Override
-    public IBox3I floor() {
-        return new Box3I(this);
-    }
-
-    @Override
-    public IBox3I round() {
-        return new Box3I(
-            BananaMath.round(this.minX), BananaMath.round(this.minY), BananaMath.round(this.minZ),
-            BananaMath.round(this.maxX), BananaMath.round(this.maxY), BananaMath.round(this.maxZ)
-        );
-    }
-
-    @Override
-    public IBox3I ceil() {
-        return new Box3I(
-            BananaMath.ceil(this.minX), BananaMath.ceil(this.minY), BananaMath.ceil(this.minZ),
-            BananaMath.ceil(this.maxX), BananaMath.ceil(this.maxY), BananaMath.ceil(this.maxZ)
-        );
-    }
-
-    @Override
-    public IBox3D copy() {
+    public IBox3D toDouble() {
         return new Box3D(this);
+    }
+
+    @Override
+    public IBox3I copy() {
+        return new Box3I(this);
     }
 }

@@ -44,9 +44,9 @@ public interface IVec3I {
     float distance(IVec3I vec);
     float distance(IVec3D vec);
     float distanceSq(int x, int y, int z);
-    float distanceSq(double x, double y, double z);
+    double distanceSq(double x, double y, double z);
     float distanceSq(IVec3I vec);
-    float distanceSq(IVec3D vec);
+    double distanceSq(IVec3D vec);
     IVec3I add(int x, int y, int z);
     IVec3I add(double x, double y, double z);
     IVec3I add(IVec3I vec);

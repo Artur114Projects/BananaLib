@@ -21,6 +21,13 @@ public class FloatStack {
         this.dataSize = dataSize;
     }
 
+    private FloatStack(FloatStack parent) {
+        this.stack = Arrays.copyOf(parent.stack, parent.stack.length);
+        this.dataSize = parent.dataSize;
+        this.cursor = parent.cursor;
+        this.mode = parent.mode;
+    }
+
     public void reset() {
         this.cursor = 0;
     }
@@ -49,5 +56,9 @@ public class FloatStack {
             throw new IllegalStateException();
         }
         return this.stack[--this.cursor];
+    }
+
+    public FloatStack copy() {
+        return new FloatStack(this);
     }
 }

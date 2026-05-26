@@ -21,6 +21,13 @@ public class IntStack {
         this.dataSize = dataSize;
     }
 
+    private IntStack(IntStack parent) {
+        this.stack = Arrays.copyOf(parent.stack, parent.stack.length);
+        this.dataSize = parent.dataSize;
+        this.cursor = parent.cursor;
+        this.mode = parent.mode;
+    }
+
     public void reset() {
         this.cursor = 0;
     }
@@ -49,5 +56,9 @@ public class IntStack {
             throw new IllegalStateException();
         }
         return this.stack[--this.cursor];
+    }
+
+    public IntStack copy() {
+        return new IntStack(this);
     }
 }

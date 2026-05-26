@@ -6,6 +6,11 @@ Basic principles that all libraries should follow
 - Mutable implementations return this object unless otherwise specified
 - All mutable objects must have a state stack and a pool
 
+### Boxes (ABB)
+
+- all Box implementations must monitor the coordinate order themselves (minVec must be smaller than maxVec in all dimensionality coordinates)
+- [intersection] if a box is passed that does not intersect with the current one, it returns an empty box (for immutable), becomes an empty box (for mutable)
+
 ### Rotations
 
 - Must rotate clockwise when looking at the -axis rotation
@@ -15,6 +20,10 @@ Basic principles that all libraries should follow
 - Unless otherwise specified in the method name, [move * this] should be multiplied
 - Matrices must have a mulPost method that multiplies in reverse order, i.e. [this * move]
 - Matrices should preferably implement local(method_name) methods that will multiply the matrix in reverse order, i.e. [this * move]
+
+### Matrix
+
+- [invert] Throws an ArithmeticException if the matrix is not invertible
 
 ### Bounds
 
@@ -26,6 +35,7 @@ Basic principles that all libraries should follow
 ### Equality
 
 - [equals] performs exact comparison
+- [equalsEps] performs eps comparison
 
 ### Multi Thread
 

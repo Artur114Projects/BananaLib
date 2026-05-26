@@ -21,6 +21,13 @@ public class DoubleStack {
         this.dataSize = dataSize;
     }
 
+    private DoubleStack(DoubleStack parent) {
+        this.stack = Arrays.copyOf(parent.stack, parent.stack.length);
+        this.dataSize = parent.dataSize;
+        this.cursor = parent.cursor;
+        this.mode = parent.mode;
+    }
+
     public void reset() {
         this.cursor = 0;
     }
@@ -49,5 +56,9 @@ public class DoubleStack {
             throw new IllegalStateException();
         }
         return this.stack[--this.cursor];
+    }
+
+    public DoubleStack copy() {
+        return new DoubleStack(this);
     }
 }

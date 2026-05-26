@@ -201,25 +201,25 @@ public class AdvancedBlockPos extends BlockPos.MutableBlockPos {
         return this.down();
     }
 
-    public AdvancedBlockPos setWorldY(World world) {
-        return setWorldY(world, false);
-    }
+//    public AdvancedBlockPos setWorldY(World world) {
+//        return setWorldY(world, false);
+//    }
 
-    public AdvancedBlockPos setWorldY(World world, boolean ignoringLiquids) {
-        return setWorldY(world, ignoringLiquids, Blocks.AIR, Blocks.BEDROCK);
-    }
+//    public AdvancedBlockPos setWorldY(World world, boolean ignoringLiquids) {
+//        return setWorldY(world, ignoringLiquids, Blocks.AIR, Blocks.BEDROCK);
+//    }
 
-    public AdvancedBlockPos setWorldY(World world, Predicate<IBlockState> predicate, boolean ignoringLiquids) {
-        return setWorldY(world, predicate, ignoringLiquids, Blocks.AIR, Blocks.BEDROCK);
-    }
+//    public AdvancedBlockPos setWorldY(World world, Predicate<IBlockState> predicate, boolean ignoringLiquids) {
+//        return setWorldY(world, predicate, ignoringLiquids, Blocks.AIR, Blocks.BEDROCK);
+//    }
 
-    public AdvancedBlockPos setWorldY(World world, Predicate<IBlockState> predicate, boolean ignoringLiquids, Block... ignoringBlocks) {
-        return this.setWorldY(world, predicate.or(state -> (state.getMaterial().isLiquid() && ignoringLiquids) || BananaMath.arrayContains(ignoringBlocks, state.getBlock())));
-    }
+//    public AdvancedBlockPos setWorldY(World world, Predicate<IBlockState> predicate, boolean ignoringLiquids, Block... ignoringBlocks) {
+//        return this.setWorldY(world, predicate.or(state -> (state.getMaterial().isLiquid() && ignoringLiquids) || BananaMath.arrayContains(ignoringBlocks, state.getBlock())));
+//    }
 
-    public AdvancedBlockPos setWorldY(World world, boolean ignoringLiquids, Block... ignoringBlocks) {
-        return this.setWorldY(world, state -> (state.getMaterial().isLiquid() && ignoringLiquids) || BananaMath.arrayContains(ignoringBlocks, state.getBlock()));
-    }
+//    public AdvancedBlockPos setWorldY(World world, boolean ignoringLiquids, Block... ignoringBlocks) {
+//        return this.setWorldY(world, state -> (state.getMaterial().isLiquid() && ignoringLiquids) || BananaMath.arrayContains(ignoringBlocks, state.getBlock()));
+//    }
 
     public AdvancedBlockPos setWorldY(World world, Predicate<IBlockState> predicate) {
         Chunk chunk = world.getChunkFromChunkCoords(this.getChunkX(), this.getChunkZ());

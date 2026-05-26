@@ -26,6 +26,7 @@ minecraft {
 
 dependencies {
     compileOnly project(':modules:math')
+    testImplementation project(':modules:math')
     minecraft 'net.minecraftforge:forge:1.12.2-14.23.5.2859'
 }
 
