@@ -2,3 +2,4 @@ rootProject.name = 'bananalib'
 
 include 'modules:math'
 include 'modules:mc'
+include 'modules:mc-all'

@@ -1,7 +1,7 @@
 package com.artur114.bananalib.math.m2d.vec;
 
-import com.artur114.bananalib.math.m2d.area.IBox2D;
-import com.artur114.bananalib.math.m2d.area.IBox2I;
+import com.artur114.bananalib.math.m2d.box.IBox2D;
+import com.artur114.bananalib.math.m2d.box.IBox2I;
 
 public interface IVec2DM extends IVec2D {
     IVec2DM set(double[] pos);

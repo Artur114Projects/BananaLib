@@ -1,8 +1,8 @@
 package com.artur114.bananalib.math.m2d.vec;
 
 import com.artur114.bananalib.math.BananaMath;
-import com.artur114.bananalib.math.m2d.area.IBox2D;
-import com.artur114.bananalib.math.m2d.area.IBox2I;
+import com.artur114.bananalib.math.m2d.box.IBox2D;
+import com.artur114.bananalib.math.m2d.box.IBox2I;
 import com.artur114.bananalib.math.m3d.vec.IVec3D;
 import com.artur114.bananalib.math.m3d.vec.IVec3I;
 import com.artur114.bananalib.math.m3d.vec.Vec3D;
@@ -405,7 +405,8 @@ public class Vec2D implements IVec2D {
 
     @Override
     public boolean equals(Object obj) {
-        return obj instanceof IVec2D && ((IVec2D) obj).x() == this.x && ((IVec2D) obj).y() == this.y;
+        return (obj instanceof IVec2D && ((IVec2D) obj).x() == this.x && ((IVec2D) obj).y() == this.y) ||
+                (obj instanceof IVec2I && ((IVec2I) obj).x() == this.x && ((IVec2I) obj).y() == this.y);
     }
 
     @Override

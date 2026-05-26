@@ -1,8 +1,8 @@
 package com.artur114.bananalib.math.m3d.vec;
 
 import com.artur114.bananalib.math.BananaMath;
-import com.artur114.bananalib.math.m2d.area.IBox2D;
-import com.artur114.bananalib.math.m2d.area.IBox2I;
+import com.artur114.bananalib.math.m2d.box.IBox2D;
+import com.artur114.bananalib.math.m2d.box.IBox2I;
 import com.artur114.bananalib.math.m2d.vec.IVec2D;
 import com.artur114.bananalib.math.m2d.vec.IVec2I;
 import com.artur114.bananalib.math.m2d.vec.Vec2D;
@@ -58,6 +58,22 @@ public class Vec3I implements IVec3I {
         this(vec2D.x(), vec2D.y(), 0);
     }
 
+    public Vec3I(double x, IVec2D vec2D) {
+        this(x, vec2D.x(), vec2D.y());
+    }
+
+    public Vec3I(int x, IVec2I vec2D) {
+        this(x, vec2D.x(), vec2D.y());
+    }
+
+    public Vec3I(double x, IVec2I vec2D) {
+        this(x, vec2D.x(), vec2D.y());
+    }
+
+    public Vec3I(int x, IVec2D vec2D) {
+        this(x, vec2D.x(), vec2D.y());
+    }
+
     @Override
     public int x() {
         return this.x;
@@ -79,9 +95,8 @@ public class Vec3I implements IVec3I {
     }
 
     @Override
-    @SuppressWarnings("SuspiciousNameCombination")
     public IVec2I xz() {
-        return new Vec2I(this.z, this.x);
+        return new Vec2I(this.x, this.z);
     }
 
     @Override
@@ -422,12 +437,12 @@ public class Vec3I implements IVec3I {
 
     @Override
     public IVec3I scale(IVec2I vec) {
-        return this.scale(vec.x(), vec.y(), 0);
+        return this.scale(vec.x(), vec.y(), 1);
     }
 
     @Override
     public IVec3I scale(IVec2D vec) {
-        return this.scale(vec.x(), vec.y(), 0);
+        return this.scale(vec.x(), vec.y(), 1.0D);
     }
 
     @Override
@@ -482,12 +497,12 @@ public class Vec3I implements IVec3I {
 
     @Override
     public IVec3I divide(IVec2I vec) {
-        return this.divide(vec.x(), vec.y(), 0);
+        return this.divide(vec.x(), vec.y(), 1);
     }
 
     @Override
     public IVec3I divide(IVec2D vec) {
-        return this.divide(vec.x(), vec.y(), 0);
+        return this.divide(vec.x(), vec.y(), 1.0D);
     }
 
     @Override
@@ -765,5 +780,21 @@ public class Vec3I implements IVec3I {
     @Override
     public IVec3I copy() {
         return new Vec3I(this);
+    }
+
+    @Override
+    public String toString() {
+        return "(" + this.x + ", " + this.y + ", " + this.z + ")";
+    }
+
+    @Override
+    public int hashCode() {
+        return 31 * (31 * Double.hashCode(this.x) + Double.hashCode(this.y)) + Double.hashCode(this.z);
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        return (obj instanceof IVec3I && ((IVec3I) obj).x() == this.x && ((IVec3I) obj).y() == this.y && ((IVec3I) obj).z() == this.z) ||
+                (obj instanceof IVec3D && ((IVec3D) obj).x() == this.x && ((IVec3D) obj).y() == this.y && ((IVec3D) obj).z() == this.z);
     }
 }

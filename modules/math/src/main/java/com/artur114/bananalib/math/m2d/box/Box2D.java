@@ -1,4 +1,4 @@
-package com.artur114.bananalib.math.m2d.area;
+package com.artur114.bananalib.math.m2d.box;
 
 import com.artur114.bananalib.math.BananaMath;
 import com.artur114.bananalib.math.m2d.vec.IVec2D;
@@ -197,6 +197,11 @@ public class Box2D implements IBox2D {
     @Override
     public IBox2I ceil() {
         return new Box2I(BananaMath.ceil(this.minX), BananaMath.ceil(this.minY), BananaMath.ceil(this.maxX), BananaMath.ceil(this.maxY));
+    }
+
+    @Override
+    public IBox2D copy() {
+        return new Box2D(this);
     }
 
     @Override

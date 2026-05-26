@@ -1,4 +1,4 @@
-package com.artur114.bananalib.math.m2d.area;
+package com.artur114.bananalib.math.m2d.box;
 
 import com.artur114.bananalib.math.m2d.vec.IVec2D;
 import com.artur114.bananalib.math.m2d.vec.IVec2I;
@@ -27,4 +27,5 @@ public interface IBox2IM extends IBox2I {
     IBox2IM offset(IVec2D vec2D);
     IBox2IM offset(IVec2I vec2D);
     IBox2DM toDouble();
+    IBox2IM copy();
 }

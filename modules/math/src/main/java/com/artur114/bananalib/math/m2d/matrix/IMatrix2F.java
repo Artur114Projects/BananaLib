@@ -1,9 +1,9 @@
 package com.artur114.bananalib.math.m2d.matrix;
 
-import com.artur114.bananalib.math.m2d.area.IBox2D;
-import com.artur114.bananalib.math.m2d.area.IBox2DM;
-import com.artur114.bananalib.math.m2d.area.IBox2I;
-import com.artur114.bananalib.math.m2d.area.IBox2IM;
+import com.artur114.bananalib.math.m2d.box.IBox2D;
+import com.artur114.bananalib.math.m2d.box.IBox2DM;
+import com.artur114.bananalib.math.m2d.box.IBox2I;
+import com.artur114.bananalib.math.m2d.box.IBox2IM;
 import com.artur114.bananalib.math.m2d.vec.IVec2D;
 import com.artur114.bananalib.math.m2d.vec.IVec2DM;
 import com.artur114.bananalib.math.m2d.vec.IVec2I;

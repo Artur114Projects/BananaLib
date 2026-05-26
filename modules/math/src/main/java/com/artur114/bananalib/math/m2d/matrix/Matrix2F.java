@@ -1,7 +1,7 @@
 package com.artur114.bananalib.math.m2d.matrix;
 
 import com.artur114.bananalib.math.BananaMath;
-import com.artur114.bananalib.math.m2d.area.*;
+import com.artur114.bananalib.math.m2d.box.*;
 import com.artur114.bananalib.math.m2d.vec.*;
 
 import java.nio.FloatBuffer;

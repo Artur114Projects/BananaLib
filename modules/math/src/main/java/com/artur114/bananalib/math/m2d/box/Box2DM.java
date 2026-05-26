@@ -1,61 +1,33 @@
-package com.artur114.bananalib.math.m2d.area;
+package com.artur114.bananalib.math.m2d.box;
 
 import com.artur114.bananalib.math.BananaMath;
+import com.artur114.bananalib.math.internal.DoubleStack;
+import com.artur114.bananalib.math.internal.ThreadLocalPool;
 import com.artur114.bananalib.math.m2d.vec.IVec2D;
 import com.artur114.bananalib.math.m2d.vec.IVec2I;
 
-import java.util.Arrays;
 import java.util.Objects;
 
 public class Box2DM implements IBox2DM {
-    private static final ThreadLocal<Box2DM[]> pool = ThreadLocal.withInitial(() -> new Box2DM[16]);
-    private static final ThreadLocal<Integer> poolCursor = ThreadLocal.withInitial(() -> -1);
+    private static final ThreadLocalPool<Box2DM> pool = new ThreadLocalPool<>(new Box2DM[4], Box2DM::new, box -> {
+        box.resetStack().setZero();
+        box.released = true;
+        return box;
+    }, box -> {
+        box.released = false;
+        return box;
+    }, box -> box.released);
 
     public static Box2DM obtain() {
-        Box2DM[] pol = pool.get();
-        int polCursor = poolCursor.get();
-
-        if (polCursor < 0) {
-            return new Box2DM();
-        }
-
-        Box2DM matrix = pol[polCursor];
-        pol[polCursor--] = null;
-        poolCursor.set(polCursor);
-
-        if (matrix == null) {
-            return new Box2DM();
-        }
-
-        matrix.released = false;
-        return matrix;
+        return pool.obtain();
     }
 
-    public static void release(Box2DM matrix) {
-        if (matrix == null) {
-            return;
-        }
-        if (matrix.released) {
-            throw new IllegalArgumentException("Double release!");
-        }
-
-        Box2DM[] pol = pool.get();
-        int polCursor = poolCursor.get();
-
-        if (polCursor + 1 >= pol.length) {
-            pol = Arrays.copyOf(pol, pol.length * 2);
-            pool.set(pol);
-        }
-
-        matrix.released = true;
-        matrix.resetStack().setZero();
-        pol[++polCursor] = matrix;
-        poolCursor.set(polCursor);
+    public static void release(Box2DM box) {
+        pool.release(box);
     }
 
     private double minX, minY, maxX, maxY;
-    private double[][] stateStack = null;
-    private int stateCursor = 0;
+    private DoubleStack stateStack = null;
     private boolean released;
 
     public Box2DM() {}
@@ -149,46 +121,36 @@ public class Box2DM implements IBox2DM {
     @Override
     public IBox2DM collapseStack() {
         this.stateStack = null;
-        this.stateCursor = 0;
         return this;
     }
 
     @Override
     public IBox2DM resetStack() {
-        this.stateCursor = 0;
+        if (this.stateStack != null) {
+            this.stateStack.reset();
+        }
         return this;
     }
 
     @Override
     public IBox2DM pushBox() {
         if (this.stateStack == null) {
-            this.stateStack = new double[1][];
+            this.stateStack = new DoubleStack(4);
         }
-        if (this.stateCursor >= this.stateStack.length) {
-            this.stateStack = Arrays.copyOf(this.stateStack, this.stateCursor + 1);
-        }
-        double[] arr = this.stateStack[this.stateCursor++];
-
-        if (arr == null) {
-            arr = new double[4];
-        }
-
+        double[] arr = this.stateStack.newEntry();
         arr[0] = this.minX;
         arr[1] = this.minY;
         arr[2] = this.maxX;
         arr[3] = this.maxY;
-
-        this.stateStack[this.stateCursor - 1] = arr;
-
         return this;
     }
 
     @Override
     public IBox2DM popBox() {
-        if (this.stateCursor - 1 < 0) {
+        if (this.stateStack == null) {
             throw new IllegalStateException();
         }
-        return this.set(this.stateStack[--this.stateCursor]);
+        return this.set(this.stateStack.pull());
     }
 
     @Override
@@ -349,6 +311,11 @@ public class Box2DM implements IBox2DM {
     @Override
     public IBox2IM ceil() {
         return new Box2IM(BananaMath.ceil(this.minX), BananaMath.ceil(this.minY), BananaMath.ceil(this.maxX), BananaMath.ceil(this.maxY));
+    }
+
+    @Override
+    public IBox2DM copy() {
+        return new Box2DM(this);
     }
 
     @Override

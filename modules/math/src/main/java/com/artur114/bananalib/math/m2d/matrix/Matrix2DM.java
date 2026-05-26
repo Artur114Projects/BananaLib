@@ -1,61 +1,33 @@
 package com.artur114.bananalib.math.m2d.matrix;
 
 import com.artur114.bananalib.math.BananaMath;
-import com.artur114.bananalib.math.m2d.area.*;
+import com.artur114.bananalib.math.internal.DoubleStack;
+import com.artur114.bananalib.math.internal.ThreadLocalPool;
+import com.artur114.bananalib.math.m2d.box.*;
 import com.artur114.bananalib.math.m2d.vec.*;
 
 import java.nio.DoubleBuffer;
-import java.util.Arrays;
 import java.util.Objects;
 
 public class Matrix2DM implements IMatrix2DM {
-    private static final ThreadLocal<Matrix2DM[]> pool = ThreadLocal.withInitial(() -> new Matrix2DM[16]);
-    private static final ThreadLocal<Integer> poolCursor = ThreadLocal.withInitial(() -> -1);
-
-    public static Matrix2DM obtain() {
-        Matrix2DM[] pol = pool.get();
-        int polCursor = poolCursor.get();
-
-        if (polCursor < 0) {
-            return new Matrix2DM();
-        }
-
-        Matrix2DM matrix = pol[polCursor];
-        pol[polCursor--] = null;
-        poolCursor.set(polCursor);
-
-        if (matrix == null) {
-            return new Matrix2DM();
-        }
-
+    private static final ThreadLocalPool<Matrix2DM> pool = new ThreadLocalPool<>(new Matrix2DM[4], Matrix2DM::new, matrix -> {
+        matrix.resetStack().setIdentity();
+        matrix.released = true;
+        return matrix;
+    }, matrix -> {
         matrix.released = false;
         return matrix;
+    }, matrix -> matrix.released);
+
+    public static Matrix2DM obtain() {
+        return pool.obtain();
     }
 
     public static void release(Matrix2DM matrix) {
-        if (matrix == null) {
-            return;
-        }
-        if (matrix.released) {
-            throw new IllegalArgumentException("Double release!");
-        }
-
-        Matrix2DM[] pol = pool.get();
-        int polCursor = poolCursor.get();
-
-        if (polCursor + 1 >= pol.length) {
-            pol = Arrays.copyOf(pol, pol.length * 2);
-            pool.set(pol);
-        }
-
-        matrix.released = true;
-        matrix.resetStack().setIdentity();
-        pol[++polCursor] = matrix;
-        poolCursor.set(polCursor);
+        pool.release(matrix);
     }
 
-    private double[][] stateStack = null;
-    private int stateCursor = 0;
+    private DoubleStack stateStack = null;
     private double m00, m01, m02;
     private double m10, m11, m12;
     private boolean released;
@@ -156,48 +128,38 @@ public class Matrix2DM implements IMatrix2DM {
     @Override
     public IMatrix2DM collapseStack() {
         this.stateStack = null;
-        this.stateCursor = 0;
         return this;
     }
 
     @Override
     public IMatrix2DM resetStack() {
-        this.stateCursor = 0;
+        if (this.stateStack != null) {
+            this.stateStack.reset();
+        }
         return this;
     }
 
     @Override
     public IMatrix2DM pushMatrix() {
         if (this.stateStack == null) {
-            this.stateStack = new double[1][];
+            this.stateStack = new DoubleStack(6);
         }
-        if (this.stateCursor >= this.stateStack.length) {
-            this.stateStack = Arrays.copyOf(this.stateStack, this.stateCursor + 1);
-        }
-        double[] arr = this.stateStack[this.stateCursor++];
-
-        if (arr == null) {
-            arr = new double[6];
-        }
-
+        double[] arr = this.stateStack.newEntry();
         arr[0] = this.m00;
         arr[1] = this.m01;
         arr[2] = this.m02;
         arr[3] = this.m10;
         arr[4] = this.m11;
         arr[5] = this.m12;
-
-        this.stateStack[this.stateCursor - 1] = arr;
-
         return this;
     }
 
     @Override
     public IMatrix2DM popMatrix() {
-        if (this.stateCursor - 1 < 0) {
+        if (this.stateStack == null) {
             throw new IllegalStateException();
         }
-        return this.set(this.stateStack[--this.stateCursor]);
+        return this.set(this.stateStack.pull());
     }
 
     @Override

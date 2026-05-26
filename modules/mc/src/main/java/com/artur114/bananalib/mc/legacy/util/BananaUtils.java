@@ -1,6 +1,6 @@
 package com.artur114.bananalib.mc.legacy.util;
 
-import com.artur114.bananalib.math.m2d.area.IBox2I;
+import com.artur114.bananalib.math.m2d.box.IBox2I;
 import com.artur114.bananalib.math.m2d.vec.IVec2I;
 import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.util.math.ChunkPos;

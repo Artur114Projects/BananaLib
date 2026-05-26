@@ -1,4 +1,4 @@
-package com.artur114.bananalib.math.m2d.area;
+package com.artur114.bananalib.math.m2d.box;
 
 import com.artur114.bananalib.math.m2d.vec.IVec2D;
 import com.artur114.bananalib.math.m2d.vec.IVec2I;
@@ -34,4 +34,5 @@ public interface IBox2I {
     IBox2IM toMutable();
     IBox2I toImmutable();
     IBox2D toDouble();
+    IBox2I copy();
 }

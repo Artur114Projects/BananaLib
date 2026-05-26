@@ -1,63 +1,34 @@
 package com.artur114.bananalib.math.m2d.vec;
 
 import com.artur114.bananalib.math.BananaMath;
-import com.artur114.bananalib.math.m2d.area.IBox2D;
-import com.artur114.bananalib.math.m2d.area.IBox2I;
+import com.artur114.bananalib.math.internal.IntStack;
+import com.artur114.bananalib.math.internal.ThreadLocalPool;
+import com.artur114.bananalib.math.m2d.box.IBox2D;
+import com.artur114.bananalib.math.m2d.box.IBox2I;
 import com.artur114.bananalib.math.m3d.vec.IVec3D;
 import com.artur114.bananalib.math.m3d.vec.IVec3I;
 import com.artur114.bananalib.math.m3d.vec.Vec3D;
 import com.artur114.bananalib.math.m3d.vec.Vec3I;
 
-import java.util.Arrays;
-
 public class Vec2IM implements IVec2IM {
-    private static final ThreadLocal<Vec2IM[]> pool = ThreadLocal.withInitial(() -> new Vec2IM[16]);
-    private static final ThreadLocal<Integer> poolCursor = ThreadLocal.withInitial(() -> -1);
+    private static final ThreadLocalPool<Vec2IM> pool = new ThreadLocalPool<>(new Vec2IM[4], Vec2IM::new, vec -> {
+        vec.resetStack().setZero();
+        vec.released = true;
+        return vec;
+    }, vec -> {
+        vec.released = false;
+        return vec;
+    }, vec -> vec.released);
 
     public static Vec2IM obtain() {
-        Vec2IM[] pol = pool.get();
-        int polCursor = poolCursor.get();
-
-        if (polCursor < 0) {
-            return new Vec2IM();
-        }
-
-        Vec2IM matrix = pol[polCursor];
-        pol[polCursor--] = null;
-        poolCursor.set(polCursor);
-
-        if (matrix == null) {
-            return new Vec2IM();
-        }
-
-        matrix.released = false;
-        return matrix;
+        return pool.obtain();
     }
 
-    public static void release(Vec2IM matrix) {
-        if (matrix == null) {
-            return;
-        }
-        if (matrix.released) {
-            throw new IllegalArgumentException("Double release!");
-        }
-
-        Vec2IM[] pol = pool.get();
-        int polCursor = poolCursor.get();
-
-        if (polCursor + 1 >= pol.length) {
-            pol = Arrays.copyOf(pol, pol.length * 2);
-            pool.set(pol);
-        }
-
-        matrix.released = true;
-        matrix.resetStack().setZero();
-        pol[++polCursor] = matrix;
-        poolCursor.set(polCursor);
+    public static void release(Vec2IM vec) {
+        pool.release(vec);
     }
 
-    private int[][] stateStack = null;
-    private int stateCursor = 0;
+    private IntStack stateStack = null;
     private boolean released;
     private int x, y;
 
@@ -149,44 +120,34 @@ public class Vec2IM implements IVec2IM {
     @Override
     public IVec2IM collapseStack() {
         this.stateStack = null;
-        this.stateCursor = 0;
         return this;
     }
 
     @Override
     public IVec2IM resetStack() {
-        this.stateCursor = 0;
+        if (this.stateStack != null) {
+            this.stateStack.reset();
+        }
         return this;
     }
 
     @Override
     public IVec2IM pushPos() {
         if (this.stateStack == null) {
-            this.stateStack = new int[1][];
+            this.stateStack = new IntStack(2);
         }
-        if (this.stateCursor >= this.stateStack.length) {
-            this.stateStack = Arrays.copyOf(this.stateStack, this.stateCursor + 1);
-        }
-        int[] arr = this.stateStack[this.stateCursor++];
-
-        if (arr == null) {
-            arr = new int[2];
-        }
-
+        int[] arr = this.stateStack.newEntry();
         arr[0] = this.x;
         arr[1] = this.y;
-
-        this.stateStack[this.stateCursor - 1] = arr;
-
         return this;
     }
 
     @Override
     public IVec2IM popPos() {
-        if (this.stateCursor - 1 < 0) {
+        if (this.stateStack == null) {
             throw new IllegalStateException();
         }
-        return this.set(this.stateStack[--this.stateCursor]);
+        return this.set(this.stateStack.pull());
     }
 
     @Override
@@ -554,12 +515,13 @@ public class Vec2IM implements IVec2IM {
 
     @Override
     public boolean equals(Object obj) {
-        return obj instanceof IVec2I && ((IVec2I) obj).x() == this.x && ((IVec2I) obj).y() == this.y;
+        return (obj instanceof IVec2I && ((IVec2I) obj).x() == this.x && ((IVec2I) obj).y() == this.y) ||
+                (obj instanceof IVec2D && ((IVec2D) obj).x() == this.x && ((IVec2D) obj).y() == this.y);
     }
 
     @Override
     public int hashCode() {
-        return 31 * this.x + this.y;
+        return 31 * Double.hashCode(this.x) + Double.hashCode(this.y);
     }
 
     @Override

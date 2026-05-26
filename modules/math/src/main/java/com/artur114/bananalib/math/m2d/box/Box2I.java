@@ -1,4 +1,4 @@
-package com.artur114.bananalib.math.m2d.area;
+package com.artur114.bananalib.math.m2d.box;
 
 import com.artur114.bananalib.math.BananaMath;
 import com.artur114.bananalib.math.m2d.vec.IVec2D;
@@ -184,6 +184,11 @@ public class Box2I implements IBox2I {
     @Override
     public IBox2D toDouble() {
         return new Box2D(this);
+    }
+
+    @Override
+    public IBox2I copy() {
+        return new Box2I(this);
     }
 
     @Override

@@ -4,74 +4,6 @@ public class BananaMath {
     public static final double DOUBLE_EPS = 1.0E-12D;
     public static final float FLOAT_EPS = 1.0E-6F;
 
-    public static boolean arrayContainsAny(byte[] array, byte... params) {
-        for (int i : array) {
-            for (int j : params) {
-                if (i == j) {
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
-
-    public static boolean arrayContainsAny(int[] array, int... params) {
-        for (int i : array) {
-            for (int j : params) {
-                if (i == j) {
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
-
-    @SafeVarargs
-    public static <T> boolean arrayContainsAny(T[] array, T... params) {
-        for (T i : array) {
-            for (T j : params) {
-                if (i.equals(j)) {
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
-
-    public static boolean arrayContains(byte[] array, byte param) {
-        for (int i : array) {
-            if (i == param) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    public static boolean arrayContains(int[] array, int param) {
-        for (int i : array) {
-            if (i == param) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    public static <T> boolean arrayContains(T[] array, T value) {
-        for (T obj : array) {
-            if (obj.equals(value)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    public static boolean isCollideManhattan(int pointX, int pointY, int point1X, int point1Y, int radius) {
-        if (radius == 0) {
-            return point1X == pointX && point1Y == pointY;
-        }
-        return Math.abs(point1X - pointX) <= radius && Math.abs(point1Y - pointY) <= radius;
-    }
-
     public static float interpolate(float start, float end, float pct) {
         return start + (end - start) * pct;
     }
@@ -80,28 +12,24 @@ public class BananaMath {
         return start + (end - start) * pct;
     }
 
+    public static float interpolate(float start, float end, double pct) {
+        return (float) (start + (end - start) * pct);
+    }
+
+    public static double interpolate(double start, double end, double pct) {
+        return start + (end - start) * pct;
+    }
+
     public static int mod(double v) {
-        if (v < 0) {
-            return -1;
-        } else {
-            return 1;
-        }
+        return v < 0 ? -1 : 0;
     }
 
     public static int mod(float v) {
-        if (v < 0) {
-            return -1;
-        } else {
-            return 1;
-        }
+        return v < 0 ? -1 : 0;
     }
 
     public static int mod(int v) {
-        if (v < 0) {
-            return -1;
-        } else {
-            return 1;
-        }
+        return v < 0 ? -1 : 0;
     }
 
     public static int round(double d) {
