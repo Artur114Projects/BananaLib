@@ -4,6 +4,7 @@ import com.artur114.bananalib.math.m2d.box.IBox2D;
 import com.artur114.bananalib.math.m2d.box.IBox2I;
 import com.artur114.bananalib.math.m2d.vec.IVec2D;
 import com.artur114.bananalib.math.m2d.vec.IVec2I;
+import com.artur114.bananalib.math.m2d.vec.IVec2IM;
 import com.artur114.bananalib.math.m3d.box.IBox3D;
 import com.artur114.bananalib.math.m3d.box.IBox3I;
 import com.artur114.bananalib.math.m3d.vec.IVec3D;
@@ -107,59 +108,60 @@ public class PosMc3I extends BlockPos implements IVec3I {
     }
 
     @Override
-    public IVec2D xyD() {
+    public IVec2IM xy(IVec2IM out) {
         return null;
     }
 
     @Override
-    public IVec2D xzD() {
+    public IVec2IM xz(IVec2IM out) {
         return null;
     }
 
     @Override
-    public IVec2D yxD() {
+    public IVec2IM yx(IVec2IM out) {
         return null;
     }
 
     @Override
-    public IVec2D yzD() {
+    public IVec2IM yz(IVec2IM out) {
         return null;
     }
 
     @Override
-    public IVec2D zxD() {
+    public IVec2IM zx(IVec2IM out) {
         return null;
     }
 
     @Override
-    public IVec2D zyD() {
+    public IVec2IM zy(IVec2IM out) {
         return null;
     }
 
     @Override
-    public IVec3D zyxD() {
+    public IVec3IM zyx(IVec3IM out) {
         return null;
     }
 
     @Override
-    public IVec3D zxyD() {
+    public IVec3IM zxy(IVec3IM out) {
         return null;
     }
 
     @Override
-    public IVec3D yzxD() {
+    public IVec3IM yzx(IVec3IM out) {
         return null;
     }
 
     @Override
-    public IVec3D xzyD() {
+    public IVec3IM xzy(IVec3IM out) {
         return null;
     }
 
     @Override
-    public IVec3D yxzD() {
+    public IVec3IM yxz(IVec3IM out) {
         return null;
     }
+
 
     @Override
     public float length() {

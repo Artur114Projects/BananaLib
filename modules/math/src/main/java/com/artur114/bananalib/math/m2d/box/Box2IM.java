@@ -301,7 +301,9 @@ public class Box2IM implements IBox2IM {
 
     @Override
     public IBox2IM copy() {
-        return new Box2IM(this);
+        Box2IM box = new Box2IM(this);
+        box.stateStack = this.stateStack.copy();
+        return box;
     }
 
     @Override

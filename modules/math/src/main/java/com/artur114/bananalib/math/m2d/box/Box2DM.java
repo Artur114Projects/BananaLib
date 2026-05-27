@@ -315,7 +315,9 @@ public class Box2DM implements IBox2DM {
 
     @Override
     public IBox2DM copy() {
-        return new Box2DM(this);
+        Box2DM box = new Box2DM(this);
+        box.stateStack = this.stateStack.copy();
+        return box;
     }
 
     @Override

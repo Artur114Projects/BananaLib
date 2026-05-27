@@ -3,6 +3,7 @@ package com.artur114.bananalib.math.m3d.box;
 import com.artur114.bananalib.math.BananaMath;
 import com.artur114.bananalib.math.internal.DoubleStack;
 import com.artur114.bananalib.math.internal.ThreadLocalPool;
+import com.artur114.bananalib.math.m2d.box.Box2IM;
 import com.artur114.bananalib.math.m2d.box.IBox2D;
 import com.artur114.bananalib.math.m2d.box.IBox2I;
 import com.artur114.bananalib.math.m2d.vec.IVec2D;
@@ -759,6 +760,8 @@ public class Box3DM implements IBox3DM {
 
     @Override
     public IBox3DM copy() {
-        return new Box3DM(this);
+        Box3DM box = new Box3DM(this);
+        box.stateStack = this.stateStack.copy();
+        return box;
     }
 }

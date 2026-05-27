@@ -3,7 +3,9 @@ package com.artur114.bananalib.math.m2d.vec;
 import com.artur114.bananalib.math.m2d.box.IBox2D;
 import com.artur114.bananalib.math.m2d.box.IBox2I;
 import com.artur114.bananalib.math.m3d.vec.IVec3D;
+import com.artur114.bananalib.math.m3d.vec.IVec3DM;
 import com.artur114.bananalib.math.m3d.vec.IVec3I;
+import com.artur114.bananalib.math.m3d.vec.IVec3IM;
 
 public interface IVec2I {
     int x();
@@ -12,10 +14,10 @@ public interface IVec2I {
     IVec3I xyz(int z);
     IVec3I xzy(int z);
     IVec3I zxy(int z);
-    IVec2D yxD();
-    IVec3D xyzD(double z);
-    IVec3D xzyD(double z);
-    IVec3D zxyD(double z);
+    IVec2IM yx(IVec2IM out);
+    IVec3IM xyz(IVec3IM out, int z);
+    IVec3IM xzy(IVec3IM out, int z);
+    IVec3IM zxy(IVec3IM out, int z);
     float length();
     float lengthSq();
     int dot(IVec2I vec);

@@ -3,10 +3,7 @@ package com.artur114.bananalib.math.m3d.vec;
 import com.artur114.bananalib.math.BananaMath;
 import com.artur114.bananalib.math.m2d.box.IBox2D;
 import com.artur114.bananalib.math.m2d.box.IBox2I;
-import com.artur114.bananalib.math.m2d.vec.IVec2D;
-import com.artur114.bananalib.math.m2d.vec.IVec2I;
-import com.artur114.bananalib.math.m2d.vec.Vec2D;
-import com.artur114.bananalib.math.m2d.vec.Vec2I;
+import com.artur114.bananalib.math.m2d.vec.*;
 import com.artur114.bananalib.math.m3d.box.IBox3D;
 import com.artur114.bananalib.math.m3d.box.IBox3I;
 
@@ -151,64 +148,64 @@ public class Vec3D implements IVec3D {
     }
 
     @Override
-    public IVec2I xyI() {
-        return new Vec2I(this.x, this.y);
+    public IVec2DM xy(IVec2DM out) {
+        return out.set(this.x, this.y);
     }
 
     @Override
-    public IVec2I xzI() {
-        return new Vec2I(this.x, this.z);
-    }
-
-    @Override
-    @SuppressWarnings("SuspiciousNameCombination")
-    public IVec2I yxI() {
-        return new Vec2I(this.y, this.x);
+    public IVec2DM xz(IVec2DM out) {
+        return out.set(this.x, this.z);
     }
 
     @Override
     @SuppressWarnings("SuspiciousNameCombination")
-    public IVec2I yzI() {
-        return new Vec2I(this.y, this.z);
+    public IVec2DM yx(IVec2DM out) {
+        return out.set(this.y, this.x);
     }
 
     @Override
     @SuppressWarnings("SuspiciousNameCombination")
-    public IVec2I zxI() {
-        return new Vec2I(this.z, this.x);
-    }
-
-    @Override
-    public IVec2I zyI() {
-        return new Vec2I(this.z, this.y);
-    }
-
-    @Override
-    public IVec3I zyxI() {
-        return new Vec3I(this.z, this.y, this.x);
+    public IVec2DM yz(IVec2DM out) {
+        return out.set(this.y, this.z);
     }
 
     @Override
     @SuppressWarnings("SuspiciousNameCombination")
-    public IVec3I zxyI() {
-        return new Vec3I(this.z, this.x, this.y);
+    public IVec2DM zx(IVec2DM out) {
+        return out.set(this.z, this.x);
+    }
+
+    @Override
+    public IVec2DM zy(IVec2DM out) {
+        return out.set(this.z, this.y);
+    }
+
+    @Override
+    public IVec3DM zyx(IVec3DM out) {
+        return out.set(this.z, this.y, this.x);
     }
 
     @Override
     @SuppressWarnings("SuspiciousNameCombination")
-    public IVec3I yzxI() {
-        return new Vec3I(this.y, this.z, this.x);
-    }
-
-    @Override
-    public IVec3I xzyI() {
-        return new Vec3I(this.x, this.z, this.y);
+    public IVec3DM zxy(IVec3DM out) {
+        return out.set(this.z, this.x, this.y);
     }
 
     @Override
     @SuppressWarnings("SuspiciousNameCombination")
-    public IVec3I yxzI() {
-        return new Vec3I(this.y, this.x, this.z);
+    public IVec3DM yzx(IVec3DM out) {
+        return out.set(this.y, this.z, this.x);
+    }
+
+    @Override
+    public IVec3DM xzy(IVec3DM out) {
+        return out.set(this.x, this.z, this.y);
+    }
+
+    @Override
+    @SuppressWarnings("SuspiciousNameCombination")
+    public IVec3DM yxz(IVec3DM out) {
+        return out.set(this.y, this.x, this.z);
     }
 
     @Override

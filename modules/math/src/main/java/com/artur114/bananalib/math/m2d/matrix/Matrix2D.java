@@ -115,13 +115,13 @@ public class Matrix2D implements IMatrix2D {
         double m2v00 = this.m00, m2v01 = this.m01, m2v02 = this.m02;
         double m2v10 = this.m10, m2v11 = this.m11, m2v12 = this.m12;
         return new Matrix2D(
-                (m1v00 * m2v00) + (m1v01 * m2v10),
-                (m1v00 * m2v01) + (m1v01 * m2v11),
-                (m1v00 * m2v02) + (m1v01 * m2v12) + (m1v02),
+            (m1v00 * m2v00) + (m1v01 * m2v10),
+            (m1v00 * m2v01) + (m1v01 * m2v11),
+            (m1v00 * m2v02) + (m1v01 * m2v12) + (m1v02),
 
-                (m1v10 * m2v00) + (m1v11 * m2v10),
-                (m1v10 * m2v01) + (m1v11 * m2v11),
-                (m1v10 * m2v02) + (m1v11 * m2v12) + (m1v12)
+            (m1v10 * m2v00) + (m1v11 * m2v10),
+            (m1v10 * m2v01) + (m1v11 * m2v11),
+            (m1v10 * m2v02) + (m1v11 * m2v12) + (m1v12)
         );
     }
 
@@ -132,13 +132,13 @@ public class Matrix2D implements IMatrix2D {
         double m2v00 = this.m00, m2v01 = this.m01, m2v02 = this.m02;
         double m2v10 = this.m10, m2v11 = this.m11, m2v12 = this.m12;
         return new Matrix2D(
-                (m1v00 * m2v00) + (m1v01 * m2v10),
-                (m1v00 * m2v01) + (m1v01 * m2v11),
-                (m1v00 * m2v02) + (m1v01 * m2v12) + (m1v02),
+            (m1v00 * m2v00) + (m1v01 * m2v10),
+            (m1v00 * m2v01) + (m1v01 * m2v11),
+            (m1v00 * m2v02) + (m1v01 * m2v12) + (m1v02),
 
-                (m1v10 * m2v00) + (m1v11 * m2v10),
-                (m1v10 * m2v01) + (m1v11 * m2v11),
-                (m1v10 * m2v02) + (m1v11 * m2v12) + (m1v12)
+            (m1v10 * m2v00) + (m1v11 * m2v10),
+            (m1v10 * m2v01) + (m1v11 * m2v11),
+            (m1v10 * m2v02) + (m1v11 * m2v12) + (m1v12)
         );
     }
 
@@ -151,13 +151,13 @@ public class Matrix2D implements IMatrix2D {
         double m1v10 = this.m10;
         double m1v11 = this.m11;
         return new Matrix2D(
-                (m1v00 * m2v00) + (m1v01 * m2v10),
-                (m1v00 * m2v01) + (m1v01 * m2v11),
-                (m1v00 * m2v02) + (m1v01 * m2v12) + (this.m02),
+            (m1v00 * m2v00) + (m1v01 * m2v10),
+            (m1v00 * m2v01) + (m1v01 * m2v11),
+            (m1v00 * m2v02) + (m1v01 * m2v12) + (this.m02),
 
-                (m1v10 * m2v00) + (m1v11 * m2v10),
-                (m1v10 * m2v01) + (m1v11 * m2v11),
-                (m1v10 * m2v02) + (m1v11 * m2v12) + (this.m12)
+            (m1v10 * m2v00) + (m1v11 * m2v10),
+            (m1v10 * m2v01) + (m1v11 * m2v11),
+            (m1v10 * m2v02) + (m1v11 * m2v12) + (this.m12)
         );
     }
 
@@ -170,29 +170,29 @@ public class Matrix2D implements IMatrix2D {
         double m1v10 = this.m10;
         double m1v11 = this.m11;
         return new Matrix2D(
-                (m1v00 * m2v00) + (m1v01 * m2v10),
-                (m1v00 * m2v01) + (m1v01 * m2v11),
-                (m1v00 * m2v02) + (m1v01 * m2v12) + (this.m02),
+            (m1v00 * m2v00) + (m1v01 * m2v10),
+            (m1v00 * m2v01) + (m1v01 * m2v11),
+            (m1v00 * m2v02) + (m1v01 * m2v12) + (this.m02),
 
-                (m1v10 * m2v00) + (m1v11 * m2v10),
-                (m1v10 * m2v01) + (m1v11 * m2v11),
-                (m1v10 * m2v02) + (m1v11 * m2v12) + (this.m12)
+            (m1v10 * m2v00) + (m1v11 * m2v10),
+            (m1v10 * m2v01) + (m1v11 * m2v11),
+            (m1v10 * m2v02) + (m1v11 * m2v12) + (this.m12)
         );
     }
 
     @Override
     public IMatrix2D scale(int x, int y) {
         return new Matrix2D(
-                x * this.m00, x * this.m01, x * this.m02,
-                y * this.m10, y * this.m11, y * this.m12
+            x * this.m00, x * this.m01, x * this.m02,
+            y * this.m10, y * this.m11, y * this.m12
         );
     }
 
     @Override
     public IMatrix2D scale(double x, double y) {
         return new Matrix2D(
-                x * this.m00, x * this.m01, x * this.m02,
-                y * this.m10, y * this.m11, y * this.m12
+            x * this.m00, x * this.m01, x * this.m02,
+            y * this.m10, y * this.m11, y * this.m12
         );
     }
 
@@ -209,16 +209,16 @@ public class Matrix2D implements IMatrix2D {
     @Override
     public IMatrix2D translate(int x, int y) {
         return new Matrix2D(
-                this.m00, this.m01, this.m02 + x,
-                this.m10, this.m11, this.m12 + y
+            this.m00, this.m01, this.m02 + x,
+            this.m10, this.m11, this.m12 + y
         );
     }
 
     @Override
     public IMatrix2D translate(double x, double y) {
         return new Matrix2D(
-                this.m00, this.m01, this.m02 + x,
-                this.m10, this.m11, this.m12 + y
+            this.m00, this.m01, this.m02 + x,
+            this.m10, this.m11, this.m12 + y
         );
     }
 
@@ -238,8 +238,8 @@ public class Matrix2D implements IMatrix2D {
         double sin = Math.sin(rads);
         double cos = Math.cos(rads);
         return new Matrix2D(
-                (cos * this.m00) + (sin * this.m10), (cos * this.m01) + (sin * this.m11), (cos * this.m02) + (sin * this.m12),
-                (-sin * this.m00) + (cos * this.m10), (-sin * this.m01) + (cos * this.m11), (-sin * this.m02) + (cos * this.m12)
+            (cos * this.m00) + (sin * this.m10), (cos * this.m01) + (sin * this.m11), (cos * this.m02) + (sin * this.m12),
+            (-sin * this.m00) + (cos * this.m10), (-sin * this.m01) + (cos * this.m11), (-sin * this.m02) + (cos * this.m12)
         );
     }
 
@@ -256,8 +256,8 @@ public class Matrix2D implements IMatrix2D {
         double m10r = (-sin * m00p) + (cos * m10p), m11r = (-sin * m01p) + (cos * m11p), m12r = (-sin * m02p) + (cos * m12p);
 
         return new Matrix2D(
-                m00r, m01r, m02r + x,
-                m10r, m11r, m12r + y
+            m00r, m01r, m02r + x,
+            m10r, m11r, m12r + y
         );
     }
 
@@ -274,8 +274,8 @@ public class Matrix2D implements IMatrix2D {
         double m10r = (-sin * m00p) + (cos * m10p), m11r = (-sin * m01p) + (cos * m11p), m12r = (-sin * m02p) + (cos * m12p);
 
         return new Matrix2D(
-                m00r, m01r, m02r + x,
-                m10r, m11r, m12r + y
+            m00r, m01r, m02r + x,
+            m10r, m11r, m12r + y
         );
     }
 

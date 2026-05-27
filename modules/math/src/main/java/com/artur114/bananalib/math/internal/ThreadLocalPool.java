@@ -6,7 +6,7 @@ import java.util.function.Predicate;
 import java.util.function.Supplier;
 
 public class ThreadLocalPool<T> {
-    private final ThreadLocal<Integer> poolCursor;
+    private final ThreadLocal<int[]> poolCursor;
     private final Predicate<T> checkReleased;
     private final ThreadLocal<T[]> pool;
     private final Function<T, T> release;
@@ -26,12 +26,13 @@ public class ThreadLocalPool<T> {
         this.mode = mode;
 
         this.pool = ThreadLocal.withInitial(() -> Arrays.copyOf(arr, arr.length));
-        this.poolCursor = ThreadLocal.withInitial(() -> -1);
+        this.poolCursor = ThreadLocal.withInitial(() -> new int[] {-1});
     }
 
     public T obtain() {
         T[] pol = this.pool.get();
-        int polCursor = this.poolCursor.get();
+        int[] polCursorArr = this.poolCursor.get();
+        int polCursor = polCursorArr[0];
 
         if (polCursor < 0) {
             return this.create.get();
@@ -39,7 +40,7 @@ public class ThreadLocalPool<T> {
 
         T obj = pol[polCursor];
         pol[polCursor--] = null;
-        this.poolCursor.set(polCursor);
+        polCursorArr[0] = polCursor;
 
         if (obj == null) {
             return this.create.get();
@@ -57,7 +58,8 @@ public class ThreadLocalPool<T> {
         }
 
         T[] pol = this.pool.get();
-        int polCursor = this.poolCursor.get();
+        int[] polCursorArr = this.poolCursor.get();
+        int polCursor = polCursorArr[0];
 
         if (polCursor + 1 >= pol.length) {
             pol = Arrays.copyOf(pol, this.mode.grow(pol.length));
@@ -65,6 +67,6 @@ public class ThreadLocalPool<T> {
         }
 
         pol[++polCursor] = this.release.apply(obj);
-        this.poolCursor.set(polCursor);
+        polCursorArr[0] = polCursor;
     }
 }

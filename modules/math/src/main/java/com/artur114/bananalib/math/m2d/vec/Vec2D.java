@@ -3,10 +3,7 @@ package com.artur114.bananalib.math.m2d.vec;
 import com.artur114.bananalib.math.BananaMath;
 import com.artur114.bananalib.math.m2d.box.IBox2D;
 import com.artur114.bananalib.math.m2d.box.IBox2I;
-import com.artur114.bananalib.math.m3d.vec.IVec3D;
-import com.artur114.bananalib.math.m3d.vec.IVec3I;
-import com.artur114.bananalib.math.m3d.vec.Vec3D;
-import com.artur114.bananalib.math.m3d.vec.Vec3I;
+import com.artur114.bananalib.math.m3d.vec.*;
 
 public class Vec2D implements IVec2D {
     public static final Vec2D ZERO = new Vec2D(0, 0);
@@ -64,24 +61,24 @@ public class Vec2D implements IVec2D {
 
     @Override
     @SuppressWarnings("SuspiciousNameCombination")
-    public IVec2I yxI() {
-        return new Vec2I(this.y, this.x);
+    public IVec2DM yx(IVec2DM out) {
+        return out.set(this.y, this.x);
     }
 
     @Override
-    public IVec3I xyzI(int z) {
-        return new Vec3I(this.x, this.y, z);
+    public IVec3DM xyz(IVec3DM out, double z) {
+        return out.set(this.x, this.y, z);
     }
 
     @Override
-    public IVec3I xzyI(int z) {
-        return new Vec3I(this.x, z, this.y);
+    public IVec3DM xzy(IVec3DM out, double z) {
+        return out.set(this.x, z, this.y);
     }
 
     @Override
     @SuppressWarnings("SuspiciousNameCombination")
-    public IVec3I zxyI(int z) {
-        return new Vec3I(z, this.x, this.y);
+    public IVec3DM zxy(IVec3DM out, double z) {
+        return out.set(z, this.x, this.y);
     }
 
     @Override

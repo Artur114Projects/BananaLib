@@ -26,6 +26,13 @@ public class FloatStack {
         this.dataSize = parent.dataSize;
         this.cursor = parent.cursor;
         this.mode = parent.mode;
+
+        for (int i = 0; i != this.stack.length; i++) {
+            float[] a = this.stack[i];
+            if (a != null) {
+                this.stack[i] = Arrays.copyOf(a, a.length);
+            }
+        }
     }
 
     public void reset() {
