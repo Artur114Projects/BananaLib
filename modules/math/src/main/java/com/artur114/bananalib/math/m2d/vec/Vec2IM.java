@@ -479,6 +479,32 @@ public class Vec2IM implements IVec2IM {
     }
 
     @Override
+    public IVec2IM lerp(int x, int y, double delta) {
+        return this.set(
+            BananaMath.round(this.x + (x - this.x) * delta),
+            BananaMath.round(this.y + (y - this.y) * delta)
+        );
+    }
+
+    @Override
+    public IVec2IM lerp(double x, double y, double delta) {
+        return this.set(
+            BananaMath.round(this.x + (x - this.x) * delta),
+            BananaMath.round(this.y + (y - this.y) * delta)
+        );
+    }
+
+    @Override
+    public IVec2IM lerp(IVec2IC vec, double delta) {
+        return this.lerp(vec.x(), vec.y(), delta);
+    }
+
+    @Override
+    public IVec2IM lerp(IVec2DC vec, double delta) {
+        return this.lerp(vec.x(), vec.y(), delta);
+    }
+
+    @Override
     public IVec2IM wrap(IBox2I box) {
         return this.wrap(box.minX(), box.minY(), box.maxX(), box.maxY());
     }
@@ -543,7 +569,7 @@ public class Vec2IM implements IVec2IM {
     @Override
     public IVec2DM normalize() {
         double l = Math.sqrt(this.x * this.x + this.y * this.y);
-        return l < 1.0E-4D ? new Vec2DM(0, 0) : new Vec2DM(this.x / l, this.y / l);
+        return l < BananaMath.DOUBLE_EPS ? new Vec2DM(0, 0) : new Vec2DM(this.x / l, this.y / l);
     }
 
     @Override

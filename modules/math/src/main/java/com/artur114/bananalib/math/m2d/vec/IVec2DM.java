@@ -45,6 +45,10 @@ public interface IVec2DM extends IVec2D {
     IVec2DM rotateAround(double x, double y, double degrees);
     IVec2DM rotateAround(IVec2DC point, double degrees);
     IVec2DM rotateAround(IVec2IC point, double degrees);
+    IVec2DM lerp(int x, int y, double delta);
+    IVec2DM lerp(double x, double y, double delta);
+    IVec2DM lerp(IVec2IC vec, double delta);
+    IVec2DM lerp(IVec2DC vec, double delta);
     IVec2DM wrap(IBox2I box);
     IVec2DM wrap(IBox2D box);
     IVec2DM wrap(int x, int y);

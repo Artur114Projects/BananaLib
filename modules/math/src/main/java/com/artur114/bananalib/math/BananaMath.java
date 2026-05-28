@@ -4,19 +4,19 @@ public class BananaMath {
     public static final double DOUBLE_EPS = 1.0E-12D;
     public static final float FLOAT_EPS = 1.0E-6F;
 
-    public static float interpolate(float start, float end, float pct) {
+    public static float lerp(float start, float end, float pct) {
         return start + (end - start) * pct;
     }
 
-    public static double interpolate(double start, double end, float pct) {
+    public static double lerp(double start, double end, float pct) {
         return start + (end - start) * pct;
     }
 
-    public static float interpolate(float start, float end, double pct) {
+    public static float lerp(float start, float end, double pct) {
         return (float) (start + (end - start) * pct);
     }
 
-    public static double interpolate(double start, double end, double pct) {
+    public static double lerp(double start, double end, double pct) {
         return start + (end - start) * pct;
     }
 

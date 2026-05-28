@@ -354,6 +354,32 @@ public class Vec2D implements IVec2D {
     }
 
     @Override
+    public IVec2D lerp(int x, int y, double delta) {
+        return new Vec2D(
+            this.x + (x - this.x) * delta,
+            this.y + (y - this.y) * delta
+        );
+    }
+
+    @Override
+    public IVec2D lerp(double x, double y, double delta) {
+        return new Vec2D(
+            this.x + (x - this.x) * delta,
+            this.y + (y - this.y) * delta
+        );
+    }
+
+    @Override
+    public IVec2D lerp(IVec2IC vec, double delta) {
+        return this.lerp(vec.x(), vec.y(), delta);
+    }
+
+    @Override
+    public IVec2D lerp(IVec2DC vec, double delta) {
+        return this.lerp(vec.x(), vec.y(), delta);
+    }
+
+    @Override
     public IVec2D rotateAround(IVec2IC point, double degrees) {
         return this.rotateAround(point.x(), point.y(), degrees);
     }
@@ -423,7 +449,7 @@ public class Vec2D implements IVec2D {
     @Override
     public IVec2D normalize() {
         double l = Math.sqrt(this.x * this.x + this.y * this.y);
-        return l < 1.0E-4D ? ZERO : new Vec2D(this.x / l, this.y / l);
+        return l < BananaMath.DOUBLE_EPS ? ZERO : new Vec2D(this.x / l, this.y / l);
     }
 
     @Override

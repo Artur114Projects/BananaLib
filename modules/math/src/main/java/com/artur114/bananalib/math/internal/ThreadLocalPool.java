@@ -1,5 +1,7 @@
 package com.artur114.bananalib.math.internal;
 
+import org.jetbrains.annotations.ApiStatus;
+
 import java.util.Arrays;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -9,6 +11,7 @@ import java.util.function.Supplier;
  * Internal runtime utility.<br>
  * Not intended for public use.
  */
+@ApiStatus.Internal
 public class ThreadLocalPool<T> {
     private final ThreadLocal<int[]> poolCursor;
     private final Predicate<T> checkReleased;

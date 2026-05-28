@@ -1,5 +1,7 @@
 package com.artur114.bananalib.math.core.m2d.vec;
 
+import com.artur114.bananalib.math.core.m3d.vec.IVec3DC;
+
 public interface IVec2IC {
     int x();
     int y();
@@ -26,6 +28,8 @@ public interface IVec2IC {
     IVec2IC divide(double val);
     IVec2IC divide(double x, double y);
     IVec2IC rotate(double degrees);
+    IVec2IC lerp(int x, int y, double delta);
+    IVec2IC lerp(double x, double y, double delta);
     IVec2DC normalize();
     IVec2IC toMutable();
     IVec2IC toImmutable();

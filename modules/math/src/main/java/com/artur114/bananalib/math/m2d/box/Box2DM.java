@@ -304,7 +304,7 @@ public class Box2DM implements IBox2DM {
 
     @Override
     public IBox2IM floor() {
-        return new Box2IM(this);
+        return new Box2IM(BananaMath.ceil(this.minX), BananaMath.ceil(this.minY), BananaMath.floor(this.maxX), BananaMath.floor(this.maxY));
     }
 
     @Override
@@ -314,7 +314,7 @@ public class Box2DM implements IBox2DM {
 
     @Override
     public IBox2IM ceil() {
-        return new Box2IM(BananaMath.ceil(this.minX), BananaMath.ceil(this.minY), BananaMath.ceil(this.maxX), BananaMath.ceil(this.maxY));
+        return new Box2IM(BananaMath.floor(this.minX), BananaMath.floor(this.minY), BananaMath.ceil(this.maxX), BananaMath.ceil(this.maxY));
     }
 
     @Override

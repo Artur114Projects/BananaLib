@@ -29,6 +29,8 @@ public interface IVec3DC {
     IVec3DC rotateX(double degrees);
     IVec3DC rotateY(double degrees);
     IVec3DC rotateZ(double degrees);
+    IVec3DC lerp(int x, int y, int z, double delta);
+    IVec3DC lerp(double x, double y, double z, double delta);
     IVec3DC normalize();
     IVec3DC toMutable();
     IVec3DC toImmutable();

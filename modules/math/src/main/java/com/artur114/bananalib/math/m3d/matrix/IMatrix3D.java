@@ -1,9 +1,26 @@
 package com.artur114.bananalib.math.m3d.matrix;
 
+import com.artur114.bananalib.math.core.m2d.vec.IVec2DC;
+import com.artur114.bananalib.math.core.m2d.vec.IVec2IC;
+import com.artur114.bananalib.math.core.m3d.box.IBox3DC;
+import com.artur114.bananalib.math.core.m3d.box.IBox3IC;
+import com.artur114.bananalib.math.core.m3d.vec.IVec3DC;
+import com.artur114.bananalib.math.core.m3d.vec.IVec3IC;
 import com.artur114.bananalib.math.m2d.vec.IVec2D;
+import com.artur114.bananalib.math.m2d.vec.IVec2DM;
 import com.artur114.bananalib.math.m2d.vec.IVec2I;
+import com.artur114.bananalib.math.m2d.vec.IVec2IM;
+import com.artur114.bananalib.math.m3d.box.IBox3D;
+import com.artur114.bananalib.math.m3d.box.IBox3DM;
+import com.artur114.bananalib.math.m3d.box.IBox3I;
+import com.artur114.bananalib.math.m3d.box.IBox3IM;
 import com.artur114.bananalib.math.m3d.vec.IVec3D;
+import com.artur114.bananalib.math.m3d.vec.IVec3DM;
 import com.artur114.bananalib.math.m3d.vec.IVec3I;
+import com.artur114.bananalib.math.m3d.vec.IVec3IM;
+import org.jetbrains.annotations.Contract;
+
+import java.nio.DoubleBuffer;
 
 public interface IMatrix3D {
     double m00();
@@ -22,6 +39,7 @@ public interface IMatrix3D {
     double m31();
     double m32();
     double m33();
+    @Contract("-> new")
     IMatrix3D invert();
     double determinant();
     boolean isReversible();
@@ -114,4 +132,40 @@ public interface IMatrix3D {
     IMatrix3D rotateAround(IVec3I point, double degrees, IVec2D vec, double z);
     IMatrix3D rotateAround(IVec3I point, double degrees, IVec2I vec);
     IMatrix3D rotateAround(IVec3I point, double degrees, IVec2D vec);
+    @Contract("_,_ -> new") IVec2I transform(int x, int y);
+    @Contract("_,_ -> new") IVec2D transform(double x, double y);
+    @Contract("_,_,_ -> new") IVec3I transform(int x, int y, int z);
+    @Contract("_,_,_ -> new") IVec3D transform(double x, double y, double z);
+    @Contract("_ -> new") IVec3I transform(IVec3IC vec);
+    @Contract("_ -> _") IVec3IM transform(IVec3IM vec);
+    @Contract("_ -> new") IVec3D transform(IVec3DC vec);
+    @Contract("_ -> _") IVec3DM transform(IVec3DM vec);
+    @Contract("_ -> new") IVec3I[] transform(IVec3IC... vec);
+    @Contract("_ -> _") IVec3IM[] transform(IVec3IM... vec);
+    @Contract("_ -> new") IVec3D[] transform(IVec3DC... vec);
+    @Contract("_ -> _") IVec3DM[] transform(IVec3DM... vec);
+    @Contract("_ -> new") IVec2I transform(IVec2IC vec);
+    @Contract("_ -> _") IVec2IM transform(IVec2IM vec);
+    @Contract("_ -> new") IVec2D transform(IVec2DC vec);
+    @Contract("_ -> _") IVec2DM transform(IVec2DM vec);
+    @Contract("_,_ -> new") IVec3I transform(IVec2IC vec, int z);
+    @Contract("_,_ -> new") IVec3D transform(IVec2IC vec, double z);
+    @Contract("_,_ -> new") IVec3D transform(IVec2DC vec, int z);
+    @Contract("_,_ -> new") IVec3D transform(IVec2DC vec, double z);
+    @Contract("_ -> new") IVec2I[] transform(IVec2IC... vec);
+    @Contract("_ -> _") IVec2IM[] transform(IVec2IM... vec);
+    @Contract("_ -> new") IVec2D[] transform(IVec2DC... vec);
+    @Contract("_ -> _") IVec2DM[] transform(IVec2DM... vec);
+    @Contract("_ -> new") IBox3I transform(IBox3IC box);
+    @Contract("_ -> _") IBox3IM transform(IBox3IM box);
+    @Contract("_ -> new") IBox3D transform(IBox3DC box);
+    @Contract("_ -> _") IBox3DM transform(IBox3DM box);
+    @Contract("_ -> new") IBox3I[] transform(IBox3IC... box);
+    @Contract("_ -> _") IBox3IM[] transform(IBox3IM... box);
+    @Contract("_ -> new") IBox3D[] transform(IBox3DC... box);
+    @Contract("_ -> _") IBox3DM[] transform(IBox3DM... box);
+    @Contract("_ -> _") DoubleBuffer writeToBuffer(DoubleBuffer buf);
+    @Contract("-> new") IMatrix3DM toMutable();
+    @Contract("-> this") IMatrix3D toImmutable();
+    @Contract("-> new") IMatrix3F toFloat();
 }

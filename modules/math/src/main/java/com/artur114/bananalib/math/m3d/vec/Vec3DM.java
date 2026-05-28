@@ -1,13 +1,23 @@
 package com.artur114.bananalib.math.m3d.vec;
 
 import com.artur114.bananalib.math.BananaMath;
+import com.artur114.bananalib.math.core.m2d.box.IBox2DC;
+import com.artur114.bananalib.math.core.m2d.box.IBox2IC;
+import com.artur114.bananalib.math.core.m2d.vec.IVec2DC;
+import com.artur114.bananalib.math.core.m2d.vec.IVec2IC;
+import com.artur114.bananalib.math.core.m3d.box.IBox3DC;
+import com.artur114.bananalib.math.core.m3d.box.IBox3IC;
+import com.artur114.bananalib.math.core.m3d.vec.IVec3DC;
+import com.artur114.bananalib.math.core.m3d.vec.IVec3IC;
 import com.artur114.bananalib.math.internal.DoubleStack;
+import com.artur114.bananalib.math.internal.Hasher;
 import com.artur114.bananalib.math.internal.ThreadLocalPool;
 import com.artur114.bananalib.math.m2d.box.IBox2D;
 import com.artur114.bananalib.math.m2d.box.IBox2I;
 import com.artur114.bananalib.math.m2d.vec.*;
 import com.artur114.bananalib.math.m3d.box.IBox3D;
 import com.artur114.bananalib.math.m3d.box.IBox3I;
+import org.jetbrains.annotations.Nullable;
 
 public class Vec3DM implements IVec3DM {
     private static final ThreadLocalPool<Vec3DM> pool = new ThreadLocalPool<>(new Vec3DM[4], Vec3DM::new, vec -> {
@@ -27,7 +37,7 @@ public class Vec3DM implements IVec3DM {
         pool.release(vec);
     }
 
-    private DoubleStack stateStack = null;
+    private @Nullable DoubleStack stateStack = null;
     private boolean released;
     private double x, y, z;
 
@@ -45,52 +55,52 @@ public class Vec3DM implements IVec3DM {
         this.z = z;
     }
 
-    public Vec3DM(IVec3D vec) {
+    public Vec3DM(IVec3DC vec) {
         this(vec.x(), vec.y(), vec.z());
     }
 
-    public Vec3DM(IVec3I vec) {
+    public Vec3DM(IVec3IC vec) {
         this(vec.x(), vec.y(), vec.z());
     }
 
-    public Vec3DM(IVec2D vec2D, double z) {
-        this(vec2D.x(), vec2D.y(), z);
+    public Vec3DM(IVec2DC vec, double z) {
+        this(vec.x(), vec.y(), z);
     }
 
-    public Vec3DM(IVec2I vec2D, int z) {
-        this(vec2D.x(), vec2D.y(), z);
+    public Vec3DM(IVec2IC vec, int z) {
+        this(vec.x(), vec.y(), z);
     }
 
-    public Vec3DM(IVec2I vec2D, double z) {
-        this(vec2D.x(), vec2D.y(), z);
+    public Vec3DM(IVec2IC vec, double z) {
+        this(vec.x(), vec.y(), z);
     }
 
-    public Vec3DM(IVec2D vec2D, int z) {
-        this(vec2D.x(), vec2D.y(), z);
+    public Vec3DM(IVec2DC vec, int z) {
+        this(vec.x(), vec.y(), z);
     }
 
-    public Vec3DM(IVec2D vec2D) {
-        this(vec2D.x(), vec2D.y(), 0);
+    public Vec3DM(IVec2DC vec) {
+        this(vec.x(), vec.y(), 0);
     }
 
-    public Vec3DM(IVec2I vec2D) {
-        this(vec2D.x(), vec2D.y(), 0);
+    public Vec3DM(IVec2IC vec) {
+        this(vec.x(), vec.y(), 0);
     }
 
-    public Vec3DM(double x, IVec2D vec2D) {
-        this(x, vec2D.x(), vec2D.y());
+    public Vec3DM(double x, IVec2DC vec) {
+        this(x, vec.x(), vec.y());
     }
 
-    public Vec3DM(int x, IVec2I vec2D) {
-        this(x, vec2D.x(), vec2D.y());
+    public Vec3DM(int x, IVec2IC vec) {
+        this(x, vec.x(), vec.y());
     }
 
-    public Vec3DM(double x, IVec2I vec2D) {
-        this(x, vec2D.x(), vec2D.y());
+    public Vec3DM(double x, IVec2IC vec) {
+        this(x, vec.x(), vec.y());
     }
 
-    public Vec3DM(int x, IVec2D vec2D) {
-        this(x, vec2D.x(), vec2D.y());
+    public Vec3DM(int x, IVec2DC vec) {
+        this(x, vec.x(), vec.y());
     }
 
     @Override
@@ -121,42 +131,42 @@ public class Vec3DM implements IVec3DM {
     }
 
     @Override
-    public IVec3DM set(IVec3I vec) {
+    public IVec3DM set(IVec3IC vec) {
         return this.set(vec.x(), vec.y(), vec.z());
     }
 
     @Override
-    public IVec3DM set(IVec3D vec) {
+    public IVec3DM set(IVec3DC vec) {
         return this.set(vec.x(), vec.y(), vec.z());
     }
 
     @Override
-    public IVec3DM set(IVec2D vec, double z) {
+    public IVec3DM set(IVec2DC vec, double z) {
         return this.set(vec.x(), vec.y(), z);
     }
 
     @Override
-    public IVec3DM set(IVec2D vec, int z) {
+    public IVec3DM set(IVec2DC vec, int z) {
         return this.set(vec.x(), vec.y(), z);
     }
 
     @Override
-    public IVec3DM set(IVec2I vec, double z) {
+    public IVec3DM set(IVec2IC vec, double z) {
         return this.set(vec.x(), vec.y(), z);
     }
 
     @Override
-    public IVec3DM set(IVec2I vec, int z) {
+    public IVec3DM set(IVec2IC vec, int z) {
         return this.set(vec.x(), vec.y(), z);
     }
 
     @Override
-    public IVec3DM set(IVec2D vec) {
+    public IVec3DM set(IVec2DC vec) {
         return this.set(vec.x(), vec.y(), 0);
     }
 
     @Override
-    public IVec3DM set(IVec2I vec) {
+    public IVec3DM set(IVec2IC vec) {
         return this.set(vec.x(), vec.y(), 0);
     }
 
@@ -386,23 +396,43 @@ public class Vec3DM implements IVec3DM {
     }
 
     @Override
-    public double dot(IVec3I vec) {
-        return this.x * vec.x() + this.y * vec.y() + this.z * vec.z();
+    public double dot(int x, int y, int z) {
+        return this.x * x + this.y * y + this.z * z;
     }
 
     @Override
-    public double dot(IVec3D vec) {
-        return this.x * vec.x() + this.y * vec.y() + this.z * vec.z();
+    public double dot(double x, double y, double z) {
+        return this.x * x + this.y * y + this.z * z;
     }
 
     @Override
-    public IVec3D cross(IVec3I vec) {
-        return new Vec3D(this.y * vec.z() - this.z * vec.y(), this.z * vec.x() - this.x * vec.z(), this.x * vec.y() - this.y * vec.x());
+    public IVec3D cross(int x, int y, int z) {
+        return new Vec3D(this.y * z - this.z * y, this.z * x - this.x * z, this.x * y - this.y * x);
     }
 
     @Override
-    public IVec3D cross(IVec3D vec) {
-        return new Vec3D(this.y * vec.z() - this.z * vec.y(), this.z * vec.x() - this.x * vec.z(), this.x * vec.y() - this.y * vec.x());
+    public IVec3D cross(double x, double y, double z) {
+        return new Vec3D(this.y * z - this.z * y, this.z * x - this.x * z, this.x * y - this.y * x);
+    }
+
+    @Override
+    public double dot(IVec3IC vec) {
+        return this.dot(vec.x(), vec.y(), vec.z());
+    }
+
+    @Override
+    public double dot(IVec3DC vec) {
+        return this.dot(vec.x(), vec.y(), vec.z());
+    }
+
+    @Override
+    public IVec3D cross(IVec3IC vec) {
+        return this.cross(vec.x(), vec.y(), vec.z());
+    }
+
+    @Override
+    public IVec3D cross(IVec3DC vec) {
+        return this.cross(vec.x(), vec.y(), vec.z());
     }
 
     @Override
@@ -418,12 +448,12 @@ public class Vec3DM implements IVec3DM {
     }
 
     @Override
-    public double distance(IVec3I vec) {
+    public double distance(IVec3IC vec) {
         return this.distance(vec.x(), vec.y(), vec.z());
     }
 
     @Override
-    public double distance(IVec3D vec) {
+    public double distance(IVec3DC vec) {
         return this.distance(vec.x(), vec.y(), vec.z());
     }
 
@@ -440,12 +470,12 @@ public class Vec3DM implements IVec3DM {
     }
 
     @Override
-    public double distanceSq(IVec3I vec) {
+    public double distanceSq(IVec3IC vec) {
         return this.distanceSq(vec.x(), vec.y(), vec.z());
     }
 
     @Override
-    public double distanceSq(IVec3D vec) {
+    public double distanceSq(IVec3DC vec) {
         return this.distanceSq(vec.x(), vec.y(), vec.z());
     }
 
@@ -466,42 +496,42 @@ public class Vec3DM implements IVec3DM {
     }
 
     @Override
-    public IVec3DM add(IVec3I vec) {
+    public IVec3DM add(IVec3IC vec) {
         return this.add(vec.x(), vec.y(), vec.z());
     }
 
     @Override
-    public IVec3DM add(IVec3D vec) {
+    public IVec3DM add(IVec3DC vec) {
         return this.add(vec.x(), vec.y(), vec.z());
     }
 
     @Override
-    public IVec3DM add(IVec2I vec, int z) {
+    public IVec3DM add(IVec2IC vec, int z) {
         return this.add(vec.x(), vec.y(), z);
     }
 
     @Override
-    public IVec3DM add(IVec2I vec, double z) {
+    public IVec3DM add(IVec2IC vec, double z) {
         return this.add(vec.x(), vec.y(), z);
     }
 
     @Override
-    public IVec3DM add(IVec2D vec, int z) {
+    public IVec3DM add(IVec2DC vec, int z) {
         return this.add(vec.x(), vec.y(), z);
     }
 
     @Override
-    public IVec3DM add(IVec2D vec, double z) {
+    public IVec3DM add(IVec2DC vec, double z) {
         return this.add(vec.x(), vec.y(), z);
     }
 
     @Override
-    public IVec3DM add(IVec2I vec) {
+    public IVec3DM add(IVec2IC vec) {
         return this.add(vec.x(), vec.y(), 0);
     }
 
     @Override
-    public IVec3DM add(IVec2D vec) {
+    public IVec3DM add(IVec2DC vec) {
         return this.add(vec.x(), vec.y(), 0);
     }
 
@@ -522,42 +552,42 @@ public class Vec3DM implements IVec3DM {
     }
 
     @Override
-    public IVec3DM subtract(IVec3I vec) {
+    public IVec3DM subtract(IVec3IC vec) {
         return this.subtract(vec.x(), vec.y(), vec.z());
     }
 
     @Override
-    public IVec3DM subtract(IVec3D vec) {
+    public IVec3DM subtract(IVec3DC vec) {
         return this.subtract(vec.x(), vec.y(), vec.z());
     }
 
     @Override
-    public IVec3DM subtract(IVec2I vec, int z) {
+    public IVec3DM subtract(IVec2IC vec, int z) {
         return this.subtract(vec.x(), vec.y(), z);
     }
 
     @Override
-    public IVec3DM subtract(IVec2I vec, double z) {
+    public IVec3DM subtract(IVec2IC vec, double z) {
         return this.subtract(vec.x(), vec.y(), z);
     }
 
     @Override
-    public IVec3DM subtract(IVec2D vec, int z) {
+    public IVec3DM subtract(IVec2DC vec, int z) {
         return this.subtract(vec.x(), vec.y(), z);
     }
 
     @Override
-    public IVec3DM subtract(IVec2D vec, double z) {
+    public IVec3DM subtract(IVec2DC vec, double z) {
         return this.subtract(vec.x(), vec.y(), z);
     }
 
     @Override
-    public IVec3DM subtract(IVec2I vec) {
+    public IVec3DM subtract(IVec2IC vec) {
         return this.subtract(vec.x(), vec.y(), 0);
     }
 
     @Override
-    public IVec3DM subtract(IVec2D vec) {
+    public IVec3DM subtract(IVec2DC vec) {
         return this.subtract(vec.x(), vec.y(), 0);
     }
 
@@ -594,42 +624,42 @@ public class Vec3DM implements IVec3DM {
     }
 
     @Override
-    public IVec3DM scale(IVec3I vec) {
+    public IVec3DM scale(IVec3IC vec) {
         return this.scale(vec.x(), vec.y(), vec.z());
     }
 
     @Override
-    public IVec3DM scale(IVec3D vec) {
+    public IVec3DM scale(IVec3DC vec) {
         return this.scale(vec.x(), vec.y(), vec.z());
     }
 
     @Override
-    public IVec3DM scale(IVec2I vec, int z) {
+    public IVec3DM scale(IVec2IC vec, int z) {
         return this.scale(vec.x(), vec.y(), z);
     }
 
     @Override
-    public IVec3DM scale(IVec2I vec, double z) {
+    public IVec3DM scale(IVec2IC vec, double z) {
         return this.scale(vec.x(), vec.y(), z);
     }
 
     @Override
-    public IVec3DM scale(IVec2D vec, int z) {
+    public IVec3DM scale(IVec2DC vec, int z) {
         return this.scale(vec.x(), vec.y(), z);
     }
 
     @Override
-    public IVec3DM scale(IVec2D vec, double z) {
+    public IVec3DM scale(IVec2DC vec, double z) {
         return this.scale(vec.x(), vec.y(), z);
     }
 
     @Override
-    public IVec3DM scale(IVec2I vec) {
+    public IVec3DM scale(IVec2IC vec) {
         return this.scale(vec.x(), vec.y(), 1);
     }
 
     @Override
-    public IVec3DM scale(IVec2D vec) {
+    public IVec3DM scale(IVec2DC vec) {
         return this.scale(vec.x(), vec.y(), 1.0D);
     }
 
@@ -666,42 +696,42 @@ public class Vec3DM implements IVec3DM {
     }
 
     @Override
-    public IVec3DM divide(IVec3I vec) {
+    public IVec3DM divide(IVec3IC vec) {
         return this.divide(vec.x(), vec.y(), vec.z());
     }
 
     @Override
-    public IVec3DM divide(IVec3D vec) {
+    public IVec3DM divide(IVec3DC vec) {
         return this.divide(vec.x(), vec.y(), vec.z());
     }
 
     @Override
-    public IVec3DM divide(IVec2I vec, int z) {
+    public IVec3DM divide(IVec2IC vec, int z) {
         return this.divide(vec.x(), vec.y(), z);
     }
 
     @Override
-    public IVec3DM divide(IVec2I vec, double z) {
+    public IVec3DM divide(IVec2IC vec, double z) {
         return this.divide(vec.x(), vec.y(), z);
     }
 
     @Override
-    public IVec3DM divide(IVec2D vec, int z) {
+    public IVec3DM divide(IVec2DC vec, int z) {
         return this.divide(vec.x(), vec.y(), z);
     }
 
     @Override
-    public IVec3DM divide(IVec2D vec, double z) {
+    public IVec3DM divide(IVec2DC vec, double z) {
         return this.divide(vec.x(), vec.y(), z);
     }
 
     @Override
-    public IVec3DM divide(IVec2I vec) {
+    public IVec3DM divide(IVec2IC vec) {
         return this.divide(vec.x(), vec.y(), 1);
     }
 
     @Override
-    public IVec3DM divide(IVec2D vec) {
+    public IVec3DM divide(IVec2DC vec) {
         return this.divide(vec.x(), vec.y(), 1.0D);
     }
 
@@ -761,12 +791,12 @@ public class Vec3DM implements IVec3DM {
     }
 
     @Override
-    public IVec3DM rotateXAround(IVec3I point, double degrees) {
+    public IVec3DM rotateXAround(IVec3IC point, double degrees) {
         return this.rotateXAround(point.x(), point.y(), point.z(), degrees);
     }
 
     @Override
-    public IVec3DM rotateXAround(IVec3D point, double degrees) {
+    public IVec3DM rotateXAround(IVec3DC point, double degrees) {
         return this.rotateXAround(point.x(), point.y(), point.z(), degrees);
     }
 
@@ -793,12 +823,12 @@ public class Vec3DM implements IVec3DM {
     }
 
     @Override
-    public IVec3DM rotateYAround(IVec3I point, double degrees) {
+    public IVec3DM rotateYAround(IVec3IC point, double degrees) {
         return this.rotateYAround(point.x(), point.y(), point.z(), degrees);
     }
 
     @Override
-    public IVec3DM rotateYAround(IVec3D point, double degrees) {
+    public IVec3DM rotateYAround(IVec3DC point, double degrees) {
         return this.rotateYAround(point.x(), point.y(), point.z(), degrees);
     }
 
@@ -825,52 +855,110 @@ public class Vec3DM implements IVec3DM {
     }
 
     @Override
-    public IVec3DM rotateZAround(IVec3I point, double degrees) {
+    public IVec3DM rotateZAround(IVec3IC point, double degrees) {
         return this.rotateZAround(point.x(), point.y(), point.z(), degrees);
     }
 
     @Override
-    public IVec3DM rotateZAround(IVec3D point, double degrees) {
+    public IVec3DM rotateZAround(IVec3DC point, double degrees) {
         return this.rotateZAround(point.x(), point.y(), point.z(), degrees);
     }
 
     @Override
-    public IVec3DM wrap(IBox3I box) {
+    public IVec3DM lerp(int x, int y, int z, double delta) {
+        return this.set(
+            this.x + (x - this.x) * delta,
+            this.y + (y - this.y) * delta,
+            this.z + (z - this.z) * delta
+        );
+    }
+
+    @Override
+    public IVec3DM lerp(double x, double y, double z, double delta) {
+        return this.set(
+            this.x + (x - this.x) * delta,
+            this.y + (y - this.y) * delta,
+            this.z + (z - this.z) * delta
+        );
+    }
+
+    @Override
+    public IVec3DM lerp(IVec3IC vec, double delta) {
+        return this.lerp(vec.x(), vec.y(), vec.z(), delta);
+    }
+
+    @Override
+    public IVec3DM lerp(IVec3DC vec, double delta) {
+        return this.lerp(vec.x(), vec.y(), vec.z(), delta);
+    }
+
+    @Override
+    public IVec3DM lerp(IVec2IC vec, int z, double delta) {
+        return this.lerp(vec.x(), vec.y(), z, delta);
+    }
+
+    @Override
+    public IVec3DM lerp(IVec2IC vec, double z, double delta) {
+        return this.lerp(vec.x(), vec.y(), z, delta);
+    }
+
+    @Override
+    public IVec3DM lerp(IVec2DC vec, int z, double delta) {
+        return this.lerp(vec.x(), vec.y(), z, delta);
+    }
+
+    @Override
+    public IVec3DM lerp(IVec2DC vec, double z, double delta) {
+        return this.lerp(vec.x(), vec.y(), z, delta);
+    }
+
+    @Override
+    public IVec3DM lerp(IVec2IC vec, double delta) {
+        return this.lerp(vec.x(), vec.y(), 0, delta);
+    }
+
+    @Override
+    public IVec3DM lerp(IVec2DC vec, double delta) {
+        return this.lerp(vec.x(), vec.y(), 0.0D, delta);
+    }
+
+    @Override
+    public IVec3DM wrap(IBox3IC box) {
         return this.wrap(box.minX(), box.minY(), box.minZ(), box.maxX(), box.maxY(), box.maxZ());
     }
 
     @Override
-    public IVec3DM wrap(IBox3D box) {
+    public IVec3DM wrap(IBox3DC box) {
         return this.wrap(box.minX(), box.minY(), box.minZ(), box.maxX(), box.maxY(), box.maxZ());
     }
 
     @Override
-    public IVec3DM wrap(IBox2I box, int minZ, int maxZ) {
+    public IVec3DM wrap(IBox2IC box, int minZ, int maxZ) {
         return this.wrap(box.minX(), box.minY(), minZ, box.maxX(), box.maxY(), maxZ);
     }
 
     @Override
-    public IVec3DM wrap(IBox2I box, double minZ, double maxZ) {
+    public IVec3DM wrap(IBox2IC box, double minZ, double maxZ) {
         return this.wrap(box.minX(), box.minY(), minZ, box.maxX(), box.maxY(), maxZ);
     }
 
     @Override
-    public IVec3DM wrap(IBox2D box, int minZ, int maxZ) {
+    public IVec3DM wrap(IBox2DC box, int minZ, int maxZ) {
         return this.wrap(box.minX(), box.minY(), minZ, box.maxX(), box.maxY(), maxZ);
     }
 
     @Override
-    public IVec3DM wrap(IBox2D box, double minZ, double maxZ) {
+    public IVec3DM wrap(IBox2DC box, double minZ, double maxZ) {
         return this.wrap(box.minX(), box.minY(), minZ, box.maxX(), box.maxY(), maxZ);
     }
 
     @Override
-    public IVec3DM wrap(IBox2I box) {
+    public IVec3DM wrap(IBox2IC box) {
         return this.wrap(box.minX(), box.minY(), 0, box.maxX(), box.maxY(), 1);
     }
 
     @Override
-    public IVec3DM wrap(IBox2D box) {
+    public IVec3DM wrap(IBox2DC box) {
         return this.wrap(box.minX(), box.minY(), 0, box.maxX(), box.maxY(), 1);
     }
 
@@ -897,42 +985,42 @@ public class Vec3DM implements IVec3DM {
     }
 
     @Override
-    public IVec3DM clamp(IBox3I box) {
+    public IVec3DM clamp(IBox3IC box) {
         return this.clamp(box.minX(), box.minY(), box.minZ(), box.maxX(), box.maxY(), box.maxZ());
     }
 
     @Override
-    public IVec3DM clamp(IBox3D box) {
+    public IVec3DM clamp(IBox3DC box) {
         return this.clamp(box.minX(), box.minY(), box.minZ(), box.maxX(), box.maxY(), box.maxZ());
     }
 
     @Override
-    public IVec3DM clamp(IBox2I box, int minZ, int maxZ) {
+    public IVec3DM clamp(IBox2IC box, int minZ, int maxZ) {
         return this.clamp(box.minX(), box.minY(), minZ, box.maxX(), box.maxY(), maxZ);
     }
 
     @Override
-    public IVec3DM clamp(IBox2I box, double minZ, double maxZ) {
+    public IVec3DM clamp(IBox2IC box, double minZ, double maxZ) {
         return this.clamp(box.minX(), box.minY(), minZ, box.maxX(), box.maxY(), maxZ);
     }
 
     @Override
-    public IVec3DM clamp(IBox2D box, int minZ, int maxZ) {
+    public IVec3DM clamp(IBox2DC box, int minZ, int maxZ) {
         return this.clamp(box.minX(), box.minY(), minZ, box.maxX(), box.maxY(), maxZ);
     }
 
     @Override
-    public IVec3DM clamp(IBox2D box, double minZ, double maxZ) {
+    public IVec3DM clamp(IBox2DC box, double minZ, double maxZ) {
         return this.clamp(box.minX(), box.minY(), minZ, box.maxX(), box.maxY(), maxZ);
     }
 
     @Override
-    public IVec3DM clamp(IBox2I box) {
+    public IVec3DM clamp(IBox2IC box) {
         return this.clamp(box.minX(), box.minY(), 0, box.maxX(), box.maxY(), 0);
     }
 
     @Override
-    public IVec3DM clamp(IBox2D box) {
+    public IVec3DM clamp(IBox2DC box) {
         return this.clamp(box.minX(), box.minY(), 0, box.maxX(), box.maxY(), 0);
     }
 
@@ -959,7 +1047,7 @@ public class Vec3DM implements IVec3DM {
     @Override
     public IVec3DM normalize() {
         double l = Math.sqrt(this.x * this.x + this.y * this.y + this.z * this.z);
-        return l < 1.0E-4D ? this.setZero() : this.set(this.x / l, this.y / l, this.z / l);
+        return l < BananaMath.DOUBLE_EPS ? this.setZero() : this.set(this.x / l, this.y / l, this.z / l);
     }
 
     @Override
@@ -998,12 +1086,12 @@ public class Vec3DM implements IVec3DM {
 
     @Override
     public String toString() {
-        return "(" + ((float) this.x) + ", " + ((float) this.y) + ", " + ((float) this.z) + ")";
+        return "(" + this.x + ", " + this.y + ", " + this.z + ")";
     }
 
     @Override
     public int hashCode() {
-        return 31 * (31 * Double.hashCode(this.x) + Double.hashCode(this.y)) + Double.hashCode(this.z);
+        return Hasher.hash(this.x, this.y, this.z);
     }
 
     @Override

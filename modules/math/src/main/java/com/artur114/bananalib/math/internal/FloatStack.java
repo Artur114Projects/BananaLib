@@ -1,11 +1,14 @@
 package com.artur114.bananalib.math.internal;
 
+import org.jetbrains.annotations.ApiStatus;
+
 import java.util.Arrays;
 
 /**
  * Internal runtime utility.<br>
  * Not intended for public use.
  */
+@ApiStatus.Internal
 public class FloatStack {
     private final StackGrowMode mode;
     private final int dataSize;

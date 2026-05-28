@@ -26,6 +26,8 @@ public interface IVec2DC {
     IVec2DC divide(double val);
     IVec2DC divide(double x, double y);
     IVec2DC rotate(double degrees);
+    IVec2DC lerp(int x, int y, double delta);
+    IVec2DC lerp(double x, double y, double delta);
     IVec2DC normalize();
     IVec2DC toMutable();
     IVec2DC toImmutable();

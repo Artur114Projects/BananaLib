@@ -190,7 +190,7 @@ public class Box2D implements IBox2D {
 
     @Override
     public IBox2I floor() {
-        return new Box2I(this);
+        return new Box2I(BananaMath.ceil(this.minX), BananaMath.ceil(this.minY), BananaMath.floor(this.maxX), BananaMath.floor(this.maxY));
     }
 
     @Override
@@ -200,7 +200,7 @@ public class Box2D implements IBox2D {
 
     @Override
     public IBox2I ceil() {
-        return new Box2I(BananaMath.ceil(this.minX), BananaMath.ceil(this.minY), BananaMath.ceil(this.maxX), BananaMath.ceil(this.maxY));
+        return new Box2I(BananaMath.floor(this.minX), BananaMath.floor(this.minY), BananaMath.ceil(this.maxX), BananaMath.ceil(this.maxY));
     }
 
     @Override

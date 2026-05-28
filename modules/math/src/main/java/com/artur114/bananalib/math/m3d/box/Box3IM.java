@@ -1,6 +1,14 @@
 package com.artur114.bananalib.math.m3d.box;
 
 import com.artur114.bananalib.math.BananaMath;
+import com.artur114.bananalib.math.core.m2d.box.IBox2DC;
+import com.artur114.bananalib.math.core.m2d.box.IBox2IC;
+import com.artur114.bananalib.math.core.m2d.vec.IVec2DC;
+import com.artur114.bananalib.math.core.m2d.vec.IVec2IC;
+import com.artur114.bananalib.math.core.m3d.box.IBox3DC;
+import com.artur114.bananalib.math.core.m3d.box.IBox3IC;
+import com.artur114.bananalib.math.core.m3d.vec.IVec3DC;
+import com.artur114.bananalib.math.core.m3d.vec.IVec3IC;
 import com.artur114.bananalib.math.internal.IntStack;
 import com.artur114.bananalib.math.internal.ThreadLocalPool;
 import com.artur114.bananalib.math.m2d.box.IBox2D;
@@ -9,6 +17,7 @@ import com.artur114.bananalib.math.m2d.vec.IVec2D;
 import com.artur114.bananalib.math.m2d.vec.IVec2I;
 import com.artur114.bananalib.math.m3d.vec.IVec3D;
 import com.artur114.bananalib.math.m3d.vec.IVec3I;
+import org.jetbrains.annotations.Nullable;
 
 public class Box3IM implements IBox3IM {
     private static final ThreadLocalPool<Box3IM> pool = new ThreadLocalPool<>(new Box3IM[4], Box3IM::new, box -> {
@@ -28,7 +37,7 @@ public class Box3IM implements IBox3IM {
         pool.release(box);
     }
 
-    private IntStack stateStack = null;
+    private @Nullable IntStack stateStack = null;
     private int minX, minY, minZ;
     private int maxX, maxY, maxZ;
     private boolean released;
@@ -55,35 +64,35 @@ public class Box3IM implements IBox3IM {
         this.maxZ = Math.max(minZ, maxZ);
     }
 
-    public Box3IM(IBox3I box) {
+    public Box3IM(IBox3IC box) {
         this(box.minX(), box.minY(), box.minZ(), box.maxX(), box.maxY(), box.maxZ());
     }
 
-    public Box3IM(IBox3D box) {
+    public Box3IM(IBox3DC box) {
         this(box.minX(), box.minY(), box.minZ(), box.maxX(), box.maxY(), box.maxZ());
     }
 
-    public Box3IM(IBox2I box, int minZ, int maxZ) {
+    public Box3IM(IBox2IC box, int minZ, int maxZ) {
         this(box.minX(), box.minY(), minZ, box.maxX(), box.maxY(), maxZ);
     }
 
-    public Box3IM(IBox2I box, double minZ, double maxZ) {
+    public Box3IM(IBox2IC box, double minZ, double maxZ) {
         this(box.minX(), box.minY(), minZ, box.maxX(), box.maxY(), maxZ);
     }
 
-    public Box3IM(IBox2D box, int minZ, int maxZ) {
+    public Box3IM(IBox2DC box, int minZ, int maxZ) {
         this(box.minX(), box.minY(), minZ, box.maxX(), box.maxY(), maxZ);
     }
 
-    public Box3IM(IBox2D box, double minZ, double maxZ) {
+    public Box3IM(IBox2DC box, double minZ, double maxZ) {
         this(box.minX(), box.minY(), minZ, box.maxX(), box.maxY(), maxZ);
     }
 
-    public Box3IM(IBox2I box) {
+    public Box3IM(IBox2IC box) {
         this(box.minX(), box.minY(), 0, box.maxX(), box.maxY(), 0);
     }
 
-    public Box3IM(IBox2D box) {
+    public Box3IM(IBox2DC box) {
         this(box.minX(), box.minY(), 0, box.maxX(), box.maxY(), 0.0D);
     }
 
@@ -124,52 +133,52 @@ public class Box3IM implements IBox3IM {
     }
 
     @Override
-    public IBox3IM set(IVec3D boxFrom, IVec3D boxTo) {
+    public IBox3IM set(IVec3DC boxFrom, IVec3DC boxTo) {
         return this.set(boxFrom.x(), boxFrom.y(), boxFrom.z(), boxTo.x(), boxTo.y(), boxTo.z());
     }
 
     @Override
-    public IBox3IM set(IVec3I boxFrom, IVec3I boxTo) {
+    public IBox3IM set(IVec3IC boxFrom, IVec3IC boxTo) {
         return this.set(boxFrom.x(), boxFrom.y(), boxFrom.z(), boxTo.x(), boxTo.y(), boxTo.z());
     }
 
     @Override
-    public IBox3IM set(IBox3D box) {
+    public IBox3IM set(IBox3DC box) {
         return this.set(box.minX(), box.minY(), box.minZ(), box.maxX(), box.maxY(), box.maxZ());
     }
 
     @Override
-    public IBox3IM set(IBox3I box) {
+    public IBox3IM set(IBox3IC box) {
         return this.set(box.minX(), box.minY(), box.minZ(), box.maxX(), box.maxY(), box.maxZ());
     }
 
     @Override
-    public IBox3IM set(IBox2I box, int minZ, int maxZ) {
+    public IBox3IM set(IBox2IC box, int minZ, int maxZ) {
         return this.set(box.minX(), box.minY(), minZ, box.maxX(), box.maxY(), maxZ);
     }
 
     @Override
-    public IBox3IM set(IBox2I box, double minZ, double maxZ) {
+    public IBox3IM set(IBox2IC box, double minZ, double maxZ) {
         return this.set(box.minX(), box.minY(), minZ, box.maxX(), box.maxY(), maxZ);
     }
 
     @Override
-    public IBox3IM set(IBox2D box, int minZ, int maxZ) {
+    public IBox3IM set(IBox2DC box, int minZ, int maxZ) {
         return this.set(box.minX(), box.minY(), minZ, box.maxX(), box.maxY(), maxZ);
     }
 
     @Override
-    public IBox3IM set(IBox2D box, double minZ, double maxZ) {
+    public IBox3IM set(IBox2DC box, double minZ, double maxZ) {
         return this.set(box.minX(), box.minY(), minZ, box.maxX(), box.maxY(), maxZ);
     }
 
     @Override
-    public IBox3IM set(IBox2I box) {
+    public IBox3IM set(IBox2IC box) {
         return this.set(box.minX(), box.minY(), 0, box.maxX(), box.maxY(), 0);
     }
 
     @Override
-    public IBox3IM set(IBox2D box) {
+    public IBox3IM set(IBox2DC box) {
         return this.set(box.minX(), box.minY(), 0.0D, box.maxX(), box.maxY(), 0.0D);
     }
 
@@ -267,82 +276,82 @@ public class Box3IM implements IBox3IM {
     }
 
     @Override
-    public boolean contains(IBox3I box) {
+    public boolean contains(IBox3IC box) {
         return this.contains(box.minX(), box.minY(), box.minZ()) && this.contains(box.maxX(), box.maxY(), box.maxZ());
     }
 
     @Override
-    public boolean contains(IBox3D box) {
+    public boolean contains(IBox3DC box) {
         return this.contains(box.minX(), box.minY(), box.minZ()) && this.contains(box.maxX(), box.maxY(), box.maxZ());
     }
 
     @Override
-    public boolean contains(IVec3I vec) {
+    public boolean contains(IVec3IC vec) {
         return this.contains(vec.x(), vec.y(), vec.z());
     }
 
     @Override
-    public boolean contains(IVec3D vec) {
+    public boolean contains(IVec3DC vec) {
         return this.contains(vec.x(), vec.y(), vec.z());
     }
 
     @Override
-    public boolean contains(IVec2I vec, int z) {
+    public boolean contains(IVec2IC vec, int z) {
         return this.contains(vec.x(), vec.y(), z);
     }
 
     @Override
-    public boolean contains(IVec2I vec, double z) {
+    public boolean contains(IVec2IC vec, double z) {
         return this.contains(vec.x(), vec.y(), z);
     }
 
     @Override
-    public boolean contains(IVec2D vec, int z) {
+    public boolean contains(IVec2DC vec, int z) {
         return this.contains(vec.x(), vec.y(), z);
     }
 
     @Override
-    public boolean contains(IVec2D vec, double z) {
+    public boolean contains(IVec2DC vec, double z) {
         return this.contains(vec.x(), vec.y(), z);
     }
 
     @Override
-    public boolean contains(IVec2I vec) {
+    public boolean contains(IVec2IC vec) {
         return this.contains(vec.x(), vec.y(), 0);
     }
 
     @Override
-    public boolean contains(IVec2D vec) {
+    public boolean contains(IVec2DC vec) {
         return this.contains(vec.x(), vec.y(), 0.0D);
     }
 
     @Override
-    public boolean contains(IBox2I box, int minZ, int maxZ) {
+    public boolean contains(IBox2IC box, int minZ, int maxZ) {
         return this.contains(box.minX(), box.minY(), minZ) && this.contains(box.maxX(), box.maxY(), maxZ);
     }
 
     @Override
-    public boolean contains(IBox2I box, double minZ, double maxZ) {
+    public boolean contains(IBox2IC box, double minZ, double maxZ) {
         return this.contains(box.minX(), box.minY(), minZ) && this.contains(box.maxX(), box.maxY(), maxZ);
     }
 
     @Override
-    public boolean contains(IBox2D box, int minZ, int maxZ) {
+    public boolean contains(IBox2DC box, int minZ, int maxZ) {
         return this.contains(box.minX(), box.minY(), minZ) && this.contains(box.maxX(), box.maxY(), maxZ);
     }
 
     @Override
-    public boolean contains(IBox2D box, double minZ, double maxZ) {
+    public boolean contains(IBox2DC box, double minZ, double maxZ) {
         return this.contains(box.minX(), box.minY(), minZ) && this.contains(box.maxX(), box.maxY(), maxZ);
     }
 
     @Override
-    public boolean contains(IBox2I box) {
+    public boolean contains(IBox2IC box) {
         return this.contains(box.minX(), box.minY(), 0) && this.contains(box.maxX(), box.maxY(), 0);
     }
 
     @Override
-    public boolean contains(IBox2D box) {
+    public boolean contains(IBox2DC box) {
         return this.contains(box.minX(), box.minY(), 0.0D) && this.contains(box.maxX(), box.maxY(), 0.0D);
     }
 
@@ -357,52 +366,52 @@ public class Box3IM implements IBox3IM {
     }
 
     @Override
-    public boolean intersects(IVec3D boxFrom, IVec3D boxTo) {
+    public boolean intersects(IVec3DC boxFrom, IVec3DC boxTo) {
         return this.intersects(boxFrom.x(), boxFrom.y(), boxFrom.z(), boxTo.x(), boxTo.y(), boxTo.z());
     }
 
     @Override
-    public boolean intersects(IVec3I boxFrom, IVec3I boxTo) {
+    public boolean intersects(IVec3IC boxFrom, IVec3IC boxTo) {
         return this.intersects(boxFrom.x(), boxFrom.y(), boxFrom.z(), boxTo.x(), boxTo.y(), boxTo.z());
     }
 
     @Override
-    public boolean intersects(IBox3D box) {
+    public boolean intersects(IBox3DC box) {
         return this.intersects(box.minX(), box.minY(), box.minZ(), box.maxX(), box.maxY(), box.maxZ());
     }
 
     @Override
-    public boolean intersects(IBox3I box) {
+    public boolean intersects(IBox3IC box) {
         return this.intersects(box.minX(), box.minY(), box.minZ(), box.maxX(), box.maxY(), box.maxZ());
     }
 
     @Override
-    public boolean intersects(IBox2I box, int minZ, int maxZ) {
+    public boolean intersects(IBox2IC box, int minZ, int maxZ) {
         return this.intersects(box.minX(), box.minY(), minZ, box.maxX(), box.maxY(), maxZ);
     }
 
     @Override
-    public boolean intersects(IBox2I box, double minZ, double maxZ) {
+    public boolean intersects(IBox2IC box, double minZ, double maxZ) {
         return this.intersects(box.minX(), box.minY(), minZ, box.maxX(), box.maxY(), maxZ);
     }
 
     @Override
-    public boolean intersects(IBox2D box, int minZ, int maxZ) {
+    public boolean intersects(IBox2DC box, int minZ, int maxZ) {
         return this.intersects(box.minX(), box.minY(), minZ, box.maxX(), box.maxY(), maxZ);
     }
 
     @Override
-    public boolean intersects(IBox2D box, double minZ, double maxZ) {
+    public boolean intersects(IBox2DC box, double minZ, double maxZ) {
         return this.intersects(box.minX(), box.minY(), minZ, box.maxX(), box.maxY(), maxZ);
     }
 
     @Override
-    public boolean intersects(IBox2I box) {
+    public boolean intersects(IBox2IC box) {
         return this.intersects(box.minX(), box.minY(), 0, box.maxX(), box.maxY(), 0);
     }
 
     @Override
-    public boolean intersects(IBox2D box) {
+    public boolean intersects(IBox2DC box) {
         return this.intersects(box.minX(), box.minY(), 0.0D, box.maxX(), box.maxY(), 0.0D);
     }
 
@@ -439,42 +448,42 @@ public class Box3IM implements IBox3IM {
     }
 
     @Override
-    public IBox3IM grow(IVec3I vec) {
+    public IBox3IM grow(IVec3IC vec) {
         return this.grow(vec.x(), vec.y(), vec.z());
     }
 
     @Override
-    public IBox3IM grow(IVec3D vec) {
+    public IBox3IM grow(IVec3DC vec) {
         return this.grow(vec.x(), vec.y(), vec.z());
     }
 
     @Override
-    public IBox3IM grow(IVec2I vec, int z) {
+    public IBox3IM grow(IVec2IC vec, int z) {
         return this.grow(vec.x(), vec.y(), z);
     }
 
     @Override
-    public IBox3IM grow(IVec2I vec, double z) {
+    public IBox3IM grow(IVec2IC vec, double z) {
         return this.grow(vec.x(), vec.y(), z);
     }
 
     @Override
-    public IBox3IM grow(IVec2D vec, int z) {
+    public IBox3IM grow(IVec2DC vec, int z) {
         return this.grow(vec.x(), vec.y(), z);
     }
 
     @Override
-    public IBox3IM grow(IVec2D vec, double z) {
+    public IBox3IM grow(IVec2DC vec, double z) {
         return this.grow(vec.x(), vec.y(), z);
     }
 
     @Override
-    public IBox3IM grow(IVec2I vec) {
+    public IBox3IM grow(IVec2IC vec) {
         return this.grow(vec.x(), vec.y(), 0);
     }
 
     @Override
-    public IBox3IM grow(IVec2D vec) {
+    public IBox3IM grow(IVec2DC vec) {
         return this.grow(vec.x(), vec.y(), 0);
     }
 
@@ -495,42 +504,42 @@ public class Box3IM implements IBox3IM {
     }
 
     @Override
-    public IBox3IM offset(IVec3I vec) {
+    public IBox3IM offset(IVec3IC vec) {
         return this.offset(vec.x(), vec.y(), vec.z());
     }
 
     @Override
-    public IBox3IM offset(IVec3D vec) {
+    public IBox3IM offset(IVec3DC vec) {
         return this.offset(vec.x(), vec.y(), vec.z());
     }
 
     @Override
-    public IBox3IM offset(IVec2I vec, int z) {
+    public IBox3IM offset(IVec2IC vec, int z) {
         return this.offset(vec.x(), vec.y(), z);
     }
 
     @Override
-    public IBox3IM offset(IVec2I vec, double z) {
+    public IBox3IM offset(IVec2IC vec, double z) {
         return this.offset(vec.x(), vec.y(), z);
     }
 
     @Override
-    public IBox3IM offset(IVec2D vec, int z) {
+    public IBox3IM offset(IVec2DC vec, int z) {
         return this.offset(vec.x(), vec.y(), z);
     }
 
     @Override
-    public IBox3IM offset(IVec2D vec, double z) {
+    public IBox3IM offset(IVec2DC vec, double z) {
         return this.offset(vec.x(), vec.y(), z);
     }
 
     @Override
-    public IBox3IM offset(IVec2I vec) {
+    public IBox3IM offset(IVec2IC vec) {
         return this.offset(vec.x(), vec.y(), 0);
     }
 
     @Override
-    public IBox3IM offset(IVec2D vec) {
+    public IBox3IM offset(IVec2DC vec) {
         return this.offset(vec.x(), vec.y(), 0);
     }
 
@@ -553,42 +562,42 @@ public class Box3IM implements IBox3IM {
     }
 
     @Override
-    public IBox3IM include(IVec3I vec) {
+    public IBox3IM include(IVec3IC vec) {
         return this.include(vec.x(), vec.y(), vec.z());
     }
 
     @Override
-    public IBox3IM include(IVec3D vec) {
+    public IBox3IM include(IVec3DC vec) {
         return this.include(vec.x(), vec.y(), vec.z());
     }
 
     @Override
-    public IBox3IM include(IVec2I vec, int z) {
+    public IBox3IM include(IVec2IC vec, int z) {
         return this.include(vec.x(), vec.y(), z);
     }
 
     @Override
-    public IBox3IM include(IVec2I vec, double z) {
+    public IBox3IM include(IVec2IC vec, double z) {
         return this.include(vec.x(), vec.y(), z);
     }
 
     @Override
-    public IBox3IM include(IVec2D vec, int z) {
+    public IBox3IM include(IVec2DC vec, int z) {
         return this.include(vec.x(), vec.y(), z);
     }
 
     @Override
-    public IBox3IM include(IVec2D vec, double z) {
+    public IBox3IM include(IVec2DC vec, double z) {
         return this.include(vec.x(), vec.y(), z);
     }
 
     @Override
-    public IBox3IM include(IVec2I vec) {
+    public IBox3IM include(IVec2IC vec) {
         return this.include(vec.x(), vec.y(), 0);
     }
 
     @Override
-    public IBox3IM include(IVec2D vec) {
+    public IBox3IM include(IVec2DC vec) {
         return this.include(vec.x(), vec.y(), 0);
     }
 
@@ -609,52 +618,52 @@ public class Box3IM implements IBox3IM {
     }
 
     @Override
-    public IBox3IM union(IVec3D boxFrom, IVec3D boxTo) {
+    public IBox3IM union(IVec3DC boxFrom, IVec3DC boxTo) {
         return this.union(boxFrom.x(), boxFrom.y(), boxFrom.z(), boxTo.x(), boxTo.y(), boxTo.z());
     }
 
     @Override
-    public IBox3IM union(IVec3I boxFrom, IVec3I boxTo) {
+    public IBox3IM union(IVec3IC boxFrom, IVec3IC boxTo) {
         return this.union(boxFrom.x(), boxFrom.y(), boxFrom.z(), boxTo.x(), boxTo.y(), boxTo.z());
     }
 
     @Override
-    public IBox3IM union(IBox3D box) {
+    public IBox3IM union(IBox3DC box) {
         return this.union(box.minX(), box.minY(), box.minZ(), box.maxX(), box.maxY(), box.maxZ());
     }
 
     @Override
-    public IBox3IM union(IBox3I box) {
+    public IBox3IM union(IBox3IC box) {
         return this.union(box.minX(), box.minY(), box.minZ(), box.maxX(), box.maxY(), box.maxZ());
     }
 
     @Override
-    public IBox3IM union(IBox2I box, int minZ, int maxZ) {
+    public IBox3IM union(IBox2IC box, int minZ, int maxZ) {
         return this.union(box.minX(), box.minY(), minZ, box.maxX(), box.maxY(), maxZ);
     }
 
     @Override
-    public IBox3IM union(IBox2I box, double minZ, double maxZ) {
+    public IBox3IM union(IBox2IC box, double minZ, double maxZ) {
         return this.union(box.minX(), box.minY(), minZ, box.maxX(), box.maxY(), maxZ);
     }
 
     @Override
-    public IBox3IM union(IBox2D box, int minZ, int maxZ) {
+    public IBox3IM union(IBox2DC box, int minZ, int maxZ) {
         return this.union(box.minX(), box.minY(), minZ, box.maxX(), box.maxY(), maxZ);
     }
 
     @Override
-    public IBox3IM union(IBox2D box, double minZ, double maxZ) {
+    public IBox3IM union(IBox2DC box, double minZ, double maxZ) {
         return this.union(box.minX(), box.minY(), minZ, box.maxX(), box.maxY(), maxZ);
     }
 
     @Override
-    public IBox3IM union(IBox2I box) {
+    public IBox3IM union(IBox2IC box) {
         return this.union(box.minX(), box.minY(), 0, box.maxX(), box.maxY(), 0);
     }
 
     @Override
-    public IBox3IM union(IBox2D box) {
+    public IBox3IM union(IBox2DC box) {
         return this.union(box.minX(), box.minY(), 0, box.maxX(), box.maxY(), 0);
     }
 
@@ -677,52 +686,52 @@ public class Box3IM implements IBox3IM {
     }
 
     @Override
-    public IBox3IM intersection(IVec3D boxFrom, IVec3D boxTo) {
+    public IBox3IM intersection(IVec3DC boxFrom, IVec3DC boxTo) {
         return this.intersection(boxFrom.x(), boxFrom.y(), boxFrom.z(), boxTo.x(), boxTo.y(), boxTo.z());
     }
 
     @Override
-    public IBox3IM intersection(IVec3I boxFrom, IVec3I boxTo) {
+    public IBox3IM intersection(IVec3IC boxFrom, IVec3IC boxTo) {
         return this.intersection(boxFrom.x(), boxFrom.y(), boxFrom.z(), boxTo.x(), boxTo.y(), boxTo.z());
     }
 
     @Override
-    public IBox3IM intersection(IBox3D box) {
+    public IBox3IM intersection(IBox3DC box) {
         return this.intersection(box.minX(), box.minY(), box.minZ(), box.maxX(), box.maxY(), box.maxZ());
     }
 
     @Override
-    public IBox3IM intersection(IBox3I box) {
+    public IBox3IM intersection(IBox3IC box) {
         return this.intersection(box.minX(), box.minY(), box.minZ(), box.maxX(), box.maxY(), box.maxZ());
     }
 
     @Override
-    public IBox3IM intersection(IBox2I box, int minZ, int maxZ) {
+    public IBox3IM intersection(IBox2IC box, int minZ, int maxZ) {
         return this.intersection(box.minX(), box.minY(), minZ, box.maxX(), box.maxY(), maxZ);
     }
 
     @Override
-    public IBox3IM intersection(IBox2I box, double minZ, double maxZ) {
+    public IBox3IM intersection(IBox2IC box, double minZ, double maxZ) {
         return this.intersection(box.minX(), box.minY(), minZ, box.maxX(), box.maxY(), maxZ);
     }
 
     @Override
-    public IBox3IM intersection(IBox2D box, int minZ, int maxZ) {
+    public IBox3IM intersection(IBox2DC box, int minZ, int maxZ) {
         return this.intersection(box.minX(), box.minY(), minZ, box.maxX(), box.maxY(), maxZ);
     }
 
     @Override
-    public IBox3IM intersection(IBox2D box, double minZ, double maxZ) {
+    public IBox3IM intersection(IBox2DC box, double minZ, double maxZ) {
         return this.intersection(box.minX(), box.minY(), minZ, box.maxX(), box.maxY(), maxZ);
     }
 
     @Override
-    public IBox3IM intersection(IBox2I box) {
+    public IBox3IM intersection(IBox2IC box) {
         return this.intersection(box.minX(), box.minY(), 0, box.maxX(), box.maxY(), 0);
     }
 
     @Override
-    public IBox3IM intersection(IBox2D box) {
+    public IBox3IM intersection(IBox2DC box) {
         return this.intersection(box.minX(), box.minY(), 0.0D, box.maxX(), box.maxY(), 0.0D);
     }
 
