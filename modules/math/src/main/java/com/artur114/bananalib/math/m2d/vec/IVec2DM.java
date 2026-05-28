@@ -1,5 +1,7 @@
 package com.artur114.bananalib.math.m2d.vec;
 
+import com.artur114.bananalib.math.core.m2d.vec.IVec2DC;
+import com.artur114.bananalib.math.core.m2d.vec.IVec2IC;
 import com.artur114.bananalib.math.m2d.box.IBox2D;
 import com.artur114.bananalib.math.m2d.box.IBox2I;
 
@@ -7,8 +9,8 @@ public interface IVec2DM extends IVec2D {
     IVec2DM set(double[] pos);
     IVec2DM set(double x, double y);
     IVec2DM set(int x, int y);
-    IVec2DM set(IVec2D vec);
-    IVec2DM set(IVec2I vec);
+    IVec2DM set(IVec2DC vec);
+    IVec2DM set(IVec2IC vec);
     IVec2DM setX(int x);
     IVec2DM setX(double x);
     IVec2DM setY(int y);
@@ -20,29 +22,29 @@ public interface IVec2DM extends IVec2D {
     IVec2DM popPos();
     IVec2DM add(int x, int y);
     IVec2DM add(double x, double y);
-    IVec2DM add(IVec2I vec);
-    IVec2DM add(IVec2D vec);
+    IVec2DM add(IVec2IC vec);
+    IVec2DM add(IVec2DC vec);
     IVec2DM subtract(int x, int y);
     IVec2DM subtract(double x, double y);
-    IVec2DM subtract(IVec2I vec);
-    IVec2DM subtract(IVec2D vec);
+    IVec2DM subtract(IVec2IC vec);
+    IVec2DM subtract(IVec2DC vec);
     IVec2DM scale(int val);
     IVec2DM scale(int x, int y);
     IVec2DM scale(double val);
     IVec2DM scale(double x, double y);
-    IVec2DM scale(IVec2I vec);
-    IVec2DM scale(IVec2D vec);
+    IVec2DM scale(IVec2IC vec);
+    IVec2DM scale(IVec2DC vec);
     IVec2DM divide(int val);
     IVec2DM divide(int x, int y);
     IVec2DM divide(double val);
     IVec2DM divide(double x, double y);
-    IVec2DM divide(IVec2I vec);
-    IVec2DM divide(IVec2D vec);
+    IVec2DM divide(IVec2IC vec);
+    IVec2DM divide(IVec2DC vec);
     IVec2DM rotate(double degrees);
     IVec2DM rotateAround(int x, int y, double degrees);
     IVec2DM rotateAround(double x, double y, double degrees);
-    IVec2DM rotateAround(IVec2D point, double degrees);
-    IVec2DM rotateAround(IVec2I point, double degrees);
+    IVec2DM rotateAround(IVec2DC point, double degrees);
+    IVec2DM rotateAround(IVec2IC point, double degrees);
     IVec2DM wrap(IBox2I box);
     IVec2DM wrap(IBox2D box);
     IVec2DM wrap(int x, int y);

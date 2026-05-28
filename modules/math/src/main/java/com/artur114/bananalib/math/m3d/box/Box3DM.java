@@ -761,7 +761,9 @@ public class Box3DM implements IBox3DM {
     @Override
     public IBox3DM copy() {
         Box3DM box = new Box3DM(this);
-        box.stateStack = this.stateStack.copy();
+        if (this.stateStack != null) {
+            box.stateStack = this.stateStack.copy();
+        }
         return box;
     }
 }

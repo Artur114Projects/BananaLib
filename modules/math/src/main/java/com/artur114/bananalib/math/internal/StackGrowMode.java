@@ -1,5 +1,9 @@
 package com.artur114.bananalib.math.internal;
 
+/**
+ * Internal runtime utility.<br>
+ * Not intended for public use.
+ */
 public enum StackGrowMode {
     EXPONENT, LINEAR_1, LINEAR_2, LINEAR_3, LINEAR_4;
 

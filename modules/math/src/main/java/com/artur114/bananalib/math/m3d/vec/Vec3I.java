@@ -245,9 +245,9 @@ public class Vec3I implements IVec3I {
     }
 
     @Override
-    public float distance(double x, double y, double z) {
+    public double distance(double x, double y, double z) {
         double deltaX = x - this.x, deltaY = y - this.y, deltaZ = z - this.z;
-        return (float) Math.sqrt(deltaY * deltaY + deltaX * deltaX + deltaZ * deltaZ);
+        return Math.sqrt(deltaY * deltaY + deltaX * deltaX + deltaZ * deltaZ);
     }
 
     @Override
@@ -256,7 +256,7 @@ public class Vec3I implements IVec3I {
     }
 
     @Override
-    public float distance(IVec3D vec) {
+    public double distance(IVec3D vec) {
         return this.distance(vec.x(), vec.y(), vec.z());
     }
 

@@ -2,6 +2,10 @@ package com.artur114.bananalib.math.internal;
 
 import java.util.Arrays;
 
+/**
+ * Internal runtime utility.<br>
+ * Not intended for public use.
+ */
 public class DoubleStack {
     private final StackGrowMode mode;
     private final int dataSize;

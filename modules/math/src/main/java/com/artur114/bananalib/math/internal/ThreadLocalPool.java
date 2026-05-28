@@ -5,6 +5,10 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 
+/**
+ * Internal runtime utility.<br>
+ * Not intended for public use.
+ */
 public class ThreadLocalPool<T> {
     private final ThreadLocal<int[]> poolCursor;
     private final Predicate<T> checkReleased;

@@ -1,6 +1,10 @@
 package com.artur114.bananalib.math.m2d.box;
 
 import com.artur114.bananalib.math.BananaMath;
+import com.artur114.bananalib.math.core.m2d.box.IBox2DC;
+import com.artur114.bananalib.math.core.m2d.box.IBox2IC;
+import com.artur114.bananalib.math.core.m2d.vec.IVec2DC;
+import com.artur114.bananalib.math.core.m2d.vec.IVec2IC;
 import com.artur114.bananalib.math.m2d.vec.IVec2D;
 import com.artur114.bananalib.math.m2d.vec.IVec2I;
 
@@ -20,19 +24,19 @@ public class Box2I implements IBox2I {
         this(BananaMath.floor(minX), BananaMath.floor(minY), BananaMath.floor(maxX), BananaMath.floor(maxY));
     }
 
-    public Box2I(IVec2D from, IVec2D to) {
+    public Box2I(IVec2DC from, IVec2DC to) {
         this(BananaMath.floor(from.x()), BananaMath.floor(from.y()), BananaMath.floor(to.x()), BananaMath.floor(to.y()));
     }
 
-    public Box2I(IVec2I from, IVec2I to) {
+    public Box2I(IVec2IC from, IVec2IC to) {
         this(from.x(), from.y(), to.x(), to.y());
     }
 
-    public Box2I(IBox2D box) {
+    public Box2I(IBox2DC box) {
         this(box.minX(), box.minY(), box.maxX(), box.maxY());
     }
 
-    public Box2I(IBox2I box) {
+    public Box2I(IBox2IC box) {
         this(box.minX(), box.minY(), box.maxX(), box.maxY());
     }
 
@@ -68,7 +72,7 @@ public class Box2I implements IBox2I {
 
     @Override
     public IBox2I grow(double x, double y) {
-        return new Box2I(this.minX() - x, this.minY() - y, this.maxX() + x, this.maxY() + y);
+        return new Box2I(this.minX - x, this.minY - y, this.maxX + x, this.maxY + y);
     }
 
     @Override
@@ -78,96 +82,96 @@ public class Box2I implements IBox2I {
 
     @Override
     public IBox2I grow(int x, int y) {
-        return new Box2I(this.minX() - x, this.minY() - y, this.maxX() + x, this.maxY() + y);
+        return new Box2I(this.minX - x, this.minY - y, this.maxX + x, this.maxY + y);
     }
 
     @Override
-    public IBox2I grow(IVec2I vec2D) {
+    public IBox2I grow(IVec2IC vec2D) {
         return this.grow(vec2D.x(), vec2D.y());
     }
 
     @Override
-    public IBox2I grow(IVec2D vec2D) {
+    public IBox2I grow(IVec2DC vec2D) {
         return this.grow(vec2D.x(), vec2D.y());
     }
 
     @Override
     public IBox2I offset(int x, int y) {
-        return new Box2I(this.minX() + x, this.minY() + y, this.maxX() + x, this.maxY() + y);
+        return new Box2I(this.minX + x, this.minY + y, this.maxX + x, this.maxY + y);
     }
 
     @Override
     public IBox2I offset(double x, double y) {
-        return new Box2I(this.minX() + x, this.minY() + y, this.maxX() + x, this.maxY() + y);
+        return new Box2I(this.minX + x, this.minY + y, this.maxX + x, this.maxY + y);
     }
 
     @Override
-    public IBox2I offset(IVec2D vec2D) {
+    public IBox2I offset(IVec2DC vec2D) {
         return this.offset(vec2D.x(), vec2D.y());
     }
 
     @Override
-    public IBox2I offset(IVec2I vec2D) {
+    public IBox2I offset(IVec2IC vec2D) {
         return this.offset(vec2D.x(), vec2D.y());
     }
 
     @Override
     public boolean intersects(int minX, int minY, int maxX, int maxY) {
-        return this.minX() <= maxX && this.maxX() >= minX && this.minY() <= maxY && this.maxY() >= minY;
+        return this.minX <= maxX && this.maxX >= minX && this.minY <= maxY && this.maxY >= minY;
     }
 
     @Override
     public boolean intersects(double minX, double minY, double maxX, double maxY) {
-        return this.minX() <= maxX && this.maxX() >= minX && this.minY() <= maxY && this.maxY() >= minY;
+        return this.minX <= maxX && this.maxX >= minX && this.minY <= maxY && this.maxY >= minY;
     }
 
     @Override
-    public boolean intersects(IVec2D boxFrom, IVec2D boxTo) {
+    public boolean intersects(IVec2DC boxFrom, IVec2DC boxTo) {
         return this.intersects(boxFrom.x(), boxFrom.y(), boxTo.x(), boxTo.y());
     }
 
     @Override
-    public boolean intersects(IVec2I boxFrom, IVec2I boxTo) {
+    public boolean intersects(IVec2IC boxFrom, IVec2IC boxTo) {
         return this.intersects(boxFrom.x(), boxFrom.y(), boxTo.x(), boxTo.y());
     }
 
     @Override
-    public boolean intersects(IBox2D area2D) {
+    public boolean intersects(IBox2DC area2D) {
         return this.intersects(area2D.minX(), area2D.minY(), area2D.maxX(), area2D.maxY());
     }
 
     @Override
-    public boolean intersects(IBox2I area2D) {
+    public boolean intersects(IBox2IC area2D) {
         return this.intersects(area2D.minX(), area2D.minY(), area2D.maxX(), area2D.maxY());
     }
 
     @Override
     public boolean contains(int x, int y) {
-        return x >= this.minX() && y >= this.minY() && x <= this.maxX() && y <= this.maxY();
+        return x >= this.minX && y >= this.minY && x <= this.maxX && y <= this.maxY;
     }
 
     @Override
     public boolean contains(double x, double y) {
-        return x >= this.minX() && y >= this.minY() && x <= this.maxX() && y <= this.maxY();
+        return x >= this.minX && y >= this.minY && x <= this.maxX && y <= this.maxY;
     }
 
     @Override
-    public boolean contains(IBox2I area2D) {
+    public boolean contains(IBox2IC area2D) {
         return this.contains(area2D.minX(), area2D.minY()) && this.contains(area2D.maxX(), area2D.maxY());
     }
 
     @Override
-    public boolean contains(IBox2D area2D) {
+    public boolean contains(IBox2DC area2D) {
         return this.contains(area2D.minX(), area2D.minY()) && this.contains(area2D.maxX(), area2D.maxY());
     }
 
     @Override
-    public boolean contains(IVec2I vec2D) {
+    public boolean contains(IVec2IC vec2D) {
         return this.contains(vec2D.x(), vec2D.y());
     }
 
     @Override
-    public boolean contains(IVec2D vec2D) {
+    public boolean contains(IVec2DC vec2D) {
         return this.contains(vec2D.x(), vec2D.y());
     }
 
@@ -193,16 +197,17 @@ public class Box2I implements IBox2I {
 
     @Override
     public boolean equals(Object obj) {
-        return obj instanceof IBox2I && ((IBox2I) obj).minX() == this.minX() && ((IBox2I) obj).minY() == this.minY() && ((IBox2I) obj).maxX() == this.maxX() && ((IBox2I) obj).maxY() == this.maxY();
+        return (obj instanceof IBox2I && ((IBox2I) obj).minX() == this.minX && ((IBox2I) obj).minY() == this.minY && ((IBox2I) obj).maxX() == this.maxX && ((IBox2I) obj).maxY() == this.maxY) ||
+                (obj instanceof IBox2D && ((IBox2D) obj).minX() == this.minX && ((IBox2D) obj).minY() == this.minY && ((IBox2D) obj).maxX() == this.maxX && ((IBox2D) obj).maxY() == this.maxY);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(this.minX(), this.minY(), this.maxX(), this.maxY());
+        return 31 * (31 * (31 * Double.hashCode(this.minX) + Double.hashCode(this.minY)) + Double.hashCode(this.maxX)) + Double.hashCode(this.maxY);
     }
 
     @Override
     public String toString() {
-        return "[" + this.minX() + ", " + minY() + "] -> ["  + this.maxX() + ", " + this.maxY() + "]";
+        return "[" + this.minX + ", " + this.minY + "] -> ["  + this.maxX + ", " + this.maxY + "]";
     }
 }

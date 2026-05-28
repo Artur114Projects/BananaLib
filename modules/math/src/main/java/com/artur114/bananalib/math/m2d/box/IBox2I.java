@@ -1,36 +1,29 @@
 package com.artur114.bananalib.math.m2d.box;
 
-import com.artur114.bananalib.math.m2d.vec.IVec2D;
-import com.artur114.bananalib.math.m2d.vec.IVec2I;
+import com.artur114.bananalib.math.core.m2d.box.IBox2DC;
+import com.artur114.bananalib.math.core.m2d.box.IBox2IC;
+import com.artur114.bananalib.math.core.m2d.vec.IVec2DC;
+import com.artur114.bananalib.math.core.m2d.vec.IVec2IC;
 
-public interface IBox2I {
-    int minX();
-    int minY();
-    int maxX();
-    int maxY();
-    int size();
+public interface IBox2I extends IBox2IC {
+    boolean contains(IBox2IC box);
+    boolean contains(IBox2DC box);
+    boolean contains(IVec2IC vec);
+    boolean contains(IVec2DC vec);
+    boolean intersects(IVec2DC boxFrom, IVec2DC boxTo);
+    boolean intersects(IVec2IC boxFrom, IVec2IC boxTo);
+    boolean intersects(IBox2DC box);
+    boolean intersects(IBox2IC box);
     IBox2I grow(double amount);
     IBox2I grow(double x, double y);
     IBox2I grow(int amount);
     IBox2I grow(int x, int y);
-    IBox2I grow(IVec2I vec2D);
-    IBox2I grow(IVec2D vec2D);
+    IBox2I grow(IVec2IC vec);
+    IBox2I grow(IVec2DC vec);
     IBox2I offset(int x, int y);
     IBox2I offset(double x, double y);
-    IBox2I offset(IVec2D vec2D);
-    IBox2I offset(IVec2I vec2D);
-    boolean intersects(int minX, int minY, int maxX, int maxY);
-    boolean intersects(double minX, double minY, double maxX, double maxY);
-    boolean intersects(IVec2D boxFrom, IVec2D boxTo);
-    boolean intersects(IVec2I boxFrom, IVec2I boxTo);
-    boolean intersects(IBox2D area2D);
-    boolean intersects(IBox2I area2D);
-    boolean contains(int x, int y);
-    boolean contains(double x, double y);
-    boolean contains(IBox2I area2D);
-    boolean contains(IBox2D area2D);
-    boolean contains(IVec2I vec2D);
-    boolean contains(IVec2D vec2D);
+    IBox2I offset(IVec2DC vec);
+    IBox2I offset(IVec2IC vec);
     IBox2IM toMutable();
     IBox2I toImmutable();
     IBox2D toDouble();

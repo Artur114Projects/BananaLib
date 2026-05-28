@@ -1,46 +1,58 @@
 package com.artur114.bananalib.math.m2d.matrix;
 
 import com.artur114.bananalib.math.BananaMath;
+import com.artur114.bananalib.math.core.m2d.box.IBox2DC;
+import com.artur114.bananalib.math.core.m2d.box.IBox2IC;
+import com.artur114.bananalib.math.core.m2d.matrix.IMatrix2DC;
+import com.artur114.bananalib.math.core.m2d.matrix.IMatrix2FC;
+import com.artur114.bananalib.math.core.m2d.vec.IVec2DC;
+import com.artur114.bananalib.math.core.m2d.vec.IVec2IC;
+import com.artur114.bananalib.math.internal.Hasher;
 import com.artur114.bananalib.math.m2d.box.*;
 import com.artur114.bananalib.math.m2d.vec.*;
 
 import java.nio.DoubleBuffer;
-import java.util.Objects;
 
 public class Matrix2D implements IMatrix2D {
     public static final Matrix2D IDENTITY = new Matrix2D();
     private final double m00, m01, m02;
     private final double m10, m11, m12;
     private final double det;
+    private final int hash;
 
     public Matrix2D() {
         this.m00 = 1.0D; this.m01 = 0.0D; this.m02 = 0.0D;
         this.m10 = 0.0D; this.m11 = 1.0D; this.m12 = 0.0D;
         this.det = 1.0D;
+        this.hash = Hasher.hashIEEE754(this.m00, this.m01, this.m02, this.m10, this.m11, this.m12, 0.0D, 0.0D, 1.0D);
     }
 
     public Matrix2D(double m00, double m01, double m02, double m10, double m11, double m12) {
         this.m00 = m00; this.m01 = m01; this.m02 = m02;
         this.m10 = m10; this.m11 = m11; this.m12 = m12;
         this.det = this.m00 * this.m11 - this.m01 * this.m10;
+        this.hash = Hasher.hashIEEE754(this.m00, this.m01, this.m02, this.m10, this.m11, this.m12, 0.0D, 0.0D, 1.0D);
     }
 
-    public Matrix2D(IMatrix2D m) {
+    public Matrix2D(IMatrix2DC m) {
         this.m00 = m.m00(); this.m01 = m.m01(); this.m02 = m.m02();
         this.m10 = m.m10(); this.m11 = m.m11(); this.m12 = m.m12();
         this.det = this.m00 * this.m11 - this.m01 * this.m10;
+        this.hash = Hasher.hashIEEE754(this.m00, this.m01, this.m02, this.m10, this.m11, this.m12, 0.0D, 0.0D, 1.0D);
     }
 
-    public Matrix2D(IMatrix2F m) {
+    public Matrix2D(IMatrix2FC m) {
         this.m00 = m.m00(); this.m01 = m.m01(); this.m02 = m.m02();
         this.m10 = m.m10(); this.m11 = m.m11(); this.m12 = m.m12();
         this.det = this.m00 * this.m11 - this.m01 * this.m10;
+        this.hash = Hasher.hashIEEE754(this.m00, this.m01, this.m02, this.m10, this.m11, this.m12, 0.0D, 0.0D, 1.0D);
     }
 
     public Matrix2D(DoubleBuffer buf) {
         this.m00 = buf.get(); this.m01 = buf.get(); this.m02 = buf.get();
         this.m10 = buf.get(); this.m11 = buf.get(); this.m12 = buf.get();
         this.det = this.m00 * this.m11 - this.m01 * this.m10;
+        this.hash = Hasher.hashIEEE754(this.m00, this.m01, this.m02, this.m10, this.m11, this.m12, 0.0D, 0.0D, 1.0D);
     }
 
     @Override
@@ -109,7 +121,7 @@ public class Matrix2D implements IMatrix2D {
     }
 
     @Override
-    public IMatrix2D mul(IMatrix2D matrix) {
+    public IMatrix2D mul(IMatrix2DC matrix) {
         double m1v00 = matrix.m00(), m1v01 = matrix.m01(), m1v02 = matrix.m02();
         double m1v10 = matrix.m10(), m1v11 = matrix.m11(), m1v12 = matrix.m12();
         double m2v00 = this.m00, m2v01 = this.m01, m2v02 = this.m02;
@@ -126,7 +138,7 @@ public class Matrix2D implements IMatrix2D {
     }
 
     @Override
-    public IMatrix2D mul(IMatrix2F matrix) {
+    public IMatrix2D mul(IMatrix2FC matrix) {
         float m1v00 = matrix.m00(), m1v01 = matrix.m01(), m1v02 = matrix.m02();
         float m1v10 = matrix.m10(), m1v11 = matrix.m11(), m1v12 = matrix.m12();
         double m2v00 = this.m00, m2v01 = this.m01, m2v02 = this.m02;
@@ -143,7 +155,7 @@ public class Matrix2D implements IMatrix2D {
     }
 
     @Override
-    public IMatrix2D mulPost(IMatrix2D matrix) {
+    public IMatrix2D mulPost(IMatrix2DC matrix) {
         double m2v00 = matrix.m00(), m2v01 = matrix.m01(), m2v02 = matrix.m02();
         double m2v10 = matrix.m10(), m2v11 = matrix.m11(), m2v12 = matrix.m12();
         double m1v00 = this.m00;
@@ -162,7 +174,7 @@ public class Matrix2D implements IMatrix2D {
     }
 
     @Override
-    public IMatrix2D mulPost(IMatrix2F matrix) {
+    public IMatrix2D mulPost(IMatrix2FC matrix) {
         double m2v00 = matrix.m00(), m2v01 = matrix.m01(), m2v02 = matrix.m02();
         double m2v10 = matrix.m10(), m2v11 = matrix.m11(), m2v12 = matrix.m12();
         double m1v00 = this.m00;
@@ -197,12 +209,12 @@ public class Matrix2D implements IMatrix2D {
     }
 
     @Override
-    public IMatrix2D scale(IVec2D vec) {
+    public IMatrix2D scale(IVec2DC vec) {
         return this.scale(vec.x(), vec.y());
     }
 
     @Override
-    public IMatrix2D scale(IVec2I vec) {
+    public IMatrix2D scale(IVec2IC vec) {
         return this.scale(vec.x(), vec.y());
     }
 
@@ -223,12 +235,12 @@ public class Matrix2D implements IMatrix2D {
     }
 
     @Override
-    public IMatrix2D translate(IVec2D vec) {
+    public IMatrix2D translate(IVec2DC vec) {
         return this.translate(vec.x(), vec.y());
     }
 
     @Override
-    public IMatrix2D translate(IVec2I vec) {
+    public IMatrix2D translate(IVec2IC vec) {
         return this.translate(vec.x(), vec.y());
     }
 
@@ -280,12 +292,12 @@ public class Matrix2D implements IMatrix2D {
     }
 
     @Override
-    public IMatrix2D rotateAround(IVec2D point, double degrees) {
+    public IMatrix2D rotateAround(IVec2DC point, double degrees) {
         return this.rotateAround(point.x(), point.y(), degrees);
     }
 
     @Override
-    public IMatrix2D rotateAround(IVec2I point, double degrees) {
+    public IMatrix2D rotateAround(IVec2IC point, double degrees) {
         return this.rotateAround(point.x(), point.y(), degrees);
     }
 
@@ -306,7 +318,7 @@ public class Matrix2D implements IMatrix2D {
     }
 
     @Override
-    public IVec2I transform(IVec2I vec) {
+    public IVec2I transform(IVec2IC vec) {
         return this.transform(vec.x(), vec.y());
     }
 
@@ -319,7 +331,7 @@ public class Matrix2D implements IMatrix2D {
     }
 
     @Override
-    public IVec2D transform(IVec2D vec) {
+    public IVec2D transform(IVec2DC vec) {
         return this.transform(vec.x(), vec.y());
     }
 
@@ -332,7 +344,7 @@ public class Matrix2D implements IMatrix2D {
     }
 
     @Override
-    public IVec2I[] transform(IVec2I... vec) {
+    public IVec2I[] transform(IVec2IC... vec) {
         IVec2I[] ret = new IVec2I[vec.length];
         for (int i = 0; i != vec.length; i++) {
             ret[i] = this.transform(vec[i]);
@@ -350,7 +362,7 @@ public class Matrix2D implements IMatrix2D {
     }
 
     @Override
-    public IVec2D[] transform(IVec2D... vec) {
+    public IVec2D[] transform(IVec2DC... vec) {
         IVec2D[] ret = new IVec2D[vec.length];
         for (int i = 0; i != vec.length; i++) {
             ret[i] = this.transform(vec[i]);
@@ -368,7 +380,7 @@ public class Matrix2D implements IMatrix2D {
     }
 
     @Override
-    public IBox2I transform(IBox2I box) {
+    public IBox2I transform(IBox2IC box) {
         return new Box2I(
             BananaMath.round((this.m00 * box.minX()) + (this.m01 * box.minY()) + (this.m02)),
             BananaMath.round((this.m10 * box.minX()) + (this.m11 * box.minY()) + (this.m12)),
@@ -390,7 +402,7 @@ public class Matrix2D implements IMatrix2D {
     }
 
     @Override
-    public IBox2D transform(IBox2D box) {
+    public IBox2D transform(IBox2DC box) {
         return new Box2D(
             (this.m00 * box.minX()) + (this.m01 * box.minY()) + (this.m02),
             (this.m10 * box.minX()) + (this.m11 * box.minY()) + (this.m12),
@@ -412,7 +424,7 @@ public class Matrix2D implements IMatrix2D {
     }
 
     @Override
-    public IBox2I[] transform(IBox2I... box) {
+    public IBox2I[] transform(IBox2IC... box) {
         IBox2I[] ret = new IBox2I[box.length];
         for (int i = 0; i != box.length; i++) {
             ret[i] = this.transform(box[i]);
@@ -430,7 +442,7 @@ public class Matrix2D implements IMatrix2D {
     }
 
     @Override
-    public IBox2D[] transform(IBox2D... box) {
+    public IBox2D[] transform(IBox2DC... box) {
         IBox2D[] ret = new IBox2D[box.length];
         for (int i = 0; i != box.length; i++) {
             ret[i] = this.transform(box[i]);
@@ -455,14 +467,14 @@ public class Matrix2D implements IMatrix2D {
         buf.put(this.m10);
         buf.put(this.m11);
         buf.put(this.m12);
-        buf.put(0.0F);
-        buf.put(0.0F);
-        buf.put(1.0F);
+        buf.put(0.0D);
+        buf.put(0.0D);
+        buf.put(1.0D);
         return buf;
     }
 
     @Override
-    public IMatrix2D toMutable() {
+    public IMatrix2DM toMutable() {
         return new Matrix2DM(this);
     }
 
@@ -478,23 +490,30 @@ public class Matrix2D implements IMatrix2D {
 
     @Override
     public String toString() {
-        return "[" + ((float) this.m00) + ", " + ((float) this.m01) + ", " + ((float) this.m02) + "]\n[" + ((float) this.m10) + ", " + ((float) this.m11) + ", " + ((float) this.m12) + "]\n[" + 0.0 + ", " + 0.0 + ", " + 1.0 + "]";
+        return "[" + this.m00 + ", " + this.m01 + ", " + this.m02 + "]\n[" + this.m10 + ", " + this.m11 + ", " + this.m12 + "]\n[" + 0.0 + ", " + 0.0 + ", " + 1.0 + "]";
     }
 
     @Override
     public boolean equals(Object obj) {
-        if (!(obj instanceof IMatrix2D)) {
-            return false;
+        if (obj instanceof IMatrix2D) {
+            IMatrix2D m = ((IMatrix2D) obj);
+            return
+                    m.m00() == this.m00 && m.m01() == this.m01 && m.m02() == this.m02 &&
+                    m.m10() == this.m10 && m.m11() == this.m11 && m.m12() == this.m12 &&
+                    m.m20() == 0.0D && m.m21() == 0.0D && m.m22() == 1.0D;
+
+        } else if (obj instanceof IMatrix2F) {
+            IMatrix2F m = ((IMatrix2F) obj);
+            return
+                    m.m00() == this.m00 && m.m01() == this.m01 && m.m02() == this.m02 &&
+                    m.m10() == this.m10 && m.m11() == this.m11 && m.m12() == this.m12 &&
+                    m.m20() == 0.0D && m.m21() == 0.0D && m.m22() == 1.0D;
         }
-        IMatrix2D m = ((IMatrix2D) obj);
-        return
-                m.m00() == this.m00 && m.m01() == this.m01 && m.m02() == this.m02 &&
-                m.m10() == this.m10 && m.m11() == this.m11 && m.m12() == this.m12 &&
-                m.m20() == 0.0D && m.m21() == 0.0D && m.m22() == 1.0D;
+        return false;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(this.m00, this.m01, this.m02, this.m10, this.m11, this.m12, 0.0D, 0.0D, 1.0D);
+        return this.hash;
     }
 }

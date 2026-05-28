@@ -5,11 +5,13 @@ Basic principles that all libraries should follow
 - Mutable implementations mutate current object unless otherwise specified.
 - Mutable implementations return this object unless otherwise specified
 - All mutable objects must have a state stack and a pool
+- Immutable zero/identity constants may be singleton instances
 
 ### Boxes (ABB)
 
 - all Box implementations must monitor the coordinate order themselves (minVec must be smaller than maxVec in all dimensionality coordinates)
 - [intersection] if a box is passed that does not intersect with the current one, it returns an empty box (for immutable), becomes an empty box (for mutable)
+- rotating AABB boxes through matrices at angles not divisible by 90 degrees may produce non-minimal or invalid bounds.
 
 ### Rotations
 
@@ -36,8 +38,16 @@ Basic principles that all libraries should follow
 
 - [equals] performs exact comparison
 - [equalsEps] performs eps comparison
+- [equals] must be multi-type, i.e. IVecI[n].equals(IVecD[n]) == true if IVecI.xy...() == IVecD.xy...()
+- [hashCode] must be multi-type, i.e. IVecI[n].hashCode() == IVecD[n].hashCode() if IVecI.xy...() == IVecD.xy...()
 
 ### Multi Thread
 
 - Mutable objects are not required to be thread-safe.
 - Pools must be local to threads
+
+### Other
+
+- [NaN] in math objects is undefined behavior
+- [-0.0] in math objects may cause undefined behavior
+- Methods do not validate arguments unless explicitly specified

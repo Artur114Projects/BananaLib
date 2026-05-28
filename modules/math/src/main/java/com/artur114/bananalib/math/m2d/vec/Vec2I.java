@@ -1,6 +1,8 @@
 package com.artur114.bananalib.math.m2d.vec;
 
 import com.artur114.bananalib.math.BananaMath;
+import com.artur114.bananalib.math.core.m2d.vec.IVec2DC;
+import com.artur114.bananalib.math.core.m2d.vec.IVec2IC;
 import com.artur114.bananalib.math.m2d.box.IBox2D;
 import com.artur114.bananalib.math.m2d.box.IBox2I;
 import com.artur114.bananalib.math.m3d.vec.*;
@@ -18,11 +20,11 @@ public class Vec2I implements IVec2I {
         this.y = y;
     }
 
-    public Vec2I(IVec2D vec2D) {
+    public Vec2I(IVec2DC vec2D) {
         this(vec2D.x(), vec2D.y());
     }
 
-    public Vec2I(IVec2I vec2D) {
+    public Vec2I(IVec2IC vec2D) {
         this(vec2D.x(), vec2D.y());
     }
 
@@ -60,6 +62,23 @@ public class Vec2I implements IVec2I {
 
     @Override
     @SuppressWarnings("SuspiciousNameCombination")
+    public IVec3I yxz(int z) {
+        return new Vec3I(this.y, this.x, z);
+    }
+
+    @Override
+    @SuppressWarnings("SuspiciousNameCombination")
+    public IVec3I yzx(int z) {
+        return new Vec3I(this.y, z, this.x);
+    }
+
+    @Override
+    public IVec3I zyx(int z) {
+        return new Vec3I(z, this.y, this.x);
+    }
+
+    @Override
+    @SuppressWarnings("SuspiciousNameCombination")
     public IVec2IM yx(IVec2IM out) {
         return out.set(this.y, this.x);
     }
@@ -81,6 +100,23 @@ public class Vec2I implements IVec2I {
     }
 
     @Override
+    @SuppressWarnings("SuspiciousNameCombination")
+    public IVec3IM yxz(IVec3IM out, int z) {
+        return out.set(this.y, this.x, z);
+    }
+
+    @Override
+    @SuppressWarnings("SuspiciousNameCombination")
+    public IVec3IM yzx(IVec3IM out, int z) {
+        return out.set(this.y, z, this.x);
+    }
+
+    @Override
+    public IVec3IM zyx(IVec3IM out, int z) {
+        return out.set(z, this.y, this.x);
+    }
+
+    @Override
     public float length() {
         return (float) Math.sqrt(this.lengthSq());
     }
@@ -91,23 +127,43 @@ public class Vec2I implements IVec2I {
     }
 
     @Override
-    public int dot(IVec2I vec) {
-        return this.x * vec.x() + this.y * vec.y();
+    public int dot(int x, int y) {
+        return this.x * x + this.y * y;
     }
 
     @Override
-    public double dot(IVec2D vec) {
-        return this.x * vec.x() + this.y * vec.y();
+    public double dot(double x, double y) {
+        return this.x * x + this.y * y;
     }
 
     @Override
-    public int cross(IVec2I vec) {
-        return this.x * vec.y() - this.y * vec.x();
+    public int cross(int x, int y) {
+        return this.x * y - this.y * x;
     }
 
     @Override
-    public double cross(IVec2D vec) {
-        return this.x * vec.y() - this.y * vec.x();
+    public double cross(double x, double y) {
+        return this.x * y - this.y * x;
+    }
+
+    @Override
+    public int dot(IVec2IC vec) {
+        return this.dot(vec.x(), vec.y());
+    }
+
+    @Override
+    public double dot(IVec2DC vec) {
+        return this.dot(vec.x(), vec.y());
+    }
+
+    @Override
+    public int cross(IVec2IC vec) {
+        return this.cross(vec.x(), vec.y());
+    }
+
+    @Override
+    public double cross(IVec2DC vec) {
+        return this.cross(vec.x(), vec.y());
     }
 
     @Override
@@ -118,19 +174,19 @@ public class Vec2I implements IVec2I {
     }
 
     @Override
-    public float distance(double x, double y) {
+    public double distance(double x, double y) {
         double deltaX = x - this.x;
         double deltaY = y - this.y;
-        return (float) Math.sqrt(deltaY * deltaY + deltaX * deltaX);
+        return Math.sqrt(deltaY * deltaY + deltaX * deltaX);
     }
 
     @Override
-    public float distance(IVec2I vec) {
+    public float distance(IVec2IC vec) {
         return this.distance(vec.x(), vec.y());
     }
 
     @Override
-    public float distance(IVec2D vec) {
+    public double distance(IVec2DC vec) {
         return this.distance(vec.x(), vec.y());
     }
 
@@ -142,19 +198,19 @@ public class Vec2I implements IVec2I {
     }
 
     @Override
-    public float distanceSq(double x, double y) {
+    public double distanceSq(double x, double y) {
         double deltaX = x - this.x;
         double deltaY = y - this.y;
-        return (float) (deltaY * deltaY + deltaX * deltaX);
+        return deltaY * deltaY + deltaX * deltaX;
     }
 
     @Override
-    public float distanceSq(IVec2I vec) {
+    public float distanceSq(IVec2IC vec) {
         return this.distanceSq(vec.x(), vec.y());
     }
 
     @Override
-    public float distanceSq(IVec2D vec) {
+    public double distanceSq(IVec2DC vec) {
         return this.distanceSq(vec.x(), vec.y());
     }
 
@@ -169,12 +225,12 @@ public class Vec2I implements IVec2I {
     }
 
     @Override
-    public IVec2I add(IVec2I vec) {
+    public IVec2I add(IVec2IC vec) {
         return this.add(vec.x(), vec.y());
     }
 
     @Override
-    public IVec2I add(IVec2D vec) {
+    public IVec2I add(IVec2DC vec) {
         return this.add(vec.x(), vec.y());
     }
 
@@ -189,12 +245,12 @@ public class Vec2I implements IVec2I {
     }
 
     @Override
-    public IVec2I subtract(IVec2I vec) {
+    public IVec2I subtract(IVec2IC vec) {
         return this.subtract(vec.x(), vec.y());
     }
 
     @Override
-    public IVec2I subtract(IVec2D vec) {
+    public IVec2I subtract(IVec2DC vec) {
         return this.subtract(vec.x(), vec.y());
     }
 
@@ -219,12 +275,12 @@ public class Vec2I implements IVec2I {
     }
 
     @Override
-    public IVec2I scale(IVec2I vec) {
+    public IVec2I scale(IVec2IC vec) {
         return this.scale(vec.x(), vec.y());
     }
 
     @Override
-    public IVec2I scale(IVec2D vec) {
+    public IVec2I scale(IVec2DC vec) {
         return this.scale(vec.x(), vec.y());
     }
 
@@ -249,12 +305,12 @@ public class Vec2I implements IVec2I {
     }
 
     @Override
-    public IVec2I divide(IVec2I vec) {
+    public IVec2I divide(IVec2IC vec) {
         return this.divide(vec.x(), vec.y());
     }
 
     @Override
-    public IVec2I divide(IVec2D vec) {
+    public IVec2I divide(IVec2DC vec) {
         return this.divide(vec.x(), vec.y());
     }
 
@@ -292,12 +348,12 @@ public class Vec2I implements IVec2I {
     }
 
     @Override
-    public IVec2I rotateAround(IVec2D point, double degrees) {
+    public IVec2I rotateAround(IVec2DC point, double degrees) {
         return this.rotateAround(point.x(), point.y(), degrees);
     }
 
     @Override
-    public IVec2I rotateAround(IVec2I point, double degrees) {
+    public IVec2I rotateAround(IVec2IC point, double degrees) {
         return this.rotateAround(point.x(), point.y(), degrees);
     }
 

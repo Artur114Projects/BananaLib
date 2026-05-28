@@ -744,7 +744,9 @@ public class Box3IM implements IBox3IM {
     @Override
     public IBox3IM copy() {
         Box3IM box = new Box3IM(this);
-        box.stateStack = this.stateStack.copy();
+        if (this.stateStack != null) {
+            box.stateStack = this.stateStack.copy();
+        }
         return box;
     }
 }

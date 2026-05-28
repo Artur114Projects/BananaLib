@@ -990,7 +990,9 @@ public class Vec3DM implements IVec3DM {
     @Override
     public IVec3DM copy() {
         Vec3DM vec = new Vec3DM(this);
-        vec.stateStack = this.stateStack.copy();
+        if (this.stateStack != null) {
+            vec.stateStack = this.stateStack.copy();
+        }
         return vec;
     }
 

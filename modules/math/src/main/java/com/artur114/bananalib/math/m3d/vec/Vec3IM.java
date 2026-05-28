@@ -412,9 +412,9 @@ public class Vec3IM implements IVec3IM {
     }
 
     @Override
-    public float distance(double x, double y, double z) {
+    public double distance(double x, double y, double z) {
         double deltaX = x - this.x, deltaY = y - this.y, deltaZ = z - this.z;
-        return (float) Math.sqrt(deltaY * deltaY + deltaX * deltaX + deltaZ * deltaZ);
+        return Math.sqrt(deltaY * deltaY + deltaX * deltaX + deltaZ * deltaZ);
     }
 
     @Override
@@ -423,7 +423,7 @@ public class Vec3IM implements IVec3IM {
     }
 
     @Override
-    public float distance(IVec3D vec) {
+    public double distance(IVec3D vec) {
         return this.distance(vec.x(), vec.y(), vec.z());
     }
 
@@ -571,9 +571,7 @@ public class Vec3IM implements IVec3IM {
 
     @Override
     public IVec3IM scale(double val) {
-        this.x *= BananaMath.floor(val);
-        this.y *= BananaMath.floor(val);
-        this.z *= BananaMath.floor(val);
+        this.set(this.x * val, this.y * val, this.z * val);
         return this;
     }
 
@@ -587,9 +585,7 @@ public class Vec3IM implements IVec3IM {
 
     @Override
     public IVec3IM scale(double x, double y, double z) {
-        this.x *= BananaMath.floor(x);
-        this.y *= BananaMath.floor(y);
-        this.z *= BananaMath.floor(z);
+        this.set(this.x * x, this.y * y, this.z * z);
         return this;
     }
 
@@ -643,9 +639,7 @@ public class Vec3IM implements IVec3IM {
 
     @Override
     public IVec3IM divide(double val) {
-        this.x /= BananaMath.floor(val);
-        this.y /= BananaMath.floor(val);
-        this.z /= BananaMath.floor(val);
+        this.set(this.x / val, this.y / val, this.z / val);
         return this;
     }
 
@@ -659,9 +653,7 @@ public class Vec3IM implements IVec3IM {
 
     @Override
     public IVec3IM divide(double x, double y, double z) {
-        this.x /= BananaMath.floor(x);
-        this.y /= BananaMath.floor(y);
-        this.z /= BananaMath.floor(z);
+        this.set(this.x / x, this.y / y, this.z / z);
         return this;
     }
 
@@ -980,7 +972,9 @@ public class Vec3IM implements IVec3IM {
     @Override
     public IVec3IM copy() {
         Vec3IM vec = new Vec3IM(this);
-        vec.stateStack = this.stateStack.copy();
+        if (this.stateStack != null) {
+            vec.stateStack = this.stateStack.copy();
+        }
         return vec;
     }
 
