@@ -598,8 +598,14 @@ public class Vec2IM implements IVec2IM {
 
     @Override
     public boolean equals(Object obj) {
-        return (obj instanceof IVec2I && ((IVec2I) obj).x() == this.x && ((IVec2I) obj).y() == this.y) ||
-                (obj instanceof IVec2D && ((IVec2D) obj).x() == this.x && ((IVec2D) obj).y() == this.y);
+        if (obj instanceof IVec2I) {
+            IVec2I vec = (IVec2I) obj;
+            return vec.x() == this.x && vec.y() == this.y;
+        } else if (obj instanceof IVec2D) {
+            IVec2D vec = (IVec2D) obj;
+            return vec.x() == this.x && vec.y() == this.y;
+        }
+        return false;
     }
 
     @Override

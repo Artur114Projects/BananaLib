@@ -30,5 +30,5 @@ dependencies {
     minecraft 'net.minecraftforge:forge:1.12.2-14.23.5.2859'
 }
 
-apply from: rootProject.file("base.gradle")
-apply from: rootProject.file("publish.gradle")
+apply from: rootProject.file("scripts/base.gradle")
+apply from: rootProject.file("scripts/publish.gradle")

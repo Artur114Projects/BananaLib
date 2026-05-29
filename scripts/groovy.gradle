@@ -1,0 +1,5 @@
+dependencies {
+    implementation gradleApi()
+    implementation localGroovy()
+    testImplementation localGroovy()
+}

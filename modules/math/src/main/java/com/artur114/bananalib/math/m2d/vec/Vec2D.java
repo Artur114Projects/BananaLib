@@ -484,8 +484,26 @@ public class Vec2D implements IVec2D {
 
     @Override
     public boolean equals(Object obj) {
-        return (obj instanceof IVec2D && ((IVec2D) obj).x() == this.x && ((IVec2D) obj).y() == this.y) ||
-                (obj instanceof IVec2I && ((IVec2I) obj).x() == this.x && ((IVec2I) obj).y() == this.y);
+        if (obj instanceof IVec2D) {
+            IVec2D vec = (IVec2D) obj;
+            return vec.x() == this.x && vec.y() == this.y;
+        } else if (obj instanceof IVec2I) {
+            IVec2I vec = (IVec2I) obj;
+            return vec.x() == this.x && vec.y() == this.y;
+        }
+        return false;
+    }
+
+    @Override
+    public boolean equalsEps(Object obj, double eps) {
+        if (obj instanceof IVec2D) {
+            IVec2D vec = (IVec2D) obj;
+            return Math.abs(vec.x() - this.x) <= eps && Math.abs(vec.y() - this.y) <= eps;
+        } else if (obj instanceof IVec2I) {
+            IVec2I vec = (IVec2I) obj;
+            return Math.abs(vec.x() - this.x) <= eps && Math.abs(vec.y() - this.y) <= eps;
+        }
+        return false;
     }
 
     @Override

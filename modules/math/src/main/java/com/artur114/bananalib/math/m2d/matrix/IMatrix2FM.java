@@ -46,4 +46,5 @@ public interface IMatrix2FM extends IMatrix2F {
     IMatrix2FM rotateAround(IVec2DC point, float degrees);
     IMatrix2FM rotateAround(IVec2IC point, float degrees);
     IMatrix2DM toDouble();
+    IMatrix2FM copy();
 }

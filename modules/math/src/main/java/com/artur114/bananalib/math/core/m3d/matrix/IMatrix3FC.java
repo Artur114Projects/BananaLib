@@ -1,4 +1,82 @@
 package com.artur114.bananalib.math.core.m3d.matrix;
 
-public interface IMatrix3FC {
+import com.artur114.bananalib.math.core.IEqualsEpsF;
+import com.artur114.bananalib.math.core.m3d.vec.IVec3DC;
+import com.artur114.bananalib.math.core.m3d.vec.IVec3IC;
+import com.artur114.bananalib.math.m3d.vec.IVec3DM;
+import com.artur114.bananalib.math.m3d.vec.IVec3IM;
+import org.jetbrains.annotations.Contract;
+
+import java.nio.FloatBuffer;
+
+public interface IMatrix3FC extends IEqualsEpsF {
+    float m00();
+    float m01();
+    float m02();
+    float m03();
+    float m10();
+    float m11();
+    float m12();
+    float m13();
+    float m20();
+    float m21();
+    float m22();
+    float m23();
+    float m30();
+    float m31();
+    float m32();
+    float m33();
+    @Contract("-> new")
+    IMatrix3FC invert();
+    @Contract("-> new")
+    IMatrix3FC transpose();
+    float determinant();
+    boolean isReversible();
+    IMatrix3FC mul(IMatrix3DC matrix);
+    IMatrix3FC mul(IMatrix3FC matrix);
+    IMatrix3FC mulPost(IMatrix3DC matrix);
+    IMatrix3FC mulPost(IMatrix3FC matrix);
+    IMatrix3FC div(int val);
+    IMatrix3FC div(float val);
+    IMatrix3FC div(double val);
+    IMatrix3FC scale(int val);
+    IMatrix3FC scale(float val);
+    IMatrix3FC scale(double val);
+    IMatrix3FC scale(int x, int y, int z);
+    IMatrix3FC scale(float x, float y, float z);
+    IMatrix3FC scale(double x, double y, double z);
+    IMatrix3FC translate(int x, int y, int z);
+    IMatrix3FC translate(float x, float y, float z);
+    IMatrix3FC translate(double x, double y, double z);
+    IMatrix3FC rotateX(float degrees);
+    IMatrix3FC rotateY(float degrees);
+    IMatrix3FC rotateZ(float degrees);
+    IMatrix3FC rotate(float degrees, int x, int y, int z);
+    IMatrix3FC rotate(float degrees, float x, float y, float z);
+    IMatrix3FC rotate(float degrees, double x, double y, double z);
+    IMatrix3FC localScale(int val);
+    IMatrix3FC localScale(float val);
+    IMatrix3FC localScale(double val);
+    IMatrix3FC localScale(int x, int y, int z);
+    IMatrix3FC localScale(float x, float y, float z);
+    IMatrix3FC localScale(double x, double y, double z);
+    IMatrix3FC localTranslate(int x, int y, int z);
+    IMatrix3FC localTranslate(float x, float y, float z);
+    IMatrix3FC localTranslate(double x, double y, double z);
+    IMatrix3FC localRotateX(float degrees);
+    IMatrix3FC localRotateY(float degrees);
+    IMatrix3FC localRotateZ(float degrees);
+    IMatrix3FC localRotate(float degrees, int x, int y, int z);
+    IMatrix3FC localRotate(float degrees, float x, float y, float z);
+    IMatrix3FC localRotate(float degrees, double x, double y, double z);
+    @Contract("_,_,_ -> new") IVec3IC transform(int x, int y, int z);
+    @Contract("_,_,_ -> new") IVec3DC transform(double x, double y, double z);
+    @Contract("_ -> new") IVec3IC transform(IVec3IC vec);
+    @Contract("_ -> _") IVec3IM transform(IVec3IM vec);
+    @Contract("_ -> new") IVec3DC transform(IVec3DC vec);
+    @Contract("_ -> _") IVec3DM transform(IVec3DM vec);
+    @Contract("_ -> _") FloatBuffer writeToBuffer(FloatBuffer buf);
+    @Contract("-> new") IMatrix3FC toMutable();
+    @Contract("-> this") IMatrix3FC toImmutable();
+    @Contract("-> new") IMatrix3DC toDouble();
 }

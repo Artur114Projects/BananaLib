@@ -59,4 +59,5 @@ public interface IMatrix2D extends IMatrix2DC {
     IMatrix2DM toMutable();
     IMatrix2D toImmutable();
     IMatrix2F toFloat();
+    IMatrix2D copy();
 }

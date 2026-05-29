@@ -321,8 +321,11 @@ public class Vec2I implements IVec2I {
         }
 
         double rad = Math.toRadians(degrees);
-        double sin = Math.sin(rad), cos = Math.cos(rad);
-        return new Vec2I(BananaMath.round(this.x * cos + this.y * sin), BananaMath.round(this.y * cos - this.x * sin));
+        double sin = BananaMath.sin(rad), cos = BananaMath.cos(rad);
+        return new Vec2I(
+            BananaMath.round(this.x * cos + this.y * sin),
+            BananaMath.round(this.y * cos - this.x * sin)
+        );
     }
 
     @Override
@@ -332,8 +335,11 @@ public class Vec2I implements IVec2I {
         }
 
         double rad = Math.toRadians(degrees);
-        double sin = Math.sin(rad), cos = Math.cos(rad);
-        return new Vec2I(BananaMath.round(((this.x - x) * cos + ((this.y - y) * sin)) + x), BananaMath.round(((this.y - y) * cos - (this.x - x) * sin) + y));
+        double sin = BananaMath.sin(rad), cos = BananaMath.cos(rad);
+        return new Vec2I(
+            BananaMath.round(((this.x - x) * cos + ((this.y - y) * sin)) + x),
+            BananaMath.round(((this.y - y) * cos - (this.x - x) * sin) + y)
+        );
     }
 
     @Override
@@ -343,8 +349,11 @@ public class Vec2I implements IVec2I {
         }
 
         double rad = Math.toRadians(degrees);
-        double sin = Math.sin(rad), cos = Math.cos(rad);
-        return new Vec2I(BananaMath.round(((this.x - x) * cos + ((this.y - y) * sin)) + x), BananaMath.round(((this.y - y) * cos - (this.x - x) * sin) + y));
+        double sin = BananaMath.sin(rad), cos = BananaMath.cos(rad);
+        return new Vec2I(
+            BananaMath.round(((this.x - x) * cos + ((this.y - y) * sin)) + x),
+            BananaMath.round(((this.y - y) * cos - (this.x - x) * sin) + y)
+        );
     }
 
     @Override
@@ -473,8 +482,14 @@ public class Vec2I implements IVec2I {
 
     @Override
     public boolean equals(Object obj) {
-        return (obj instanceof IVec2I && ((IVec2I) obj).x() == this.x && ((IVec2I) obj).y() == this.y) ||
-                (obj instanceof IVec2D && ((IVec2D) obj).x() == this.x && ((IVec2D) obj).y() == this.y);
+        if (obj instanceof IVec2I) {
+            IVec2I vec = (IVec2I) obj;
+            return vec.x() == this.x && vec.y() == this.y;
+        } else if (obj instanceof IVec2D) {
+            IVec2D vec = (IVec2D) obj;
+            return vec.x() == this.x && vec.y() == this.y;
+        }
+        return false;
     }
 
     @Override

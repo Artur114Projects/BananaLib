@@ -1,11 +1,12 @@
 package com.artur114.bananalib.math.core.m2d.matrix;
 
+import com.artur114.bananalib.math.core.IEqualsEpsF;
 import com.artur114.bananalib.math.core.m2d.vec.IVec2DC;
 import com.artur114.bananalib.math.core.m2d.vec.IVec2IC;
 
 import java.nio.FloatBuffer;
 
-public interface IMatrix2FC {
+public interface IMatrix2FC extends IEqualsEpsF {
     float m00();
     float m01();
     float m02();

@@ -314,8 +314,22 @@ public class Box2IM implements IBox2IM {
 
     @Override
     public boolean equals(Object obj) {
-        return (obj instanceof IBox2I && ((IBox2I) obj).minX() == this.minX && ((IBox2I) obj).minY() == this.minY && ((IBox2I) obj).maxX() == this.maxX && ((IBox2I) obj).maxY() == this.maxY) ||
-                (obj instanceof IBox2D && ((IBox2D) obj).minX() == this.minX && ((IBox2D) obj).minY() == this.minY && ((IBox2D) obj).maxX() == this.maxX && ((IBox2D) obj).maxY() == this.maxY);
+        if (obj instanceof IBox2I) {
+            IBox2I box = (IBox2I) obj;
+            return
+                    box.minX() == this.minX &&
+                    box.minY() == this.minY &&
+                    box.maxX() == this.maxX &&
+                    box.maxY() == this.maxY;
+        } else if (obj instanceof IBox2D) {
+            IBox2D box = (IBox2D) obj;
+            return
+                    box.minX() == this.minX &&
+                    box.minY() == this.minY &&
+                    box.maxX() == this.maxX &&
+                    box.maxY() == this.maxY;
+        }
+        return false;
     }
 
     @Override

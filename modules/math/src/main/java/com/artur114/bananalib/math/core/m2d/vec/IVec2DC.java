@@ -1,6 +1,8 @@
 package com.artur114.bananalib.math.core.m2d.vec;
 
-public interface IVec2DC {
+import com.artur114.bananalib.math.core.IEqualsEpsD;
+
+public interface IVec2DC extends IEqualsEpsD {
     double x();
     double y();
     double length();

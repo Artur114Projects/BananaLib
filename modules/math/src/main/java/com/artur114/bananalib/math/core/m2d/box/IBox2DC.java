@@ -1,6 +1,8 @@
 package com.artur114.bananalib.math.core.m2d.box;
 
-public interface IBox2DC {
+import com.artur114.bananalib.math.core.IEqualsEpsD;
+
+public interface IBox2DC extends IEqualsEpsD {
     double minX();
     double minY();
     double maxX();

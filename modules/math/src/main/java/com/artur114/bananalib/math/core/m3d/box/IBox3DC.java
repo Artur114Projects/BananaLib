@@ -1,6 +1,8 @@
 package com.artur114.bananalib.math.core.m3d.box;
 
-public interface IBox3DC {
+import com.artur114.bananalib.math.core.IEqualsEpsD;
+
+public interface IBox3DC extends IEqualsEpsD {
     double minX();
     double minY();
     double minZ();

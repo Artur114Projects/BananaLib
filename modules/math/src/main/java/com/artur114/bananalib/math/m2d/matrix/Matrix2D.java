@@ -247,8 +247,8 @@ public class Matrix2D implements IMatrix2D {
     @Override
     public IMatrix2D rotate(double degrees) {
         double rads = Math.toRadians(degrees);
-        double sin = Math.sin(rads);
-        double cos = Math.cos(rads);
+        double sin = BananaMath.sin(rads);
+        double cos = BananaMath.cos(rads);
         return new Matrix2D(
             (cos * this.m00) + (sin * this.m10), (cos * this.m01) + (sin * this.m11), (cos * this.m02) + (sin * this.m12),
             (-sin * this.m00) + (cos * this.m10), (-sin * this.m01) + (cos * this.m11), (-sin * this.m02) + (cos * this.m12)
@@ -258,8 +258,8 @@ public class Matrix2D implements IMatrix2D {
     @Override
     public IMatrix2D rotateAround(int x, int y, double degrees) {
         double rads = Math.toRadians(degrees);
-        double sin = Math.sin(rads);
-        double cos = Math.cos(rads);
+        double sin = BananaMath.sin(rads);
+        double cos = BananaMath.cos(rads);
 
         double m00p = this.m00, m01p = this.m01, m02p = this.m02 - x;
         double m10p = this.m10, m11p = this.m11, m12p = this.m12 - y;
@@ -276,8 +276,8 @@ public class Matrix2D implements IMatrix2D {
     @Override
     public IMatrix2D rotateAround(double x, double y, double degrees) {
         double rads = Math.toRadians(degrees);
-        double sin = Math.sin(rads);
-        double cos = Math.cos(rads);
+        double sin = BananaMath.sin(rads);
+        double cos = BananaMath.cos(rads);
 
         double m00p = this.m00, m01p = this.m01, m02p = this.m02 - x;
         double m10p = this.m10, m11p = this.m11, m12p = this.m12 - y;
@@ -489,6 +489,11 @@ public class Matrix2D implements IMatrix2D {
     }
 
     @Override
+    public IMatrix2D copy() {
+        return new Matrix2D(this);
+    }
+
+    @Override
     public String toString() {
         return "[" + this.m00 + ", " + this.m01 + ", " + this.m02 + "]\n[" + this.m10 + ", " + this.m11 + ", " + this.m12 + "]\n[" + 0.0 + ", " + 0.0 + ", " + 1.0 + "]";
     }
@@ -501,13 +506,42 @@ public class Matrix2D implements IMatrix2D {
                     m.m00() == this.m00 && m.m01() == this.m01 && m.m02() == this.m02 &&
                     m.m10() == this.m10 && m.m11() == this.m11 && m.m12() == this.m12 &&
                     m.m20() == 0.0D && m.m21() == 0.0D && m.m22() == 1.0D;
-
         } else if (obj instanceof IMatrix2F) {
             IMatrix2F m = ((IMatrix2F) obj);
             return
                     m.m00() == this.m00 && m.m01() == this.m01 && m.m02() == this.m02 &&
                     m.m10() == this.m10 && m.m11() == this.m11 && m.m12() == this.m12 &&
                     m.m20() == 0.0D && m.m21() == 0.0D && m.m22() == 1.0D;
+        }
+        return false;
+    }
+
+    @Override
+    public boolean equalsEps(Object obj, double eps) {
+        if (obj instanceof IMatrix2D) {
+            IMatrix2D m = ((IMatrix2D) obj);
+            return
+                    Math.abs(m.m00() - this.m00) <= eps &&
+                    Math.abs(m.m01() - this.m01) <= eps &&
+                    Math.abs(m.m02() - this.m02) <= eps &&
+                    Math.abs(m.m10() - this.m10) <= eps &&
+                    Math.abs(m.m11() - this.m11) <= eps &&
+                    Math.abs(m.m12() - this.m12) <= eps &&
+                    Math.abs(m.m20() - 0.0D) <= eps &&
+                    Math.abs(m.m21() - 0.0D) <= eps &&
+                    Math.abs(m.m22() - 1.0D) <= eps;
+        } else if (obj instanceof IMatrix2F) {
+            IMatrix2F m = ((IMatrix2F) obj);
+            return
+                    Math.abs(m.m00() - this.m00) <= eps &&
+                    Math.abs(m.m01() - this.m01) <= eps &&
+                    Math.abs(m.m02() - this.m02) <= eps &&
+                    Math.abs(m.m10() - this.m10) <= eps &&
+                    Math.abs(m.m11() - this.m11) <= eps &&
+                    Math.abs(m.m12() - this.m12) <= eps &&
+                    Math.abs(m.m20() - 0.0D) <= eps &&
+                    Math.abs(m.m21() - 0.0D) <= eps &&
+                    Math.abs(m.m22() - 1.0D) <= eps;
         }
         return false;
     }

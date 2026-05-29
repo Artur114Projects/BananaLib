@@ -538,7 +538,7 @@ public class Vec3I implements IVec3I {
         }
 
         double rad = Math.toRadians(degrees);
-        double sin = Math.sin(rad), cos = Math.cos(rad);
+        double sin = BananaMath.sin(rad), cos = BananaMath.cos(rad);
         return new Vec3I(this.x, BananaMath.round(this.y * cos + this.z * sin), BananaMath.round(this.z * cos - this.y * sin));
     }
 
@@ -549,7 +549,7 @@ public class Vec3I implements IVec3I {
         }
 
         double rad = Math.toRadians(degrees);
-        double sin = Math.sin(rad), cos = Math.cos(rad);
+        double sin = BananaMath.sin(rad), cos = BananaMath.cos(rad);
         return new Vec3I(BananaMath.round(this.x * cos + this.z * sin), this.y, BananaMath.round(this.z * cos - this.x * sin));
     }
 
@@ -560,7 +560,7 @@ public class Vec3I implements IVec3I {
         }
 
         double rad = Math.toRadians(degrees);
-        double sin = Math.sin(rad), cos = Math.cos(rad);
+        double sin = BananaMath.sin(rad), cos = BananaMath.cos(rad);
         return new Vec3I(BananaMath.round(this.x * cos + this.y * sin), BananaMath.round(this.y * cos - this.x * sin), this.z);
     }
 
@@ -571,7 +571,7 @@ public class Vec3I implements IVec3I {
         }
 
         double rad = Math.toRadians(degrees);
-        double sin = Math.sin(rad), cos = Math.cos(rad);
+        double sin = BananaMath.sin(rad), cos = BananaMath.cos(rad);
         return new Vec3I(this.x, BananaMath.round(((this.y - y) * cos + (this.z - z) * sin) + y), BananaMath.round(((this.z - z) * cos - (this.y - y) * sin) + z));
     }
 
@@ -582,7 +582,7 @@ public class Vec3I implements IVec3I {
         }
 
         double rad = Math.toRadians(degrees);
-        double sin = Math.sin(rad), cos = Math.cos(rad);
+        double sin = BananaMath.sin(rad), cos = BananaMath.cos(rad);
         return new Vec3I(this.x, BananaMath.round(((this.y - y) * cos + (this.z - z) * sin) + y), BananaMath.round(((this.z - z) * cos - (this.y - y) * sin) + z));
     }
 
@@ -603,7 +603,7 @@ public class Vec3I implements IVec3I {
         }
 
         double rad = Math.toRadians(degrees);
-        double sin = Math.sin(rad), cos = Math.cos(rad);
+        double sin = BananaMath.sin(rad), cos = BananaMath.cos(rad);
         return new Vec3I(((this.x - x) * cos + (this.z - z) * sin) + x, this.y, ((this.z - z) * cos - (this.x - x) * sin) + z);
     }
 
@@ -614,7 +614,7 @@ public class Vec3I implements IVec3I {
         }
 
         double rad = Math.toRadians(degrees);
-        double sin = Math.sin(rad), cos = Math.cos(rad);
+        double sin = BananaMath.sin(rad), cos = BananaMath.cos(rad);
         return new Vec3I(((this.x - x) * cos + (this.z - z) * sin) + x, this.y, ((this.z - z) * cos - (this.x - x) * sin) + z);
     }
 
@@ -635,7 +635,7 @@ public class Vec3I implements IVec3I {
         }
 
         double rad = Math.toRadians(degrees);
-        double sin = Math.sin(rad), cos = Math.cos(rad);
+        double sin = BananaMath.sin(rad), cos = BananaMath.cos(rad);
         return new Vec3I(((this.x - x) * cos + (this.y - y) * sin) + x, ((this.y - y) * cos - (this.x - x) * sin) + y, this.z);
     }
 
@@ -646,7 +646,7 @@ public class Vec3I implements IVec3I {
         }
 
         double rad = Math.toRadians(degrees);
-        double sin = Math.sin(rad), cos = Math.cos(rad);
+        double sin = BananaMath.sin(rad), cos = BananaMath.cos(rad);
         return new Vec3I(((this.x - x) * cos + (this.y - y) * sin) + x, ((this.y - y) * cos - (this.x - x) * sin) + y, this.z);
     }
 
@@ -872,13 +872,19 @@ public class Vec3I implements IVec3I {
     }
 
     @Override
-    public int hashCode() {
-        return Hasher.hash(this.x, this.y, this.z);
+    public boolean equals(Object obj) {
+        if (obj instanceof IVec3I) {
+            IVec3I vec = (IVec3I) obj;
+            return vec.x() == this.x && vec.y() == this.y && vec.z() == this.z;
+        } else if (obj instanceof IVec3D) {
+            IVec3D vec = (IVec3D) obj;
+            return vec.x() == this.x && vec.y() == this.y && vec.z() == this.z;
+        }
+        return false;
     }
 
     @Override
-    public boolean equals(Object obj) {
-        return (obj instanceof IVec3I && ((IVec3I) obj).x() == this.x && ((IVec3I) obj).y() == this.y && ((IVec3I) obj).z() == this.z) ||
-                (obj instanceof IVec3D && ((IVec3D) obj).x() == this.x && ((IVec3D) obj).y() == this.y && ((IVec3D) obj).z() == this.z);
+    public int hashCode() {
+        return Hasher.hash(this.x, this.y, this.z);
     }
 }

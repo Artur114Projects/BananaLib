@@ -1,6 +1,8 @@
 package com.artur114.bananalib.math.core.m3d.vec;
 
-public interface IVec3DC {
+import com.artur114.bananalib.math.core.IEqualsEpsD;
+
+public interface IVec3DC extends IEqualsEpsD {
     double x();
     double y();
     double z();

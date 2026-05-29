@@ -1,11 +1,12 @@
 package com.artur114.bananalib.math.core.m2d.matrix;
 
+import com.artur114.bananalib.math.core.IEqualsEpsD;
 import com.artur114.bananalib.math.core.m2d.vec.IVec2DC;
 import com.artur114.bananalib.math.core.m2d.vec.IVec2IC;
 
 import java.nio.DoubleBuffer;
 
-public interface IMatrix2DC {
+public interface IMatrix2DC extends IEqualsEpsD {
     double m00();
     double m01();
     double m02();

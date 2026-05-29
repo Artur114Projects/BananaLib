@@ -62,4 +62,5 @@ public interface IMatrix2F extends IMatrix2FC {
     IMatrix2FM toMutable();
     IMatrix2F toImmutable();
     IMatrix2D toDouble();
+    IMatrix2F copy();
 }

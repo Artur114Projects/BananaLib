@@ -42,4 +42,5 @@ public interface IMatrix2DM extends IMatrix2D {
     IMatrix2DM rotateAround(IVec2DC point, double degrees);
     IMatrix2DM rotateAround(IVec2IC point, double degrees);
     IMatrix2FM toFloat();
+    IMatrix2DM copy();
 }

@@ -9,12 +9,7 @@ import com.artur114.bananalib.math.core.m3d.box.IBox3DC;
 import com.artur114.bananalib.math.core.m3d.box.IBox3IC;
 import com.artur114.bananalib.math.core.m3d.vec.IVec3DC;
 import com.artur114.bananalib.math.core.m3d.vec.IVec3IC;
-import com.artur114.bananalib.math.m2d.box.IBox2D;
-import com.artur114.bananalib.math.m2d.box.IBox2I;
-import com.artur114.bananalib.math.m2d.vec.IVec2D;
-import com.artur114.bananalib.math.m2d.vec.IVec2I;
-import com.artur114.bananalib.math.m3d.vec.IVec3D;
-import com.artur114.bananalib.math.m3d.vec.IVec3I;
+import com.artur114.bananalib.math.internal.Hasher;
 
 public class Box3I implements IBox3I {
     public static final Box3I EMPTY = new Box3I(0, 0, 0, 0, 0, 0);
@@ -596,5 +591,39 @@ public class Box3I implements IBox3I {
     @Override
     public IBox3I copy() {
         return new Box3I(this);
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof IBox3I) {
+            IBox3I box = (IBox3I) obj;
+            return
+                    box.minX() == this.minX &&
+                    box.minY() == this.minY &&
+                    box.minZ() == this.minZ &&
+                    box.maxX() == this.maxX &&
+                    box.maxY() == this.maxY &&
+                    box.maxZ() == this.maxZ;
+        } else if (obj instanceof IBox3D) {
+            IBox3D box = (IBox3D) obj;
+            return
+                    box.minX() == this.minX &&
+                    box.minY() == this.minY &&
+                    box.minZ() == this.minZ &&
+                    box.maxX() == this.maxX &&
+                    box.maxY() == this.maxY &&
+                    box.maxZ() == this.maxZ;
+        }
+        return false;
+    }
+
+    @Override
+    public int hashCode() {
+        return Hasher.hash(this.minX, this.minY, this.minZ, this.maxX, this.maxY, this.maxZ);
+    }
+
+    @Override
+    public String toString() {
+        return "[" + this.minX + ", " + this.minY + ", " + this.minZ + "] -> ["  + this.maxX + ", " + this.maxY + ", " + this.maxZ + "]";
     }
 }
