@@ -1,26 +1,33 @@
 package com.artur114.bananalib.math.m2d.matrix
 
+import com.artur114.bananalib.math.BananaMath
 import com.artur114.bananalib.math.m2d.vec.IVec2D
 import com.artur114.bananalib.math.m2d.vec.IVec2I
 import com.artur114.bananalib.math.m2d.vec.Vec2D
-import com.artur114.bananalib.math.test.TestBase
 import org.junit.jupiter.api.Test
 
-class Matrix2DMTest extends TestBase {
+import static org.junit.jupiter.api.Assertions.assertThrows
+
+class Matrix2FTest extends Matrix2TestBase<IMatrix2F> {
     @Test
     void "identity matrix mul test"() {
-        IMatrix2DM identity = identityMatrix()
-        IMatrix2DM m = randomMatrix()
-        assert m.copy().mul(identity).equalsEps(m)
-        assert identity.copy().mul(m).equalsEps(m)
+        IMatrix2F identity = identityMatrix()
+        IMatrix2F m = randomMatrix()
+        assert m.mul(identity).equalsEps(m)
+        assert identity.mul(m).equalsEps(m)
+    }
+
+    @Test
+    void "non reversible matrix inv test"() {
+        assertThrows(ArithmeticException.class, { identityMatrix().scale(0, 1).invert() })
     }
 
     @Test
     void "rotated vector length test"() {
         multiTest {
-            double rot = randDouble(-360, 360)
+            float rot = randFloat(-360, 360)
             IVec2D p = randomPoint()
-            assert equalsEps(p.length(), identityMatrix().rotate(rot).transform(p).length())
+            assert equalsEps(p.length(), identityMatrix().rotate(rot).transform(p).length(), BananaMath.FLOAT_EQUALS_EPS)
         }
     }
 
@@ -28,7 +35,7 @@ class Matrix2DMTest extends TestBase {
     void "identity transform test"() {
         multiTest {
             IVec2D point = randomPoint()
-            assert identityMatrix().transform(point).equalsEps(point)
+            assert identityMatrix().transform(point).equalsEps(point, BananaMath.FLOAT_EQUALS_EPS)
         }
     }
 
@@ -39,7 +46,7 @@ class Matrix2DMTest extends TestBase {
             def b = randomMatrix()
             def c = randomMatrix()
 
-            assert a.copy().mul(b).mul(c).equalsEps(a.copy().mul(b.copy().mul(c)))
+            assert a.mul(b).mul(c).equalsEps(a.mul(b.mul(c)))
         }
     }
 
@@ -49,17 +56,17 @@ class Matrix2DMTest extends TestBase {
             def a = randomMatrix()
             def b = randomMatrix()
 
-            def ab = a.copy().mul(b)
+            def ab = a.mul(b)
 
-            assert equalsEps(ab.determinant(), a.determinant() * b.determinant())
+            assert equalsEps(ab.determinant(), a.determinant() * b.determinant(), BananaMath.FLOAT_EQUALS_EPS)
         }
     }
 
     @Test
     void "inverse determinant test"() {
         multiTest {
-            Matrix2DM m = randomMatrix()
-            assert equalsEps(m.copy().invert().determinant(), 1.0D / m.determinant())
+            def m = randomMatrix()
+            assert equalsEps(m.invert().determinant(), (float) (1.0F / m.determinant()))
         }
     }
 
@@ -67,7 +74,7 @@ class Matrix2DMTest extends TestBase {
     void "int and double overloads test"() {
         multiTest {
             IVec2I point = randomPoint().round()
-            double rot = randDouble(0, 360)
+            float rot = randFloat(0, 360)
 
             assert identityMatrix().translate(point).equalsEps(identityMatrix().translate(point.toDouble()))
             assert identityMatrix().scale(point).equalsEps(identityMatrix().scale(point.toDouble()))
@@ -79,17 +86,17 @@ class Matrix2DMTest extends TestBase {
     void "mul and mulPos test"() {
         multiTest {
             randomPoint().with {
-                double rot = randDouble(0, 360)
+                float rot = randFloat(0, 360)
                 IVec2D tr = randomPoint()
 
                 def mul = identityMatrix().mul(identityMatrix().translate(tr.x(), tr.y())).mul(identityMatrix().rotate(rot))
                 def mulPost = identityMatrix().mulPost(identityMatrix().translate(tr.x(), tr.y())).mulPost(identityMatrix().rotate(rot))
 
-                assert mul.transform(it).equalsEps(it.add(tr.x(), tr.y()).rotate(rot))
-                assert mulPost.transform(it).equalsEps(it.rotate(rot).add(tr.x(), tr.y()))
+                assert mul.transform(it).equalsEps(it.add(tr.x(), tr.y()).rotate(rot), BananaMath.FLOAT_EQUALS_EPS)
+                assert mulPost.transform(it).equalsEps(it.rotate(rot).add(tr.x(), tr.y()), BananaMath.FLOAT_EQUALS_EPS)
             }
             randomPoint().round().with {
-                double rot = randDouble(0, 360)
+                float rot = randFloat(0, 360)
                 IVec2I tr = randomPoint().round()
 
                 def mul = identityMatrix().mul(identityMatrix().translate(tr.x(), tr.y())).mul(identityMatrix().rotate(rot))
@@ -106,7 +113,7 @@ class Matrix2DMTest extends TestBase {
     void "invert invert matrix test"() {
         multiTest {
             def m = randomMatrix()
-            assert m.equalsEps(m.copy().invert().invert())
+            assert m.equalsEps(m.invert().invert())
         }
     }
 
@@ -115,17 +122,17 @@ class Matrix2DMTest extends TestBase {
         def identity = identityMatrix()
         multiTest {
             def m = randomMatrix()
-            assert m.mul(m.copy().invert()).equalsEps(identity)
+            assert m.mul(m.invert()).equalsEps(identity)
         }
     }
 
     @Test
     void "invert matrix restore point test"() {
         multiTest {
-            withRandMatrix { Matrix2DM m, tr, rot, scale ->
+            withRandMatrix { IMatrix2F m, tr, rot, scale ->
                 IVec2D point = randomPoint()
                 IVec2D pointTr = m.transform(point)
-                assert point.equalsEps(m.invert().transform(pointTr))
+                assert point.equalsEps(m.invert().transform(pointTr), BananaMath.FLOAT_EQUALS_EPS)
             }
         }
     }
@@ -134,8 +141,8 @@ class Matrix2DMTest extends TestBase {
     void "determinant test"() {
         assert equalsEps(identityMatrix().determinant(), 1.0D)
         multiTest {
-            withRandMatrix {Matrix2DM m, tr, rot, IVec2D scale ->
-                assert equalsEps(m.determinant(), scale.x() * scale.y())
+            withRandMatrix {IMatrix2F m, tr, rot, IVec2D scale ->
+                assert equalsEps(m.determinant(), (float) (scale.x() * scale.y()))
             }
         }
     }
@@ -146,55 +153,27 @@ class Matrix2DMTest extends TestBase {
             identityMatrix().with {
                 IVec2I around = randomPoint(16).round()
                 IVec2I point = randomPoint(16).round()
-                double rot = randDouble(-360, 360)
+                float rot = randFloat(-360, 360)
                 assert it.rotateAround(around, rot).transform(point) == point.rotateAround(around, rot)
             }
 
             identityMatrix().with {
-                double rot = randDouble(-360, 360)
+                float rot = randFloat(-360, 360)
                 IVec2D around = randomPoint()
                 IVec2D point = randomPoint()
-                assert it.rotateAround(around, rot).transform(point).equalsEps(point.rotateAround(around, rot))
+                assert it.rotateAround(around, rot).transform(point).equalsEps(point.rotateAround(around, rot), BananaMath.FLOAT_EQUALS_EPS)
             }
 
             IVec2D tr = randomPoint()
             def m = identityMatrix().rotateAround(tr.x(), tr.y(), 90)
             IVec2D p = new Vec2D(tr)
             IVec2D rotated = m.transform(p)
-            assert p.equalsEps(rotated, 1e-12)
+            assert p.equalsEps(rotated, BananaMath.FLOAT_EQUALS_EPS)
         }
     }
-
-    def randomMatrix() {
-        Matrix2DM m = new Matrix2DM()
-        if (rand.nextDouble() < 0.5) {
-            m.translate(randInt(40), randInt(40))
-            m.rotate(this.rand.nextDouble() * 360)
-            m.scale(randomPoint(4))
-        } else {
-            m.rotate(this.rand.nextDouble() * 360)
-            m.translate(randInt(40), randInt(40))
-            m.scale(randomPoint(4))
-        }
-        return m
-    }
-
-    def withRandMatrix(Closure<Void> cl) {
-        IVec2D scale = randomPoint(4)
-        IVec2D tr = randomPoint()
-        double rot = this.rand.nextDouble() * 360
-        cl.call(new Matrix2DM().translate(tr.x(), tr.y()).rotate(rot).scale(scale.x(), scale.y()), tr, rot, scale)
-    }
-
-    Vec2D randomPoint() {
-        randomPoint(100)
-    }
-
-    Vec2D randomPoint(double size) {
-        new Vec2D(randDouble(-size, size), randDouble(-size, size))
-    }
-
-    def identityMatrix() {
-        new Matrix2DM().setIdentity()
+    
+    @Override
+    IMatrix2F identityMatrix() {
+        return Matrix2F.IDENTITY
     }
 }

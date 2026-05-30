@@ -6,13 +6,13 @@ import com.artur114.bananalib.math.m2d.vec.Vec2D
 import com.artur114.bananalib.math.test.TestBase
 import org.junit.jupiter.api.Test
 
-class Matrix2DMTest extends TestBase {
+class Matrix2DTest extends Matrix2TestBase<IMatrix2D> {
     @Test
     void "identity matrix mul test"() {
-        IMatrix2DM identity = identityMatrix()
-        IMatrix2DM m = randomMatrix()
-        assert m.copy().mul(identity).equalsEps(m)
-        assert identity.copy().mul(m).equalsEps(m)
+        IMatrix2D identity = identityMatrix()
+        IMatrix2D m = randomMatrix()
+        assert m.mul(identity).equalsEps(m)
+        assert identity.mul(m).equalsEps(m)
     }
 
     @Test
@@ -39,7 +39,7 @@ class Matrix2DMTest extends TestBase {
             def b = randomMatrix()
             def c = randomMatrix()
 
-            assert a.copy().mul(b).mul(c).equalsEps(a.copy().mul(b.copy().mul(c)))
+            assert a.mul(b).mul(c).equalsEps(a.mul(b.mul(c)))
         }
     }
 
@@ -49,7 +49,7 @@ class Matrix2DMTest extends TestBase {
             def a = randomMatrix()
             def b = randomMatrix()
 
-            def ab = a.copy().mul(b)
+            def ab = a.mul(b)
 
             assert equalsEps(ab.determinant(), a.determinant() * b.determinant())
         }
@@ -58,8 +58,8 @@ class Matrix2DMTest extends TestBase {
     @Test
     void "inverse determinant test"() {
         multiTest {
-            Matrix2DM m = randomMatrix()
-            assert equalsEps(m.copy().invert().determinant(), 1.0D / m.determinant())
+            IMatrix2D m = randomMatrix()
+            assert equalsEps(m.invert().determinant(), 1.0D / m.determinant())
         }
     }
 
@@ -106,7 +106,7 @@ class Matrix2DMTest extends TestBase {
     void "invert invert matrix test"() {
         multiTest {
             def m = randomMatrix()
-            assert m.equalsEps(m.copy().invert().invert())
+            assert m.equalsEps(m.invert().invert())
         }
     }
 
@@ -115,14 +115,14 @@ class Matrix2DMTest extends TestBase {
         def identity = identityMatrix()
         multiTest {
             def m = randomMatrix()
-            assert m.mul(m.copy().invert()).equalsEps(identity)
+            assert m.mul(m.invert()).equalsEps(identity)
         }
     }
 
     @Test
     void "invert matrix restore point test"() {
         multiTest {
-            withRandMatrix { Matrix2DM m, tr, rot, scale ->
+            withRandMatrix { def m, tr, rot, scale ->
                 IVec2D point = randomPoint()
                 IVec2D pointTr = m.transform(point)
                 assert point.equalsEps(m.invert().transform(pointTr))
@@ -134,7 +134,7 @@ class Matrix2DMTest extends TestBase {
     void "determinant test"() {
         assert equalsEps(identityMatrix().determinant(), 1.0D)
         multiTest {
-            withRandMatrix {Matrix2DM m, tr, rot, IVec2D scale ->
+            withRandMatrix {def m, tr, rot, IVec2D scale ->
                 assert equalsEps(m.determinant(), scale.x() * scale.y())
             }
         }
@@ -165,36 +165,7 @@ class Matrix2DMTest extends TestBase {
         }
     }
 
-    def randomMatrix() {
-        Matrix2DM m = new Matrix2DM()
-        if (rand.nextDouble() < 0.5) {
-            m.translate(randInt(40), randInt(40))
-            m.rotate(this.rand.nextDouble() * 360)
-            m.scale(randomPoint(4))
-        } else {
-            m.rotate(this.rand.nextDouble() * 360)
-            m.translate(randInt(40), randInt(40))
-            m.scale(randomPoint(4))
-        }
-        return m
-    }
-
-    def withRandMatrix(Closure<Void> cl) {
-        IVec2D scale = randomPoint(4)
-        IVec2D tr = randomPoint()
-        double rot = this.rand.nextDouble() * 360
-        cl.call(new Matrix2DM().translate(tr.x(), tr.y()).rotate(rot).scale(scale.x(), scale.y()), tr, rot, scale)
-    }
-
-    Vec2D randomPoint() {
-        randomPoint(100)
-    }
-
-    Vec2D randomPoint(double size) {
-        new Vec2D(randDouble(-size, size), randDouble(-size, size))
-    }
-
-    def identityMatrix() {
-        new Matrix2DM().setIdentity()
+    IMatrix2D identityMatrix() {
+        Matrix2D.IDENTITY
     }
 }

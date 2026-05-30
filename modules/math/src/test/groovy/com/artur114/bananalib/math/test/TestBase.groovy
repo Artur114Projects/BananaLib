@@ -2,7 +2,7 @@ package com.artur114.bananalib.math.test
 
 import com.artur114.bananalib.math.BananaMath
 
-class TestBase {
+abstract class TestBase {
     public Random rand = new Random(0xBADCEFFE)
 
     def multiTest(int count, Closure<Void> closure) {

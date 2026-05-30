@@ -1,0 +1,18 @@
+plugins {
+    id 'maven-publish'
+    id 'java-library'
+    id 'groovy'
+}
+
+group = 'com.artur114.bananalib.bme'
+version = '1.0.0'
+archivesBaseName = "BananaBench"
+
+dependencies {
+    implementation 'org.joml:joml:1.10.5'
+    implementation project(":modules:math")
+}
+
+apply from: rootProject.file('scripts/base.gradle')
+apply from: rootProject.file('scripts/publish.gradle')
+apply from: rootProject.file('scripts/groovy.gradle')

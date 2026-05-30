@@ -12,6 +12,14 @@ import static org.junit.jupiter.api.Assertions.assertThrows
 
 class Matrix2FMTest extends TestBase {
     @Test
+    void "identity matrix mul test"() {
+        IMatrix2FM identity = identityMatrix()
+        IMatrix2FM m = randomMatrix()
+        assert m.copy().mul(identity).equalsEps(m)
+        assert identity.copy().mul(m).equalsEps(m)
+    }
+
+    @Test
     void "non reversible matrix inv test"() {
         assertThrows(ArithmeticException.class, { identityMatrix().scale(0, 1).invert() })
     }
