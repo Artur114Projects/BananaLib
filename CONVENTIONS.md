@@ -6,6 +6,7 @@ Basic principles that all libraries should follow
 - Mutable implementations return this object unless otherwise specified
 - All mutable objects must have a state stack and a pool
 - Immutable zero/identity constants may be singleton instances
+- Immutable objects must preserve their runtime type. Methods that conceptually modify an immutable object must return a new instance of the same concrete runtime type as the receiver, unless explicitly documented otherwise.
 
 ### Boxes (ABB)
 
@@ -15,7 +16,10 @@ Basic principles that all libraries should follow
 
 ### Rotations
 
-- Must rotate clockwise when looking at the -axis rotation
+### Rotations
+
+- Positive rotations follow the right-hand rule.
+- Rotation matrices, vector rotations and quaternions must use the same convention.
 
 ### Matrix mul
 

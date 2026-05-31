@@ -1,0 +1,128 @@
+package com.artur114.bananalib.math.genaral
+
+import com.artur114.bananalib.math.BananaMath
+import com.artur114.bananalib.math.m2d.vec.IVec2D
+import com.artur114.bananalib.math.m2d.vec.IVec2I
+import com.artur114.bananalib.math.test.TestBase
+import org.junit.jupiter.api.Test
+
+class RotationsTest extends TestBase {
+
+    @Test
+    void "rotation conventions follow test"() {
+        def vec3DZ = vec3d(0, 0, 0)
+        def vec3IZ = vec3i(0, 0, 0)
+        def vec2DZ = vec2d(0, 0)
+        def vec2IZ = vec2i(0, 0)
+
+        assert vec2d(1, 0).rotate(90).equalsEps(vec2d(0, 1))
+        assert vec2d(1, 0).toMutable().rotate(90).equalsEps(vec2d(0, 1))
+        assert vec2i(1, 0).rotate(90) == vec2i(0, 1)
+        assert vec2i(1, 0).toMutable().rotate(90) == vec2i(0, 1)
+        assert vec3d(1,0,0).rotateZ(90).equalsEps(vec3d(0,1,0))
+        assert vec3d(0,1,0).rotateX(90).equalsEps(vec3d(0,0,1))
+        assert vec3d(0,0,1).rotateY(90).equalsEps(vec3d(1,0,0))
+        assert vec3d(1,0,0).toMutable().rotateZ(90).equalsEps(vec3d(0,1,0))
+        assert vec3d(0,1,0).toMutable().rotateX(90).equalsEps(vec3d(0,0,1))
+        assert vec3d(0,0,1).toMutable().rotateY(90).equalsEps(vec3d(1,0,0))
+        assert vec3i(1,0,0).rotateZ(90) == vec3i(0,1,0)
+        assert vec3i(0,1,0).rotateX(90) == vec3i(0,0,1)
+        assert vec3i(0,0,1).rotateY(90) == vec3i(1,0,0)
+        assert vec3i(1,0,0).toMutable().rotateZ(90) == vec3i(0,1,0)
+        assert vec3i(0,1,0).toMutable().rotateX(90) == vec3i(0,0,1)
+        assert vec3i(0,0,1).toMutable().rotateY(90) == vec3i(1,0,0)
+        assert mat2d().rotate(90).transform(vec2d(1, 0)).equalsEps(vec2d(0, 1))
+        assert mat2d().toMutable().rotate(90).transform(vec2d(1, 0)).equalsEps(vec2d(0, 1))
+        assert mat2f().rotate(90).transform(vec2d(1, 0)).equalsEps(vec2d(0, 1), BananaMath.FLOAT_EQUALS_EPS)
+        assert mat2f().toMutable().rotate(90).transform(vec2d(1, 0)).equalsEps(vec2d(0, 1), BananaMath.FLOAT_EQUALS_EPS)
+        assert mat3d().rotateZ(90).transform(vec3d(1,0,0)).equalsEps(vec3d(0,1,0))
+        assert mat3d().rotateX(90).transform(vec3d(0,1,0)).equalsEps(vec3d(0,0,1))
+        assert mat3d().rotateY(90).transform(vec3d(0,0,1)).equalsEps(vec3d(1,0,0))
+
+
+        assert vec2d(1, 0).rotateAround(vec2DZ, 90).equalsEps(vec2d(0, 1))
+        assert vec2d(1, 0).toMutable().rotateAround(vec2DZ, 90).equalsEps(vec2d(0, 1))
+        assert vec2i(1, 0).rotateAround(vec2DZ,90) == vec2i(0, 1)
+        assert vec2i(1, 0).toMutable().rotateAround(vec2DZ, 90) == vec2i(0, 1)
+        assert vec3d(1,0,0).rotateZAround(vec3DZ, 90).equalsEps(vec3d(0,1,0))
+        assert vec3d(0,1,0).rotateXAround(vec3DZ, 90).equalsEps(vec3d(0,0,1))
+        assert vec3d(0,0,1).rotateYAround(vec3DZ, 90).equalsEps(vec3d(1,0,0))
+        assert vec3d(1,0,0).toMutable().rotateZAround(vec3DZ, 90).equalsEps(vec3d(0,1,0))
+        assert vec3d(0,1,0).toMutable().rotateXAround(vec3DZ, 90).equalsEps(vec3d(0,0,1))
+        assert vec3d(0,0,1).toMutable().rotateYAround(vec3DZ, 90).equalsEps(vec3d(1,0,0))
+        assert vec3i(1,0,0).rotateZAround(vec3DZ, 90) == vec3i(0,1,0)
+        assert vec3i(0,1,0).rotateXAround(vec3DZ, 90) == vec3i(0,0,1)
+        assert vec3i(0,0,1).rotateYAround(vec3DZ, 90) == vec3i(1,0,0)
+        assert vec3i(1,0,0).toMutable().rotateZAround(vec3DZ, 90) == vec3i(0,1,0)
+        assert vec3i(0,1,0).toMutable().rotateXAround(vec3DZ, 90) == vec3i(0,0,1)
+        assert vec3i(0,0,1).toMutable().rotateYAround(vec3DZ, 90) == vec3i(1,0,0)
+        assert mat2d().rotateAround(vec2DZ, 90).transform(vec2d(1, 0)).equalsEps(vec2d(0, 1))
+        assert mat2d().toMutable().rotateAround(vec2DZ, 90).transform(vec2d(1, 0)).equalsEps(vec2d(0, 1))
+        assert mat2f().rotateAround(vec2DZ, 90).transform(vec2d(1, 0)).equalsEps(vec2d(0, 1), BananaMath.FLOAT_EQUALS_EPS)
+        assert mat2f().toMutable().rotateAround(vec2DZ, 90).transform(vec2d(1, 0)).equalsEps(vec2d(0, 1), BananaMath.FLOAT_EQUALS_EPS)
+        assert mat3d().rotateZAround(vec3DZ, 90).transform(vec3d(1,0,0)).equalsEps(vec3d(0,1,0))
+        assert mat3d().rotateXAround(vec3DZ, 90).transform(vec3d(0,1,0)).equalsEps(vec3d(0,0,1))
+        assert mat3d().rotateYAround(vec3DZ, 90).transform(vec3d(0,0,1)).equalsEps(vec3d(1,0,0))
+
+
+        assert vec2d(1, 0).rotateAround(vec2IZ, 90).equalsEps(vec2d(0, 1))
+        assert vec2d(1, 0).toMutable().rotateAround(vec2IZ, 90).equalsEps(vec2d(0, 1))
+        assert vec2i(1, 0).rotateAround(vec2IZ,90) == vec2i(0, 1)
+        assert vec2i(1, 0).toMutable().rotateAround(vec2IZ, 90) == vec2i(0, 1)
+        assert vec3d(1,0,0).rotateZAround(vec3IZ, 90).equalsEps(vec3d(0,1,0))
+        assert vec3d(0,1,0).rotateXAround(vec3IZ, 90).equalsEps(vec3d(0,0,1))
+        assert vec3d(0,0,1).rotateYAround(vec3IZ, 90).equalsEps(vec3d(1,0,0))
+        assert vec3d(1,0,0).toMutable().rotateZAround(vec3IZ, 90).equalsEps(vec3d(0,1,0))
+        assert vec3d(0,1,0).toMutable().rotateXAround(vec3IZ, 90).equalsEps(vec3d(0,0,1))
+        assert vec3d(0,0,1).toMutable().rotateYAround(vec3IZ, 90).equalsEps(vec3d(1,0,0))
+        assert vec3i(1,0,0).rotateZAround(vec3IZ, 90) == vec3i(0,1,0)
+        assert vec3i(0,1,0).rotateXAround(vec3IZ, 90) == vec3i(0,0,1)
+        assert vec3i(0,0,1).rotateYAround(vec3IZ, 90) == vec3i(1,0,0)
+        assert vec3i(1,0,0).toMutable().rotateZAround(vec3IZ, 90) == vec3i(0,1,0)
+        assert vec3i(0,1,0).toMutable().rotateXAround(vec3IZ, 90) == vec3i(0,0,1)
+        assert vec3i(0,0,1).toMutable().rotateYAround(vec3IZ, 90) == vec3i(1,0,0)
+        assert mat2d().rotateAround(vec2IZ, 90).transform(vec2d(1, 0)).equalsEps(vec2d(0, 1))
+        assert mat2d().toMutable().rotateAround(vec2IZ, 90).transform(vec2d(1, 0)).equalsEps(vec2d(0, 1))
+        assert mat2f().rotateAround(vec2IZ, 90).transform(vec2d(1, 0)).equalsEps(vec2d(0, 1), BananaMath.FLOAT_EQUALS_EPS)
+        assert mat2f().toMutable().rotateAround(vec2IZ, 90).transform(vec2d(1, 0)).equalsEps(vec2d(0, 1), BananaMath.FLOAT_EQUALS_EPS)
+        assert mat3d().rotateZAround(vec3IZ, 90).transform(vec3d(1,0,0)).equalsEps(vec3d(0,1,0))
+        assert mat3d().rotateXAround(vec3IZ, 90).transform(vec3d(0,1,0)).equalsEps(vec3d(0,0,1))
+        assert mat3d().rotateYAround(vec3IZ, 90).transform(vec3d(0,0,1)).equalsEps(vec3d(1,0,0))
+    }
+
+    @Test
+    void "rotation uno test"() {
+        multiTest {
+            def vec3DZ = vec3d(0, 0, 0)
+            def vec3IZ = vec3i(0, 0, 0)
+            def vec2DZ = vec2d(0, 0)
+            def vec2IZ = vec2i(0, 0)
+            int rotI = (rand.nextInt(4) + 1) * 90
+            double rot = randDegrees()
+
+            assert vec2d(1, 0).rotate(rot).rotate(-rot).equalsEps(vec2d(1, 0))
+            assert vec2d(1, 0).toMutable().rotate(rot).rotate(-rot).equalsEps(vec2d(1, 0))
+            assert vec2i(1, 0).rotate(rotI).rotate(-rotI) == vec2i(1, 0)
+            assert vec2i(1, 0).toMutable().rotate(rotI).rotate(-rotI) == vec2i(1, 0)
+            assert vec3d(1, 0, 0).rotateZ(rot).rotateZ(-rot).equalsEps(vec3d(1, 0, 0))
+            assert vec3d(0, 1, 0).rotateX(rot).rotateX(-rot).equalsEps(vec3d(0, 1, 0))
+            assert vec3d(0, 0, 1).rotateY(rot).rotateY(-rot).equalsEps(vec3d(0, 0, 1))
+            assert vec3d(1, 0, 0).toMutable().rotateZ(rot).rotateZ(-rot).equalsEps(vec3d(1, 0, 0))
+            assert vec3d(0, 1, 0).toMutable().rotateX(rot).rotateX(-rot).equalsEps(vec3d(0, 1, 0))
+            assert vec3d(0, 0, 1).toMutable().rotateY(rot).rotateY(-rot).equalsEps(vec3d(0, 0, 1))
+            assert vec3i(1, 0, 0).rotateZ(rotI).rotateZ(-rotI) == vec3i(1, 0, 0)
+            assert vec3i(0, 1, 0).rotateX(rotI).rotateX(-rotI) == vec3i(0, 1, 0)
+            assert vec3i(0, 0, 1).rotateY(rotI).rotateY(-rotI) == vec3i(0, 0, 1)
+            assert vec3i(1, 0, 0).toMutable().rotateZ(rotI).rotateZ(-rotI) == vec3i(1, 0, 0)
+            assert vec3i(0, 1, 0).toMutable().rotateX(rotI).rotateX(-rotI) == vec3i(0, 1, 0)
+            assert vec3i(0, 0, 1).toMutable().rotateY(rotI).rotateY(-rotI) == vec3i(0, 0, 1)
+            assert mat2d().rotate(rot).rotate(-rot).transform(vec2d(1, 0)).equalsEps(vec2d(1, 0))
+            assert mat2d().toMutable().rotate(rot).rotate(-rot).transform(vec2d(1, 0)).equalsEps(vec2d(1, 0))
+            assert mat2f().rotate(rot as float).rotate(-rot as float).transform(vec2d(1, 0)).equalsEps(vec2d(1, 0), BananaMath.FLOAT_EQUALS_EPS)
+            assert mat2f().toMutable().rotate(rot as float).rotate(-rot as float).transform(vec2d(1, 0)).equalsEps(vec2d(1, 0), BananaMath.FLOAT_EQUALS_EPS)
+            assert mat3d().rotateZ(rot).rotateZ(-rot).transform(vec3d(1, 0, 0)).equalsEps(vec3d(1, 0, 0))
+            assert mat3d().rotateX(rot).rotateX(-rot).transform(vec3d(0, 1, 0)).equalsEps(vec3d(0, 1, 0))
+            assert mat3d().rotateY(rot).rotateY(-rot).transform(vec3d(0, 0, 1)).equalsEps(vec3d(0, 0, 1))
+        }
+    }
+}

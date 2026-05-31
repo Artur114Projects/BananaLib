@@ -323,8 +323,8 @@ public class Vec2I implements IVec2I {
         double rad = Math.toRadians(degrees);
         double sin = BananaMath.sin(rad), cos = BananaMath.cos(rad);
         return new Vec2I(
-            BananaMath.round(this.x * cos + this.y * sin),
-            BananaMath.round(this.y * cos - this.x * sin)
+            BananaMath.round(this.x * cos - this.y * sin),
+            BananaMath.round(this.y * cos + this.x * sin)
         );
     }
 
@@ -337,8 +337,8 @@ public class Vec2I implements IVec2I {
         double rad = Math.toRadians(degrees);
         double sin = BananaMath.sin(rad), cos = BananaMath.cos(rad);
         return new Vec2I(
-            BananaMath.round(((this.x - x) * cos + ((this.y - y) * sin)) + x),
-            BananaMath.round(((this.y - y) * cos - (this.x - x) * sin) + y)
+            BananaMath.round(((this.x - x) * cos - ((this.y - y) * sin)) + x),
+            BananaMath.round(((this.y - y) * cos + (this.x - x) * sin) + y)
         );
     }
 
@@ -351,8 +351,8 @@ public class Vec2I implements IVec2I {
         double rad = Math.toRadians(degrees);
         double sin = BananaMath.sin(rad), cos = BananaMath.cos(rad);
         return new Vec2I(
-            BananaMath.round(((this.x - x) * cos + ((this.y - y) * sin)) + x),
-            BananaMath.round(((this.y - y) * cos - (this.x - x) * sin) + y)
+            BananaMath.round(((this.x - x) * cos - ((this.y - y) * sin)) + x),
+            BananaMath.round(((this.y - y) * cos + (this.x - x) * sin) + y)
         );
     }
 

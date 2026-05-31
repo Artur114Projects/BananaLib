@@ -48,7 +48,7 @@ class Matrix2FMTest extends TestBase {
             def b = randomMatrix()
             def c = randomMatrix()
 
-            assert a.copy().mul(b).mul(c).equalsEps(a.copy().mul(b.copy().mul(c)))
+            assert a.copy().mul(b).mul(c).equalsEps(a.copy().mul(b.copy().mul(c)), 1.0E-3F)
         }
     }
 

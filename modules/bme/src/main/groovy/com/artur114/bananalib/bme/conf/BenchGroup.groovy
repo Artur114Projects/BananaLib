@@ -1,8 +1,9 @@
 package com.artur114.bananalib.bme.conf
 
+import com.artur114.bananalib.bme.BenchEngine
 import com.artur114.bananalib.bme.BenchEntry
+import com.artur114.bananalib.bme.BlackHole
 import org.gradle.api.Action
-import org.gradle.util.ConfigureUtil
 
 class BenchGroup {
     private List<BenchEntry> tests = new ArrayList<>()
@@ -22,7 +23,7 @@ class BenchGroup {
         this.beforeEach = c
     }
 
-    void test(String name, Action<Object[]> c) {
+    void test(String name, Action<BlackHole> c) {
         Action<Object[]> beforeEach = this.beforeEach == null ? {null} : this.beforeEach
         Closure<List> setup = this.setup == null ? {[]} : this.setup
         this.tests.add(new BenchEntry(setup, beforeEach, c, this.name, name))

@@ -323,7 +323,7 @@ public class Vec2D implements IVec2D {
 
         double rad = Math.toRadians(degrees);
         double sin = Math.sin(rad), cos = Math.cos(rad);
-        return new Vec2D(this.x * cos + this.y * sin, this.y * cos - this.x * sin);
+        return new Vec2D(this.x * cos - this.y * sin, this.y * cos + this.x * sin);
     }
 
     @Override
@@ -334,7 +334,7 @@ public class Vec2D implements IVec2D {
 
         double rad = Math.toRadians(degrees);
         double sin = Math.sin(rad), cos = Math.cos(rad);
-        return new Vec2D(((this.x - x) * cos + ((this.y - y) * sin)) + x, ((this.y - y) * cos - (this.x - x) * sin) + y);
+        return new Vec2D(((this.x - x) * cos - ((this.y - y) * sin)) + x, ((this.y - y) * cos + (this.x - x) * sin) + y);
     }
 
     @Override
@@ -345,7 +345,7 @@ public class Vec2D implements IVec2D {
 
         double rad = Math.toRadians(degrees);
         double sin = Math.sin(rad), cos = Math.cos(rad);
-        return new Vec2D(((this.x - x) * cos + ((this.y - y) * sin)) + x, ((this.y - y) * cos - (this.x - x) * sin) + y);
+        return new Vec2D(((this.x - x) * cos - ((this.y - y) * sin)) + x, ((this.y - y) * cos + (this.x - x) * sin) + y);
     }
 
     @Override

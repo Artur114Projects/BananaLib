@@ -8,13 +8,13 @@ abstract class Matrix2TestBase<T> extends TestBase {
     T randomMatrix() {
         def m = identityMatrix()
         if (rand.nextDouble() < 0.5) {
-            m.translate(randInt(40), randInt(40))
-            m.rotate((float) (this.rand.nextFloat() * 360.0F))
-            m.scale(randomPoint(4))
+            m = m.translate(randInt(40), randInt(40))
+            m = m.rotate((float) (this.rand.nextFloat() * 360.0F))
+            m = m.scale(randomPoint(4))
         } else {
-            m.rotate((float) (this.rand.nextFloat() * 360.0F))
-            m.translate(randInt(40), randInt(40))
-            m.scale(randomPoint(4))
+            m = m.rotate((float) (this.rand.nextFloat() * 360.0F))
+            m = m.translate(randInt(40), randInt(40))
+            m = m.scale(randomPoint(4))
         }
         return m
     }

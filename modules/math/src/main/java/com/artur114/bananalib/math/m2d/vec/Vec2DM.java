@@ -443,7 +443,7 @@ public class Vec2DM implements IVec2DM {
 
         double rad = Math.toRadians(degrees);
         double sin = Math.sin(rad), cos = Math.cos(rad);
-        return this.set(this.x * cos + this.y * sin, this.y * cos - this.x * sin);
+        return this.set(this.x * cos - this.y * sin, this.y * cos + this.x * sin);
     }
 
     @Override
@@ -454,7 +454,7 @@ public class Vec2DM implements IVec2DM {
 
         double rad = Math.toRadians(degrees);
         double sin = Math.sin(rad), cos = Math.cos(rad);
-        return this.set(((this.x - x) * cos + (this.y - y) * sin) + x, ((this.y - y) * cos - (this.x - x) * sin) + y);
+        return this.set(((this.x - x) * cos - (this.y - y) * sin) + x, ((this.y - y) * cos + (this.x - x) * sin) + y);
     }
 
     @Override
@@ -465,7 +465,7 @@ public class Vec2DM implements IVec2DM {
 
         double rad = Math.toRadians(degrees);
         double sin = Math.sin(rad), cos = Math.cos(rad);
-        return this.set(((this.x - x) * cos + (this.y - y) * sin) + x, ((this.y - y) * cos - (this.x - x) * sin) + y);
+        return this.set(((this.x - x) * cos - (this.y - y) * sin) + x, ((this.y - y) * cos + (this.x - x) * sin) + y);
     }
 
     @Override

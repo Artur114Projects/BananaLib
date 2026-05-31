@@ -539,7 +539,7 @@ public class Vec3I implements IVec3I {
 
         double rad = Math.toRadians(degrees);
         double sin = BananaMath.sin(rad), cos = BananaMath.cos(rad);
-        return new Vec3I(this.x, BananaMath.round(this.y * cos + this.z * sin), BananaMath.round(this.z * cos - this.y * sin));
+        return new Vec3I(this.x, BananaMath.round(this.y * cos - this.z * sin), BananaMath.round(this.z * cos + this.y * sin));
     }
 
     @Override
@@ -561,7 +561,7 @@ public class Vec3I implements IVec3I {
 
         double rad = Math.toRadians(degrees);
         double sin = BananaMath.sin(rad), cos = BananaMath.cos(rad);
-        return new Vec3I(BananaMath.round(this.x * cos + this.y * sin), BananaMath.round(this.y * cos - this.x * sin), this.z);
+        return new Vec3I(BananaMath.round(this.x * cos - this.y * sin), BananaMath.round(this.y * cos + this.x * sin), this.z);
     }
 
     @Override
@@ -572,7 +572,7 @@ public class Vec3I implements IVec3I {
 
         double rad = Math.toRadians(degrees);
         double sin = BananaMath.sin(rad), cos = BananaMath.cos(rad);
-        return new Vec3I(this.x, BananaMath.round(((this.y - y) * cos + (this.z - z) * sin) + y), BananaMath.round(((this.z - z) * cos - (this.y - y) * sin) + z));
+        return new Vec3I(this.x, BananaMath.round(((this.y - y) * cos - (this.z - z) * sin) + y), BananaMath.round(((this.z - z) * cos + (this.y - y) * sin) + z));
     }
 
     @Override
@@ -583,7 +583,7 @@ public class Vec3I implements IVec3I {
 
         double rad = Math.toRadians(degrees);
         double sin = BananaMath.sin(rad), cos = BananaMath.cos(rad);
-        return new Vec3I(this.x, BananaMath.round(((this.y - y) * cos + (this.z - z) * sin) + y), BananaMath.round(((this.z - z) * cos - (this.y - y) * sin) + z));
+        return new Vec3I(this.x, BananaMath.round(((this.y - y) * cos - (this.z - z) * sin) + y), BananaMath.round(((this.z - z) * cos + (this.y - y) * sin) + z));
     }
 
     @Override
@@ -636,7 +636,7 @@ public class Vec3I implements IVec3I {
 
         double rad = Math.toRadians(degrees);
         double sin = BananaMath.sin(rad), cos = BananaMath.cos(rad);
-        return new Vec3I(((this.x - x) * cos + (this.y - y) * sin) + x, ((this.y - y) * cos - (this.x - x) * sin) + y, this.z);
+        return new Vec3I(((this.x - x) * cos - (this.y - y) * sin) + x, ((this.y - y) * cos + (this.x - x) * sin) + y, this.z);
     }
 
     @Override
@@ -647,7 +647,7 @@ public class Vec3I implements IVec3I {
 
         double rad = Math.toRadians(degrees);
         double sin = BananaMath.sin(rad), cos = BananaMath.cos(rad);
-        return new Vec3I(((this.x - x) * cos + (this.y - y) * sin) + x, ((this.y - y) * cos - (this.x - x) * sin) + y, this.z);
+        return new Vec3I(((this.x - x) * cos - (this.y - y) * sin) + x, ((this.y - y) * cos + (this.x - x) * sin) + y, this.z);
     }
 
     @Override

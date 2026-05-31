@@ -384,8 +384,8 @@ public class Matrix2DM implements IMatrix2DM {
         double sin = BananaMath.sin(rads);
         double cos = BananaMath.cos(rads);
         return this.set(
-            (cos * this.m00) + (sin * this.m10), (cos * this.m01) + (sin * this.m11), (cos * this.m02) + (sin * this.m12),
-            (-sin * this.m00) + (cos * this.m10), (-sin * this.m01) + (cos * this.m11), (-sin * this.m02) + (cos * this.m12)
+            (cos * this.m00) + (-sin * this.m10), (cos * this.m01) + (-sin * this.m11), (cos * this.m02) + (-sin * this.m12),
+            (sin * this.m00) + (cos * this.m10), (sin * this.m01) + (cos * this.m11), (sin * this.m02) + (cos * this.m12)
         );
     }
 
@@ -398,8 +398,8 @@ public class Matrix2DM implements IMatrix2DM {
         double m00p = this.m00, m01p = this.m01, m02p = this.m02 - x;
         double m10p = this.m10, m11p = this.m11, m12p = this.m12 - y;
 
-        double m00r = (cos * m00p) + (sin * m10p), m01r = (cos * m01p) + (sin * m11p), m02r = (cos * m02p) + (sin * m12p);
-        double m10r = (-sin * m00p) + (cos * m10p), m11r = (-sin * m01p) + (cos * m11p), m12r = (-sin * m02p) + (cos * m12p);
+        double m00r = (cos * m00p) + (-sin * m10p), m01r = (cos * m01p) + (-sin * m11p), m02r = (cos * m02p) + (-sin * m12p);
+        double m10r = (sin * m00p) + (cos * m10p), m11r = (sin * m01p) + (cos * m11p), m12r = (sin * m02p) + (cos * m12p);
 
         return this.set(m00r, m01r, m02r + x, m10r, m11r, m12r + y);
     }
@@ -413,8 +413,8 @@ public class Matrix2DM implements IMatrix2DM {
         double m00p = this.m00, m01p = this.m01, m02p = this.m02 - x;
         double m10p = this.m10, m11p = this.m11, m12p = this.m12 - y;
 
-        double m00r = (cos * m00p) + (sin * m10p), m01r = (cos * m01p) + (sin * m11p), m02r = (cos * m02p) + (sin * m12p);
-        double m10r = (-sin * m00p) + (cos * m10p), m11r = (-sin * m01p) + (cos * m11p), m12r = (-sin * m02p) + (cos * m12p);
+        double m00r = (cos * m00p) + (-sin * m10p), m01r = (cos * m01p) + (-sin * m11p), m02r = (cos * m02p) + (-sin * m12p);
+        double m10r = (sin * m00p) + (cos * m10p), m11r = (sin * m01p) + (cos * m11p), m12r = (sin * m02p) + (cos * m12p);
 
         return this.set(m00r, m01r, m02r + x, m10r, m11r, m12r + y);
     }

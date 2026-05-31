@@ -260,8 +260,8 @@ public class Matrix2F implements IMatrix2F {
         float sin = (float) BananaMath.sin(rads);
         float cos = (float) BananaMath.cos(rads);
         return new Matrix2F(
-                (cos * this.m00) + (sin * this.m10), (cos * this.m01) + (sin * this.m11), (cos * this.m02) + (sin * this.m12),
-                (-sin * this.m00) + (cos * this.m10), (-sin * this.m01) + (cos * this.m11), (-sin * this.m02) + (cos * this.m12)
+            (cos * this.m00) + (-sin * this.m10), (cos * this.m01) + (-sin * this.m11), (cos * this.m02) + (-sin * this.m12),
+            (sin * this.m00) + (cos * this.m10), (sin * this.m01) + (cos * this.m11), (sin * this.m02) + (cos * this.m12)
         );
     }
 
@@ -274,8 +274,8 @@ public class Matrix2F implements IMatrix2F {
         float m00p = this.m00, m01p = this.m01, m02p = this.m02 - x;
         float m10p = this.m10, m11p = this.m11, m12p = this.m12 - y;
 
-        float m00r = (cos * m00p) + (sin * m10p), m01r = (cos * m01p) + (sin * m11p), m02r = (cos * m02p) + (sin * m12p);
-        float m10r = (-sin * m00p) + (cos * m10p), m11r = (-sin * m01p) + (cos * m11p), m12r = (-sin * m02p) + (cos * m12p);
+        float m00r = (cos * m00p) + (-sin * m10p), m01r = (cos * m01p) + (-sin * m11p), m02r = (cos * m02p) + (-sin * m12p);
+        float m10r = (sin * m00p) + (cos * m10p), m11r = (sin * m01p) + (cos * m11p), m12r = (sin * m02p) + (cos * m12p);
 
         return new Matrix2F(
                 m00r, m01r, m02r + x,
@@ -292,8 +292,8 @@ public class Matrix2F implements IMatrix2F {
         float m00p = this.m00, m01p = this.m01, m02p = this.m02 - x;
         float m10p = this.m10, m11p = this.m11, m12p = this.m12 - y;
 
-        float m00r = (cos * m00p) + (sin * m10p), m01r = (cos * m01p) + (sin * m11p), m02r = (cos * m02p) + (sin * m12p);
-        float m10r = (-sin * m00p) + (cos * m10p), m11r = (-sin * m01p) + (cos * m11p), m12r = (-sin * m02p) + (cos * m12p);
+        float m00r = (cos * m00p) + (-sin * m10p), m01r = (cos * m01p) + (-sin * m11p), m02r = (cos * m02p) + (-sin * m12p);
+        float m10r = (sin * m00p) + (cos * m10p), m11r = (sin * m01p) + (cos * m11p), m12r = (sin * m02p) + (cos * m12p);
 
         return new Matrix2F(
                 m00r, m01r, m02r + x,

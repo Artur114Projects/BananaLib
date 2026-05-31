@@ -22,16 +22,16 @@ BananaBench.run {
             [matrixOrig, matrix0, matrix1, vec]
         }
 
-        beforeEach {Object[] data ->
-            data[1].set(data[0])
+        beforeEach {
+            it[1].set(it[0])
         }
 
-        test("transform") {Object[] data ->
-            data[1].transform(data[3])
+        test("transform") {
+            it.consume it.data[1].transform(it.data[3])
         }
 
-        test("mul") {Object[] data ->
-            data[1].mul(data[2])
+        test("mul") {
+            it.consume it.data[1].mul(it.data[2])
         }
     }
 
@@ -46,16 +46,16 @@ BananaBench.run {
             [matrixOrig, matrix0, matrix1, out, vector3f]
         }
 
-        beforeEach {Object[] data ->
-            data[1].set(data[0])
+        beforeEach {
+            it[1].set(it[0])
         }
 
-        test("transform") {Object[] data ->
-            data[1].transform(data[4])
+        test("transform") {
+            it.consume it.data[1].transform(it.data[4])
         }
 
-        test("mul") {Object[] data ->
-            data[1].mul(data[2], data[3])
+        test("mul") {
+            it.consume it.data[1].mul(it.data[2], it.data[3])
         }
     }
 }

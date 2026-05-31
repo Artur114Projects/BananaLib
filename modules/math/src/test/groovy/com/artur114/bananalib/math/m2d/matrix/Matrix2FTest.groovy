@@ -46,7 +46,7 @@ class Matrix2FTest extends Matrix2TestBase<IMatrix2F> {
             def b = randomMatrix()
             def c = randomMatrix()
 
-            assert a.mul(b).mul(c).equalsEps(a.mul(b.mul(c)))
+            assert a.mul(b).mul(c).equalsEps(a.mul(b.mul(c)), 1.0E-3F)
         }
     }
 

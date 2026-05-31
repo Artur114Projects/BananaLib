@@ -1,0 +1,1653 @@
+package com.artur114.bananalib.math.m3d.matrix;
+
+import com.artur114.bananalib.math.BananaMath;
+import com.artur114.bananalib.math.core.m2d.vec.IVec2DC;
+import com.artur114.bananalib.math.core.m2d.vec.IVec2IC;
+import com.artur114.bananalib.math.core.m3d.box.IBox3DC;
+import com.artur114.bananalib.math.core.m3d.box.IBox3IC;
+import com.artur114.bananalib.math.core.m3d.matrix.IMatrix3DC;
+import com.artur114.bananalib.math.core.m3d.matrix.IMatrix3FC;
+import com.artur114.bananalib.math.core.m3d.vec.IVec3DC;
+import com.artur114.bananalib.math.core.m3d.vec.IVec3IC;
+import com.artur114.bananalib.math.internal.Hasher;
+import com.artur114.bananalib.math.m2d.vec.*;
+import com.artur114.bananalib.math.m3d.box.*;
+import com.artur114.bananalib.math.m3d.vec.*;
+
+import java.nio.DoubleBuffer;
+
+public class Matrix3D implements IMatrix3D {
+    public static final Matrix3D IDENTITY = new Matrix3D();
+    private final double m00, m01, m02, m03;
+    private final double m10, m11, m12, m13;
+    private final double m20, m21, m22, m23;
+    private final double det;
+    private final int hash;
+
+    public Matrix3D() {
+        this.m00 = 1.0D; this.m01 = 0.0D; this.m02 = 0.0D; this.m03 = 0.0D;
+        this.m10 = 0.0D; this.m11 = 1.0D; this.m12 = 0.0D; this.m13 = 0.0D;
+        this.m20 = 0.0D; this.m21 = 0.0D; this.m22 = 1.0D; this.m23 = 0.0D;
+        this.hash = Hasher.hashIEEE754(
+            this.m00, this.m01, this.m02, this.m03,
+            this.m10, this.m11, this.m12, this.m13,
+            this.m20, this.m21, this.m22, this.m23,
+            0.0D, 0.0D, 0.0D, 1.0D
+        );
+        this.det = 1.0D;
+    }
+
+    public Matrix3D(double m00, double m01, double m02, double m03, double m10, double m11, double m12, double m13, double m20, double m21, double m22, double m23) {
+        this.m00 = m00; this.m01 = m01; this.m02 = m02; this.m03 = m03;
+        this.m10 = m10; this.m11 = m11; this.m12 = m12; this.m13 = m13;
+        this.m20 = m20; this.m21 = m21; this.m22 = m22; this.m23 = m23;
+        this.hash = Hasher.hashIEEE754(
+            this.m00, this.m01, this.m02, this.m03,
+            this.m10, this.m11, this.m12, this.m13,
+            this.m20, this.m21, this.m22, this.m23,
+            0.0D, 0.0D, 0.0D, 1.0D
+        );
+        this.det =
+                m00 * (m11 * m22 - m12 * m21) -
+                m01 * (m10 * m22 - m12 * m20) +
+                m02 * (m10 * m21 - m11 * m20);
+    }
+
+    public Matrix3D(IMatrix3D m) {
+        this(
+            m.m00(), m.m01(), m.m02(), m.m03(),
+            m.m10(), m.m11(), m.m12(), m.m13(),
+            m.m20(), m.m21(), m.m22(), m.m23()
+        );
+    }
+
+    public Matrix3D(IMatrix3F m) {
+        this(
+            m.m00(), m.m01(), m.m02(), m.m03(),
+            m.m10(), m.m11(), m.m12(), m.m13(),
+            m.m20(), m.m21(), m.m22(), m.m23()
+        );
+    }
+
+    public Matrix3D(DoubleBuffer buf) {
+        this(
+            buf.get(), buf.get(), buf.get(), buf.get(),
+            buf.get(), buf.get(), buf.get(), buf.get(),
+            buf.get(), buf.get(), buf.get(), buf.get()
+        );
+    }
+
+    @Override
+    public double m00() {
+        return this.m00;
+    }
+
+    @Override
+    public double m01() {
+        return this.m01;
+    }
+
+    @Override
+    public double m02() {
+        return this.m02;
+    }
+
+    @Override
+    public double m03() {
+        return this.m03;
+    }
+
+    @Override
+    public double m10() {
+        return this.m10;
+    }
+
+    @Override
+    public double m11() {
+        return this.m11;
+    }
+
+    @Override
+    public double m12() {
+        return this.m12;
+    }
+
+    @Override
+    public double m13() {
+        return this.m13;
+    }
+
+    @Override
+    public double m20() {
+        return this.m20;
+    }
+
+    @Override
+    public double m21() {
+        return this.m21;
+    }
+
+    @Override
+    public double m22() {
+        return this.m22;
+    }
+
+    @Override
+    public double m23() {
+        return this.m23;
+    }
+
+    @Override
+    public double m30() {
+        return 0.0D;
+    }
+
+    @Override
+    public double m31() {
+        return 0.0D;
+    }
+
+    @Override
+    public double m32() {
+        return 0.0D;
+    }
+
+    @Override
+    public double m33() {
+        return 1.0D;
+    }
+
+    @Override
+    public IMatrix3D invert() {
+        if (!this.isReversible()) throw new ArithmeticException("Couldn't invert unreversible matrix: " + this);
+        double detInv = 1.0D / this.det;
+        double i00 = (this.m11 * this.m22 - this.m21 * this.m12) * detInv;
+        double i01 = -(this.m01 * this.m22 - this.m21 * this.m02) * detInv;
+        double i02 = (this.m01 * this.m12 - this.m11 * this.m02) * detInv;
+        double i10 = -(this.m10 * this.m22 - this.m20 * this.m12) * detInv;
+        double i11 = (this.m00 * this.m22 - this.m20 * this.m02) * detInv;
+        double i12 = -(this.m00 * this.m12 - this.m10 * this.m02) * detInv;
+        double i20 = (this.m10 * this.m21 - this.m20 * this.m11) * detInv;
+        double i21 = -(this.m00 * this.m21 - this.m20 * this.m01) * detInv;
+        double i22 = (this.m00 * this.m11 - this.m10 * this.m01) * detInv;
+        double i03 = -(i00 * this.m03 + i01 * this.m13 + i02 * this.m23);
+        double i13 = -(i10 * this.m03 + i11 * this.m13 + i12 * this.m23);
+        double i23 = -(i20 * this.m03 + i21 * this.m13 + i22 * this.m23);
+        return new Matrix3D(i00, i01, i02, i03, i10, i11, i12, i13, i20, i21, i22, i23);
+    }
+
+    @Override
+    public IMatrix3D transpose() {
+        return new Matrix3D(
+            this.m00, this.m10, this.m20, this.m30(),
+            this.m01, this.m11, this.m21, this.m31(),
+            this.m02, this.m12, this.m22, this.m32()
+        );
+    }
+
+    @Override
+    public double determinant() {
+        return this.det;
+    }
+
+    @Override
+    public boolean isReversible() {
+        return Math.abs(this.det) > BananaMath.DOUBLE_EPS;
+    }
+
+    @Override
+    public IMatrix3D mul(IMatrix3DC matrix) {
+        double m1v00 = matrix.m00(), m1v01 = matrix.m01(), m1v02 = matrix.m02(), m1v03 = matrix.m03();
+        double m1v10 = matrix.m10(), m1v11 = matrix.m11(), m1v12 = matrix.m12(), m1v13 = matrix.m13();
+        double m1v20 = matrix.m20(), m1v21 = matrix.m21(), m1v22 = matrix.m22(), m1v23 = matrix.m23();
+        double m2v00 = this.m00, m2v01 = this.m01, m2v02 = this.m02, m2v03 = this.m03;
+        double m2v10 = this.m10, m2v11 = this.m11, m2v12 = this.m12, m2v13 = this.m13;
+        double m2v20 = this.m20, m2v21 = this.m21, m2v22 = this.m22, m2v23 = this.m23;
+        return new Matrix3D(
+            (m1v00 * m2v00) + (m1v01 * m2v10) + (m1v02 * m2v20),
+            (m1v00 * m2v01) + (m1v01 * m2v11) + (m1v02 * m2v21),
+            (m1v00 * m2v02) + (m1v01 * m2v12) + (m1v02 * m2v22),
+            (m1v00 * m2v03) + (m1v01 * m2v13) + (m1v02 * m2v23) + (m1v03),
+
+            (m1v10 * m2v00) + (m1v11 * m2v10) + (m1v12 * m2v20),
+            (m1v10 * m2v01) + (m1v11 * m2v11) + (m1v12 * m2v21),
+            (m1v10 * m2v02) + (m1v11 * m2v12) + (m1v12 * m2v22),
+            (m1v10 * m2v03) + (m1v11 * m2v13) + (m1v12 * m2v23) + (m1v13),
+
+            (m1v20 * m2v00) + (m1v21 * m2v10) + (m1v22 * m2v20),
+            (m1v20 * m2v01) + (m1v21 * m2v11) + (m1v22 * m2v21),
+            (m1v20 * m2v02) + (m1v21 * m2v12) + (m1v22 * m2v22),
+            (m1v20 * m2v03) + (m1v21 * m2v13) + (m1v22 * m2v23) + (m1v23)
+        );
+    }
+
+    @Override
+    public IMatrix3D mul(IMatrix3FC matrix) {
+        float m1v00 = matrix.m00(), m1v01 = matrix.m01(), m1v02 = matrix.m02(), m1v03 = matrix.m03();
+        float m1v10 = matrix.m10(), m1v11 = matrix.m11(), m1v12 = matrix.m12(), m1v13 = matrix.m13();
+        float m1v20 = matrix.m20(), m1v21 = matrix.m21(), m1v22 = matrix.m22(), m1v23 = matrix.m23();
+        double m2v00 = this.m00, m2v01 = this.m01, m2v02 = this.m02, m2v03 = this.m03;
+        double m2v10 = this.m10, m2v11 = this.m11, m2v12 = this.m12, m2v13 = this.m13;
+        double m2v20 = this.m20, m2v21 = this.m21, m2v22 = this.m22, m2v23 = this.m23;
+        return new Matrix3D(
+            (m1v00 * m2v00) + (m1v01 * m2v10) + (m1v02 * m2v20),
+            (m1v00 * m2v01) + (m1v01 * m2v11) + (m1v02 * m2v21),
+            (m1v00 * m2v02) + (m1v01 * m2v12) + (m1v02 * m2v22),
+            (m1v00 * m2v03) + (m1v01 * m2v13) + (m1v02 * m2v23) + (m1v03),
+
+            (m1v10 * m2v00) + (m1v11 * m2v10) + (m1v12 * m2v20),
+            (m1v10 * m2v01) + (m1v11 * m2v11) + (m1v12 * m2v21),
+            (m1v10 * m2v02) + (m1v11 * m2v12) + (m1v12 * m2v22),
+            (m1v10 * m2v03) + (m1v11 * m2v13) + (m1v12 * m2v23) + (m1v13),
+
+            (m1v20 * m2v00) + (m1v21 * m2v10) + (m1v22 * m2v20),
+            (m1v20 * m2v01) + (m1v21 * m2v11) + (m1v22 * m2v21),
+            (m1v20 * m2v02) + (m1v21 * m2v12) + (m1v22 * m2v22),
+            (m1v20 * m2v03) + (m1v21 * m2v13) + (m1v22 * m2v23) + (m1v23)
+        );
+    }
+
+    @Override
+    public IMatrix3D mulPost(IMatrix3DC matrix) {
+        double m1v00 = this.m00, m1v01 = this.m01, m1v02 = this.m02;
+        double m1v10 = this.m10, m1v11 = this.m11, m1v12 = this.m12;
+        double m1v20 = this.m20, m1v21 = this.m21, m1v22 = this.m22;
+        double m2v00 = matrix.m00(), m2v01 = matrix.m01(), m2v02 = matrix.m02(), m2v03 = matrix.m03();
+        double m2v10 = matrix.m10(), m2v11 = matrix.m11(), m2v12 = matrix.m12(), m2v13 = matrix.m13();
+        double m2v20 = matrix.m20(), m2v21 = matrix.m21(), m2v22 = matrix.m22(), m2v23 = matrix.m23();
+        return new Matrix3D(
+            (m1v00 * m2v00) + (m1v01 * m2v10) + (m1v02 * m2v20),
+            (m1v00 * m2v01) + (m1v01 * m2v11) + (m1v02 * m2v21),
+            (m1v00 * m2v02) + (m1v01 * m2v12) + (m1v02 * m2v22),
+            (m1v00 * m2v03) + (m1v01 * m2v13) + (m1v02 * m2v23) + (this.m03),
+
+            (m1v10 * m2v00) + (m1v11 * m2v10) + (m1v12 * m2v20),
+            (m1v10 * m2v01) + (m1v11 * m2v11) + (m1v12 * m2v21),
+            (m1v10 * m2v02) + (m1v11 * m2v12) + (m1v12 * m2v22),
+            (m1v10 * m2v03) + (m1v11 * m2v13) + (m1v12 * m2v23) + (this.m13),
+
+            (m1v20 * m2v00) + (m1v21 * m2v10) + (m1v22 * m2v20),
+            (m1v20 * m2v01) + (m1v21 * m2v11) + (m1v22 * m2v21),
+            (m1v20 * m2v02) + (m1v21 * m2v12) + (m1v22 * m2v22),
+            (m1v20 * m2v03) + (m1v21 * m2v13) + (m1v22 * m2v23) + (this.m23)
+        );
+    }
+
+    @Override
+    public IMatrix3D mulPost(IMatrix3FC matrix) {
+        double m1v00 = this.m00, m1v01 = this.m01, m1v02 = this.m02;
+        double m1v10 = this.m10, m1v11 = this.m11, m1v12 = this.m12;
+        double m1v20 = this.m20, m1v21 = this.m21, m1v22 = this.m22;
+        float m2v00 = matrix.m00(), m2v01 = matrix.m01(), m2v02 = matrix.m02(), m2v03 = matrix.m03();
+        float m2v10 = matrix.m10(), m2v11 = matrix.m11(), m2v12 = matrix.m12(), m2v13 = matrix.m13();
+        float m2v20 = matrix.m20(), m2v21 = matrix.m21(), m2v22 = matrix.m22(), m2v23 = matrix.m23();
+        return new Matrix3D(
+            (m1v00 * m2v00) + (m1v01 * m2v10) + (m1v02 * m2v20),
+            (m1v00 * m2v01) + (m1v01 * m2v11) + (m1v02 * m2v21),
+            (m1v00 * m2v02) + (m1v01 * m2v12) + (m1v02 * m2v22),
+            (m1v00 * m2v03) + (m1v01 * m2v13) + (m1v02 * m2v23) + (this.m03),
+
+            (m1v10 * m2v00) + (m1v11 * m2v10) + (m1v12 * m2v20),
+            (m1v10 * m2v01) + (m1v11 * m2v11) + (m1v12 * m2v21),
+            (m1v10 * m2v02) + (m1v11 * m2v12) + (m1v12 * m2v22),
+            (m1v10 * m2v03) + (m1v11 * m2v13) + (m1v12 * m2v23) + (this.m13),
+
+            (m1v20 * m2v00) + (m1v21 * m2v10) + (m1v22 * m2v20),
+            (m1v20 * m2v01) + (m1v21 * m2v11) + (m1v22 * m2v21),
+            (m1v20 * m2v02) + (m1v21 * m2v12) + (m1v22 * m2v22),
+            (m1v20 * m2v03) + (m1v21 * m2v13) + (m1v22 * m2v23) + (this.m23)
+        );
+    }
+
+    @Override
+    public IMatrix3D div(int val) {
+        return new Matrix3D(
+            this.m00 / val, this.m01 / val, this.m02 / val, this.m03 / val,
+            this.m10 / val, this.m11 / val, this.m12 / val, this.m13 / val,
+            this.m20 / val, this.m21 / val, this.m22 / val, this.m23 / val
+        );
+    }
+
+    @Override
+    public IMatrix3D div(double val) {
+        return new Matrix3D(
+            this.m00 / val, this.m01 / val, this.m02 / val, this.m03 / val,
+            this.m10 / val, this.m11 / val, this.m12 / val, this.m13 / val,
+            this.m20 / val, this.m21 / val, this.m22 / val, this.m23 / val
+        );
+    }
+
+    @Override
+    public IMatrix3D scale(int val) {
+        return new Matrix3D(
+            this.m00 * val, this.m01 * val, this.m02 * val, this.m03 * val,
+            this.m10 * val, this.m11 * val, this.m12 * val, this.m13 * val,
+            this.m20 * val, this.m21 * val, this.m22 * val, this.m23 * val
+        );
+    }
+
+    @Override
+    public IMatrix3D scale(double val) {
+        return new Matrix3D(
+            this.m00 * val, this.m01 * val, this.m02 * val, this.m03 * val,
+            this.m10 * val, this.m11 * val, this.m12 * val, this.m13 * val,
+            this.m20 * val, this.m21 * val, this.m22 * val, this.m23 * val
+        );
+    }
+
+    @Override
+    public IMatrix3D scale(int x, int y, int z) {
+        return this.mul(new Matrix3D(
+            x, 0.0D, 0.0D, 0.0D,
+            0.0D, y, 0.0D, 0.0D,
+            0.0D, 0.0D, z, 0.0D
+        ));
+    }
+
+    @Override
+    public IMatrix3D scale(double x, double y, double z) {
+        return this.mul(new Matrix3D(
+            x, 0.0D, 0.0D, 0.0D,
+            0.0D, y, 0.0D, 0.0D,
+            0.0D, 0.0D, z, 0.0D
+        ));
+    }
+
+    @Override
+    public IMatrix3D scale(IVec3DC vec) {
+        return this.scale(vec.x(), vec.y(), vec.z());
+    }
+
+    @Override
+    public IMatrix3D scale(IVec3IC vec) {
+        return this.scale(vec.x(), vec.y(), vec.z());
+    }
+
+    @Override
+    public IMatrix3D scale(IVec2IC vec, int z) {
+        return this.scale(vec.x(), vec.y(), z);
+    }
+
+    @Override
+    public IMatrix3D scale(IVec2IC vec, double z) {
+        return this.scale(vec.x(), vec.y(), z);
+    }
+
+    @Override
+    public IMatrix3D scale(IVec2DC vec, int z) {
+        return this.scale(vec.x(), vec.y(), z);
+    }
+
+    @Override
+    public IMatrix3D scale(IVec2DC vec, double z) {
+        return this.scale(vec.x(), vec.y(), z);
+    }
+
+    @Override
+    public IMatrix3D scale(IVec2IC vec) {
+        return this.scale(vec.x(), vec.y(), 1);
+    }
+
+    @Override
+    public IMatrix3D scale(IVec2DC vec) {
+        return this.scale(vec.x(), vec.y(), 1.0D);
+    }
+
+    @Override
+    public IMatrix3D translate(int x, int y, int z) {
+        return this.mul(new Matrix3D(
+            1.0D, 0.0D, 0.0D, x,
+            0.0D, 1.0D, 0.0D, y,
+            0.0D, 0.0D, 1.0D, z
+        ));
+    }
+
+    @Override
+    public IMatrix3D translate(double x, double y, double z) {
+        return this.mul(new Matrix3D(
+            1.0D, 0.0D, 0.0D, x,
+            0.0D, 1.0D, 0.0D, y,
+            0.0D, 0.0D, 1.0D, z
+        ));
+    }
+
+    @Override
+    public IMatrix3D translate(IVec3DC vec) {
+        return this.translate(vec.x(), vec.y(), vec.z());
+    }
+
+    @Override
+    public IMatrix3D translate(IVec3IC vec) {
+        return this.translate(vec.x(), vec.y(), vec.z());
+    }
+
+    @Override
+    public IMatrix3D translate(IVec2IC vec, int z) {
+        return this.translate(vec.x(), vec.y(), z);
+    }
+
+    @Override
+    public IMatrix3D translate(IVec2IC vec, double z) {
+        return this.translate(vec.x(), vec.y(), z);
+    }
+
+    @Override
+    public IMatrix3D translate(IVec2DC vec, int z) {
+        return this.translate(vec.x(), vec.y(), z);
+    }
+
+    @Override
+    public IMatrix3D translate(IVec2DC vec, double z) {
+        return this.translate(vec.x(), vec.y(), z);
+    }
+
+    @Override
+    public IMatrix3D translate(IVec2IC vec) {
+        return this.translate(vec.x(), vec.y(), 0);
+    }
+
+    @Override
+    public IMatrix3D translate(IVec2DC vec) {
+        return this.translate(vec.x(), vec.y(), 0);
+    }
+
+    @Override
+    public IMatrix3D rotateX(double degrees) {
+        if (Math.abs(degrees) < BananaMath.DOUBLE_EPS) {
+            return this;
+        }
+
+        double rads = Math.toRadians(degrees);
+        double sin = BananaMath.sin(rads);
+        double cos = BananaMath.cos(rads);
+
+        return this.mul(new Matrix3D(
+            1.0D, 0.0D, 0.0D, 0.0D,
+            0.0D, cos, -sin, 0.0D,
+            0.0D, sin, cos, 0.0D
+        ));
+    }
+
+    @Override
+    public IMatrix3D rotateY(double degrees) {
+        if (Math.abs(degrees) < BananaMath.DOUBLE_EPS) {
+            return this;
+        }
+
+        double rads = Math.toRadians(degrees);
+        double sin = BananaMath.sin(rads);
+        double cos = BananaMath.cos(rads);
+
+        return this.mul(new Matrix3D(
+            cos, 0.0D, sin, 0.0D,
+            0.0D, 1.0D, 0.0D, 0.0D,
+            -sin, 0.0D, cos, 0.0D
+        ));
+    }
+
+    @Override
+    public IMatrix3D rotateZ(double degrees) {
+        if (Math.abs(degrees) < BananaMath.DOUBLE_EPS) {
+            return this;
+        }
+
+        double rads = Math.toRadians(degrees);
+        double sin = BananaMath.sin(rads);
+        double cos = BananaMath.cos(rads);
+
+        return this.mul(new Matrix3D(
+            cos, -sin, 0.0D, 0.0D,
+            sin, cos, 0.0D, 0.0D,
+            0.0D, 0.0D, 1.0D, 0.0D
+        ));
+    }
+
+    @Override
+    public IMatrix3D rotate(double degrees, int x, int y, int z) {
+        if (Math.abs(degrees) < BananaMath.DOUBLE_EPS) {
+            return this;
+        }
+        double l = Math.sqrt(x * x + y * y + z * z);
+        if (l < BananaMath.DOUBLE_EPS) {
+            return this;
+        }
+        double ax = x / l, ay = y / l, az = z / l;
+        double rads = Math.toRadians(degrees);
+        double sin = BananaMath.sin(rads);
+        double cos = BananaMath.cos(rads);
+        double cosM1 = 1 - cos;
+
+        return this.mul(new Matrix3D(
+            cos + ax * ax * cosM1, ax * ay * cosM1 - az * sin, ax * az * cosM1 + ay * sin, 0.0D,
+            ay * ax * cosM1 + az * sin, cos + ay * ay * cosM1, ay * az * cosM1 - ax * sin, 0.0D,
+            az * ax * cosM1 - ay * sin, az * ay * cosM1 + ax * sin, cos + az * az * cosM1, 0.0D
+        ));
+    }
+
+    @Override
+    public IMatrix3D rotate(double degrees, double x, double y, double z) {
+        if (Math.abs(degrees) < BananaMath.DOUBLE_EPS) {
+            return this;
+        }
+        double l = Math.sqrt(x * x + y * y + z * z);
+        if (l < BananaMath.DOUBLE_EPS) {
+            return this;
+        }
+        double ax = x / l, ay = y / l, az = z / l;
+        double rads = Math.toRadians(degrees);
+        double sin = BananaMath.sin(rads);
+        double cos = BananaMath.cos(rads);
+        double cosM1 = 1 - cos;
+
+        return this.mul(new Matrix3D(
+            cos + ax * ax * cosM1, ax * ay * cosM1 - az * sin, ax * az * cosM1 + ay * sin, 0.0D,
+            ay * ax * cosM1 + az * sin, cos + ay * ay * cosM1, ay * az * cosM1 - ax * sin, 0.0D,
+            az * ax * cosM1 - ay * sin, az * ay * cosM1 + ax * sin, cos + az * az * cosM1, 0.0D
+        ));
+    }
+
+    @Override
+    public IMatrix3D rotate(double degrees, IVec3DC vec) {
+        return this.rotate(degrees, vec.x(), vec.y(), vec.z());
+    }
+
+    @Override
+    public IMatrix3D rotate(double degrees, IVec3IC vec) {
+        return this.rotate(degrees, vec.x(), vec.y(), vec.z());
+    }
+
+    @Override
+    public IMatrix3D rotate(double degrees, IVec2IC vec, int z) {
+        return this.rotate(degrees, vec.x(), vec.y(), z);
+    }
+
+    @Override
+    public IMatrix3D rotate(double degrees, IVec2IC vec, double z) {
+        return this.rotate(degrees, vec.x(), vec.y(), z);
+    }
+
+    @Override
+    public IMatrix3D rotate(double degrees, IVec2DC vec, int z) {
+        return this.rotate(degrees, vec.x(), vec.y(), z);
+    }
+
+    @Override
+    public IMatrix3D rotate(double degrees, IVec2DC vec, double z) {
+        return this.rotate(degrees, vec.x(), vec.y(), z);
+    }
+
+    @Override
+    public IMatrix3D rotate(double degrees, IVec2IC vec) {
+        return this.rotate(degrees, vec.x(), vec.y(), 0);
+    }
+
+    @Override
+    public IMatrix3D rotate(double degrees, IVec2DC vec) {
+        return this.rotate(degrees, vec.x(), vec.y(), 0);
+    }
+
+    @Override
+    public IMatrix3D rotateXAround(int x, int y, int z, double degrees) {
+        return this.translate(-x, -y, -z).rotateX(degrees).translate(x, y, z);
+    }
+
+    @Override
+    public IMatrix3D rotateXAround(double x, double y, double z, double degrees) {
+        return this.translate(-x, -y, -z).rotateX(degrees).translate(x, y, z);
+    }
+
+    @Override
+    public IMatrix3D rotateXAround(IVec3IC point, double degrees) {
+        return this.rotateXAround(point.x(), point.y(), point.z(), degrees);
+    }
+
+    @Override
+    public IMatrix3D rotateXAround(IVec3DC point, double degrees) {
+        return this.rotateXAround(point.x(), point.y(), point.z(), degrees);
+    }
+
+    @Override
+    public IMatrix3D rotateXAround(IVec2IC vec, int z, double degrees) {
+        return this.rotateXAround(vec.x(), vec.y(), z, degrees);
+    }
+
+    @Override
+    public IMatrix3D rotateXAround(IVec2IC vec, double z, double degrees) {
+        return this.rotateXAround(vec.x(), vec.y(), z, degrees);
+    }
+
+    @Override
+    public IMatrix3D rotateXAround(IVec2DC vec, int z, double degrees) {
+        return this.rotateXAround(vec.x(), vec.y(), z, degrees);
+    }
+
+    @Override
+    public IMatrix3D rotateXAround(IVec2DC vec, double z, double degrees) {
+        return this.rotateXAround(vec.x(), vec.y(), z, degrees);
+    }
+
+    @Override
+    public IMatrix3D rotateXAround(IVec2IC vec, double degrees) {
+        return this.rotateXAround(vec.x(), vec.y(), 0, degrees);
+    }
+
+    @Override
+    public IMatrix3D rotateXAround(IVec2DC vec, double degrees) {
+        return this.rotateXAround(vec.x(), vec.y(), 0.0D, degrees);
+    }
+
+    @Override
+    public IMatrix3D rotateYAround(int x, int y, int z, double degrees) {
+        return this.translate(-x, -y, -z).rotateY(degrees).translate(x, y, z);
+    }
+
+    @Override
+    public IMatrix3D rotateYAround(double x, double y, double z, double degrees) {
+        return this.translate(-x, -y, -z).rotateY(degrees).translate(x, y, z);
+    }
+
+    @Override
+    public IMatrix3D rotateYAround(IVec3IC point, double degrees) {
+        return this.rotateYAround(point.x(), point.y(), point.z(), degrees);
+    }
+
+    @Override
+    public IMatrix3D rotateYAround(IVec3DC point, double degrees) {
+        return this.rotateYAround(point.x(), point.y(), point.z(), degrees);
+    }
+
+    @Override
+    public IMatrix3D rotateYAround(IVec2IC vec, int z, double degrees) {
+        return this.rotateYAround(vec.x(), vec.y(), z, degrees);
+    }
+
+    @Override
+    public IMatrix3D rotateYAround(IVec2IC vec, double z, double degrees) {
+        return this.rotateYAround(vec.x(), vec.y(), z, degrees);
+    }
+
+    @Override
+    public IMatrix3D rotateYAround(IVec2DC vec, int z, double degrees) {
+        return this.rotateYAround(vec.x(), vec.y(), z, degrees);
+    }
+
+    @Override
+    public IMatrix3D rotateYAround(IVec2DC vec, double z, double degrees) {
+        return this.rotateYAround(vec.x(), vec.y(), z, degrees);
+    }
+
+    @Override
+    public IMatrix3D rotateYAround(IVec2IC vec, double degrees) {
+        return this.rotateYAround(vec.x(), vec.y(), 0, degrees);
+    }
+
+    @Override
+    public IMatrix3D rotateYAround(IVec2DC vec, double degrees) {
+        return this.rotateYAround(vec.x(), vec.y(), 0.0D, degrees);
+    }
+
+    @Override
+    public IMatrix3D rotateZAround(int x, int y, int z, double degrees) {
+        return this.translate(-x, -y, -z).rotateZ(degrees).translate(x, y, z);
+    }
+
+    @Override
+    public IMatrix3D rotateZAround(double x, double y, double z, double degrees) {
+        return this.translate(-x, -y, -z).rotateZ(degrees).translate(x, y, z);
+    }
+
+    @Override
+    public IMatrix3D rotateZAround(IVec3IC point, double degrees) {
+        return this.rotateZAround(point.x(), point.y(), point.z(), degrees);
+    }
+
+    @Override
+    public IMatrix3D rotateZAround(IVec3DC point, double degrees) {
+        return this.rotateZAround(point.x(), point.y(), point.z(), degrees);
+    }
+
+    @Override
+    public IMatrix3D rotateZAround(IVec2IC vec, int z, double degrees) {
+        return this.rotateZAround(vec.x(), vec.y(), z, degrees);
+    }
+
+    @Override
+    public IMatrix3D rotateZAround(IVec2IC vec, double z, double degrees) {
+        return this.rotateZAround(vec.x(), vec.y(), z, degrees);
+    }
+
+    @Override
+    public IMatrix3D rotateZAround(IVec2DC vec, int z, double degrees) {
+        return this.rotateZAround(vec.x(), vec.y(), z, degrees);
+    }
+
+    @Override
+    public IMatrix3D rotateZAround(IVec2DC vec, double z, double degrees) {
+        return this.rotateZAround(vec.x(), vec.y(), z, degrees);
+    }
+
+    @Override
+    public IMatrix3D rotateZAround(IVec2IC vec, double degrees) {
+        return this.rotateZAround(vec.x(), vec.y(), 0, degrees);
+    }
+
+    @Override
+    public IMatrix3D rotateZAround(IVec2DC vec, double degrees) {
+        return this.rotateZAround(vec.x(), vec.y(), 0.0D, degrees);
+    }
+
+    @Override
+    public IMatrix3D rotateAround(IVec3DC point, double degrees, int x, int y, int z) {
+        return this.translate(-point.x(), -point.y(), -point.z()).rotate(degrees, x, y, z).translate(point);
+    }
+
+    @Override
+    public IMatrix3D rotateAround(IVec3DC point, double degrees, double x, double y, double z) {
+        return this.translate(-point.x(), -point.y(), -point.z()).rotate(degrees, x, y, z).translate(point);
+    }
+
+    @Override
+    public IMatrix3D rotateAround(IVec3DC point, double degrees, IVec3DC vec) {
+        return this.rotateAround(point, degrees, vec.x(), vec.y(), vec.z());
+    }
+
+    @Override
+    public IMatrix3D rotateAround(IVec3DC point, double degrees, IVec3IC vec) {
+        return this.rotateAround(point, degrees, vec.x(), vec.y(), vec.z());
+    }
+
+    @Override
+    public IMatrix3D rotateAround(IVec3DC point, double degrees, IVec2IC vec, int z) {
+        return this.rotateAround(point, degrees, vec.x(), vec.y(), z);
+    }
+
+    @Override
+    public IMatrix3D rotateAround(IVec3DC point, double degrees, IVec2IC vec, double z) {
+        return this.rotateAround(point, degrees, vec.x(), vec.y(), z);
+    }
+
+    @Override
+    public IMatrix3D rotateAround(IVec3DC point, double degrees, IVec2DC vec, int z) {
+        return this.rotateAround(point, degrees, vec.x(), vec.y(), z);
+    }
+
+    @Override
+    public IMatrix3D rotateAround(IVec3DC point, double degrees, IVec2DC vec, double z) {
+        return this.rotateAround(point, degrees, vec.x(), vec.y(), z);
+    }
+
+    @Override
+    public IMatrix3D rotateAround(IVec3DC point, double degrees, IVec2IC vec) {
+        return this.rotateAround(point, degrees, vec.x(), vec.y(), 0);
+    }
+
+    @Override
+    public IMatrix3D rotateAround(IVec3DC point, double degrees, IVec2DC vec) {
+        return this.rotateAround(point, degrees, vec.x(), vec.y(), 0.0D);
+    }
+
+    @Override
+    public IMatrix3D rotateAround(IVec3IC point, double degrees, int x, int y, int z) {
+        return this.translate(-point.x(), -point.y(), -point.z()).rotate(degrees, x, y, z).translate(point);
+    }
+
+    @Override
+    public IMatrix3D rotateAround(IVec3IC point, double degrees, double x, double y, double z) {
+        return this.translate(-point.x(), -point.y(), -point.z()).rotate(degrees, x, y, z).translate(point);
+    }
+
+    @Override
+    public IMatrix3D rotateAround(IVec3IC point, double degrees, IVec3DC vec) {
+        return this.rotateAround(point, degrees, vec.x(), vec.y(), vec.z());
+    }
+
+    @Override
+    public IMatrix3D rotateAround(IVec3IC point, double degrees, IVec3IC vec) {
+        return this.rotateAround(point, degrees, vec.x(), vec.y(), vec.z());
+    }
+
+    @Override
+    public IMatrix3D rotateAround(IVec3IC point, double degrees, IVec2IC vec, int z) {
+        return this.rotateAround(point, degrees, vec.x(), vec.y(), z);
+    }
+
+    @Override
+    public IMatrix3D rotateAround(IVec3IC point, double degrees, IVec2IC vec, double z) {
+        return this.rotateAround(point, degrees, vec.x(), vec.y(), z);
+    }
+
+    @Override
+    public IMatrix3D rotateAround(IVec3IC point, double degrees, IVec2DC vec, int z) {
+        return this.rotateAround(point, degrees, vec.x(), vec.y(), z);
+    }
+
+    @Override
+    public IMatrix3D rotateAround(IVec3IC point, double degrees, IVec2DC vec, double z) {
+        return this.rotateAround(point, degrees, vec.x(), vec.y(), z);
+    }
+
+    @Override
+    public IMatrix3D rotateAround(IVec3IC point, double degrees, IVec2IC vec) {
+        return this.rotateAround(point, degrees, vec.x(), vec.y(), 0);
+    }
+
+    @Override
+    public IMatrix3D rotateAround(IVec3IC point, double degrees, IVec2DC vec) {
+        return this.rotateAround(point, degrees, vec.x(), vec.y(), 0.0D);
+    }
+
+    @Override
+    public IMatrix3D localScale(int val) {
+        return null;
+    }
+
+    @Override
+    public IMatrix3D localScale(double val) {
+        return null;
+    }
+
+    @Override
+    public IMatrix3D localScale(int x, int y, int z) {
+        return null;
+    }
+
+    @Override
+    public IMatrix3D localScale(double x, double y, double z) {
+        return null;
+    }
+
+    @Override
+    public IMatrix3D localScale(IVec3DC vec) {
+        return null;
+    }
+
+    @Override
+    public IMatrix3D localScale(IVec3IC vec) {
+        return null;
+    }
+
+    @Override
+    public IMatrix3D localScale(IVec2IC vec, int z) {
+        return null;
+    }
+
+    @Override
+    public IMatrix3D localScale(IVec2IC vec, double z) {
+        return null;
+    }
+
+    @Override
+    public IMatrix3D localScale(IVec2DC vec, int z) {
+        return null;
+    }
+
+    @Override
+    public IMatrix3D localScale(IVec2DC vec, double z) {
+        return null;
+    }
+
+    @Override
+    public IMatrix3D localScale(IVec2IC vec) {
+        return null;
+    }
+
+    @Override
+    public IMatrix3D localScale(IVec2DC vec) {
+        return null;
+    }
+
+    @Override
+    public IMatrix3D localTranslate(int x, int y, int z) {
+        return null;
+    }
+
+    @Override
+    public IMatrix3D localTranslate(double x, double y, double z) {
+        return null;
+    }
+
+    @Override
+    public IMatrix3D localTranslate(IVec3DC vec) {
+        return null;
+    }
+
+    @Override
+    public IMatrix3D localTranslate(IVec3IC vec) {
+        return null;
+    }
+
+    @Override
+    public IMatrix3D localTranslate(IVec2IC vec, int z) {
+        return null;
+    }
+
+    @Override
+    public IMatrix3D localTranslate(IVec2IC vec, double z) {
+        return null;
+    }
+
+    @Override
+    public IMatrix3D localTranslate(IVec2DC vec, int z) {
+        return null;
+    }
+
+    @Override
+    public IMatrix3D localTranslate(IVec2DC vec, double z) {
+        return null;
+    }
+
+    @Override
+    public IMatrix3D localTranslate(IVec2IC vec) {
+        return null;
+    }
+
+    @Override
+    public IMatrix3D localTranslate(IVec2DC vec) {
+        return null;
+    }
+
+    @Override
+    public IMatrix3D localRotateX(double degrees) {
+        return null;
+    }
+
+    @Override
+    public IMatrix3D localRotateY(double degrees) {
+        return null;
+    }
+
+    @Override
+    public IMatrix3D localRotateZ(double degrees) {
+        return null;
+    }
+
+    @Override
+    public IMatrix3D localRotate(double degrees, int x, int y, int z) {
+        return null;
+    }
+
+    @Override
+    public IMatrix3D localRotate(double degrees, double x, double y, double z) {
+        return null;
+    }
+
+    @Override
+    public IMatrix3D localRotate(double degrees, IVec3DC vec) {
+        return null;
+    }
+
+    @Override
+    public IMatrix3D localRotate(double degrees, IVec3IC vec) {
+        return null;
+    }
+
+    @Override
+    public IMatrix3D localRotate(double degrees, IVec2IC vec, int z) {
+        return null;
+    }
+
+    @Override
+    public IMatrix3D localRotate(double degrees, IVec2IC vec, double z) {
+        return null;
+    }
+
+    @Override
+    public IMatrix3D localRotate(double degrees, IVec2DC vec, int z) {
+        return null;
+    }
+
+    @Override
+    public IMatrix3D localRotate(double degrees, IVec2DC vec, double z) {
+        return null;
+    }
+
+    @Override
+    public IMatrix3D localRotate(double degrees, IVec2IC vec) {
+        return null;
+    }
+
+    @Override
+    public IMatrix3D localRotate(double degrees, IVec2DC vec) {
+        return null;
+    }
+
+    @Override
+    public IMatrix3D localRotateXAround(int x, int y, int z, double degrees) {
+        return null;
+    }
+
+    @Override
+    public IMatrix3D localRotateXAround(double x, double y, double z, double degrees) {
+        return null;
+    }
+
+    @Override
+    public IMatrix3D localRotateXAround(IVec3IC point, double degrees) {
+        return null;
+    }
+
+    @Override
+    public IMatrix3D localRotateXAround(IVec3DC point, double degrees) {
+        return null;
+    }
+
+    @Override
+    public IMatrix3D localRotateXAround(IVec2IC vec, int z, double degrees) {
+        return null;
+    }
+
+    @Override
+    public IMatrix3D localRotateXAround(IVec2IC vec, double z, double degrees) {
+        return null;
+    }
+
+    @Override
+    public IMatrix3D localRotateXAround(IVec2DC vec, int z, double degrees) {
+        return null;
+    }
+
+    @Override
+    public IMatrix3D localRotateXAround(IVec2DC vec, double z, double degrees) {
+        return null;
+    }
+
+    @Override
+    public IMatrix3D localRotateXAround(IVec2IC vec, double degrees) {
+        return null;
+    }
+
+    @Override
+    public IMatrix3D localRotateXAround(IVec2DC vec, double degrees) {
+        return null;
+    }
+
+    @Override
+    public IMatrix3D localRotateYAround(int x, int y, int z, double degrees) {
+        return null;
+    }
+
+    @Override
+    public IMatrix3D localRotateYAround(double x, double y, double z, double degrees) {
+        return null;
+    }
+
+    @Override
+    public IMatrix3D localRotateYAround(IVec3IC point, double degrees) {
+        return null;
+    }
+
+    @Override
+    public IMatrix3D localRotateYAround(IVec3DC point, double degrees) {
+        return null;
+    }
+
+    @Override
+    public IMatrix3D localRotateYAround(IVec2IC vec, int z, double degrees) {
+        return null;
+    }
+
+    @Override
+    public IMatrix3D localRotateYAround(IVec2IC vec, double z, double degrees) {
+        return null;
+    }
+
+    @Override
+    public IMatrix3D localRotateYAround(IVec2DC vec, int z, double degrees) {
+        return null;
+    }
+
+    @Override
+    public IMatrix3D localRotateYAround(IVec2DC vec, double z, double degrees) {
+        return null;
+    }
+
+    @Override
+    public IMatrix3D localRotateYAround(IVec2IC vec, double degrees) {
+        return null;
+    }
+
+    @Override
+    public IMatrix3D localRotateYAround(IVec2DC vec, double degrees) {
+        return null;
+    }
+
+    @Override
+    public IMatrix3D localRotateZAround(int x, int y, int z, double degrees) {
+        return null;
+    }
+
+    @Override
+    public IMatrix3D localRotateZAround(double x, double y, double z, double degrees) {
+        return null;
+    }
+
+    @Override
+    public IMatrix3D localRotateZAround(IVec3IC point, double degrees) {
+        return null;
+    }
+
+    @Override
+    public IMatrix3D localRotateZAround(IVec3DC point, double degrees) {
+        return null;
+    }
+
+    @Override
+    public IMatrix3D localRotateZAround(IVec2IC vec, int z, double degrees) {
+        return null;
+    }
+
+    @Override
+    public IMatrix3D localRotateZAround(IVec2IC vec, double z, double degrees) {
+        return null;
+    }
+
+    @Override
+    public IMatrix3D localRotateZAround(IVec2DC vec, int z, double degrees) {
+        return null;
+    }
+
+    @Override
+    public IMatrix3D localRotateZAround(IVec2DC vec, double z, double degrees) {
+        return null;
+    }
+
+    @Override
+    public IMatrix3D localRotateZAround(IVec2IC vec, double degrees) {
+        return null;
+    }
+
+    @Override
+    public IMatrix3D localRotateZAround(IVec2DC vec, double degrees) {
+        return null;
+    }
+
+    @Override
+    public IMatrix3D localRotateAround(IVec3DC point, double degrees, int x, int y, int z) {
+        return null;
+    }
+
+    @Override
+    public IMatrix3D localRotateAround(IVec3DC point, double degrees, double x, double y, double z) {
+        return null;
+    }
+
+    @Override
+    public IMatrix3D localRotateAround(IVec3DC point, double degrees, IVec3DC vec) {
+        return null;
+    }
+
+    @Override
+    public IMatrix3D localRotateAround(IVec3DC point, double degrees, IVec3IC vec) {
+        return null;
+    }
+
+    @Override
+    public IMatrix3D localRotateAround(IVec3DC point, double degrees, IVec2IC vec, int z) {
+        return null;
+    }
+
+    @Override
+    public IMatrix3D localRotateAround(IVec3DC point, double degrees, IVec2IC vec, double z) {
+        return null;
+    }
+
+    @Override
+    public IMatrix3D localRotateAround(IVec3DC point, double degrees, IVec2DC vec, int z) {
+        return null;
+    }
+
+    @Override
+    public IMatrix3D localRotateAround(IVec3DC point, double degrees, IVec2DC vec, double z) {
+        return null;
+    }
+
+    @Override
+    public IMatrix3D localRotateAround(IVec3DC point, double degrees, IVec2IC vec) {
+        return null;
+    }
+
+    @Override
+    public IMatrix3D localRotateAround(IVec3DC point, double degrees, IVec2DC vec) {
+        return null;
+    }
+
+    @Override
+    public IMatrix3D localRotateAround(IVec3IC point, double degrees, int x, int y, int z) {
+        return null;
+    }
+
+    @Override
+    public IMatrix3D localRotateAround(IVec3IC point, double degrees, double x, double y, double z) {
+        return null;
+    }
+
+    @Override
+    public IMatrix3D localRotateAround(IVec3IC point, double degrees, IVec3DC vec) {
+        return null;
+    }
+
+    @Override
+    public IMatrix3D localRotateAround(IVec3IC point, double degrees, IVec3IC vec) {
+        return null;
+    }
+
+    @Override
+    public IMatrix3D localRotateAround(IVec3IC point, double degrees, IVec2IC vec, int z) {
+        return null;
+    }
+
+    @Override
+    public IMatrix3D localRotateAround(IVec3IC point, double degrees, IVec2IC vec, double z) {
+        return null;
+    }
+
+    @Override
+    public IMatrix3D localRotateAround(IVec3IC point, double degrees, IVec2DC vec, int z) {
+        return null;
+    }
+
+    @Override
+    public IMatrix3D localRotateAround(IVec3IC point, double degrees, IVec2DC vec, double z) {
+        return null;
+    }
+
+    @Override
+    public IMatrix3D localRotateAround(IVec3IC point, double degrees, IVec2IC vec) {
+        return null;
+    }
+
+    @Override
+    public IMatrix3D localRotateAround(IVec3IC point, double degrees, IVec2DC vec) {
+        return null;
+    }
+
+    @Override
+    public IVec2I transform(int x, int y) {
+        return new Vec2I(
+            BananaMath.round((this.m00 * x) + (this.m01 * y) + this.m03),
+            BananaMath.round((this.m10 * x) + (this.m11 * y) + this.m13)
+        );
+    }
+
+    @Override
+    public IVec2D transform(double x, double y) {
+        return new Vec2D(
+            (this.m00 * x) + (this.m01 * y) + this.m03,
+            (this.m10 * x) + (this.m11 * y) + this.m13
+        );
+    }
+
+    @Override
+    public IVec3I transform(int x, int y, int z) {
+        return new Vec3I(
+            BananaMath.round((this.m00 * x) + (this.m01 * y) + (this.m02 * z) + this.m03),
+            BananaMath.round((this.m10 * x) + (this.m11 * y) + (this.m12 * z) + this.m13),
+            BananaMath.round((this.m20 * x) + (this.m21 * y) + (this.m22 * z) + this.m23)
+        );
+    }
+
+    @Override
+    public IVec3D transform(double x, double y, double z) {
+        return new Vec3D(
+            (this.m00 * x) + (this.m01 * y) + (this.m02 * z) + this.m03,
+            (this.m10 * x) + (this.m11 * y) + (this.m12 * z) + this.m13,
+            (this.m20 * x) + (this.m21 * y) + (this.m22 * z) + this.m23
+        );
+    }
+
+    @Override
+    public IVec3I transform(IVec3IC vec) {
+        return this.transform(vec.x(), vec.y(), vec.z());
+    }
+
+    @Override
+    public IVec3IM transform(IVec3IM vec) {
+        return vec.set(
+            BananaMath.round((this.m00 * vec.x()) + (this.m01 * vec.y()) + (this.m02 * vec.z()) + this.m03),
+            BananaMath.round((this.m10 * vec.x()) + (this.m11 * vec.y()) + (this.m12 * vec.z()) + this.m13),
+            BananaMath.round((this.m20 * vec.x()) + (this.m21 * vec.y()) + (this.m22 * vec.z()) + this.m23)
+        );
+    }
+
+    @Override
+    public IVec3D transform(IVec3DC vec) {
+        return this.transform(vec.x(), vec.y(), vec.z());
+    }
+
+    @Override
+    public IVec3DM transform(IVec3DM vec) {
+        return vec.set(
+            (this.m00 * vec.x()) + (this.m01 * vec.y()) + (this.m02 * vec.z()) + this.m03,
+            (this.m10 * vec.x()) + (this.m11 * vec.y()) + (this.m12 * vec.z()) + this.m13,
+            (this.m20 * vec.x()) + (this.m21 * vec.y()) + (this.m22 * vec.z()) + this.m23
+        );
+    }
+
+    @Override
+    public IVec3I[] transform(IVec3IC... vec) {
+        IVec3I[] ret = new IVec3I[vec.length];
+        for (int i = 0; i != vec.length; i++) {
+            ret[i] = this.transform(vec[i]);
+        }
+        return ret;
+    }
+
+    @Override
+    public IVec3IM[] transform(IVec3IM... vec) {
+        for (int i = 0; i != vec.length; i++) {
+            this.transform(vec[i]);
+        }
+        return vec;
+    }
+
+    @Override
+    public IVec3D[] transform(IVec3DC... vec) {
+        IVec3D[] ret = new IVec3D[vec.length];
+        for (int i = 0; i != vec.length; i++) {
+            ret[i] = this.transform(vec[i]);
+        }
+        return ret;
+    }
+
+    @Override
+    public IVec3DM[] transform(IVec3DM... vec) {
+        for (int i = 0; i != vec.length; i++) {
+            this.transform(vec[i]);
+        }
+        return vec;
+    }
+
+    @Override
+    public IVec2I transform(IVec2IC vec) {
+        return this.transform(vec.x(), vec.y());
+    }
+
+    @Override
+    public IVec2IM transform(IVec2IM vec) {
+        return vec.set(
+            BananaMath.round((this.m00 * vec.x()) + (this.m01 * vec.y()) + this.m03),
+            BananaMath.round((this.m10 * vec.x()) + (this.m11 * vec.y()) + this.m13)
+        );
+    }
+
+    @Override
+    public IVec2D transform(IVec2DC vec) {
+        return this.transform(vec.x(), vec.y());
+    }
+
+    @Override
+    public IVec2DM transform(IVec2DM vec) {
+        return vec.set(
+            (this.m00 * vec.x()) + (this.m01 * vec.y()) + this.m03,
+            (this.m10 * vec.x()) + (this.m11 * vec.y()) + this.m13
+        );
+    }
+
+    @Override
+    public IVec3I transform(IVec2IC vec, int z) {
+        return this.transform(vec.x(), vec.y(), z);
+    }
+
+    @Override
+    public IVec3D transform(IVec2IC vec, double z) {
+        return this.transform(vec.x(), vec.y(), z);
+    }
+
+    @Override
+    public IVec3D transform(IVec2DC vec, int z) {
+        return this.transform(vec.x(), vec.y(), z);
+    }
+
+    @Override
+    public IVec3D transform(IVec2DC vec, double z) {
+        return this.transform(vec.x(), vec.y(), z);
+    }
+
+    @Override
+    public IVec2I[] transform(IVec2IC... vec) {
+        IVec2I[] ret = new IVec2I[vec.length];
+        for (int i = 0; i != vec.length; i++) {
+            ret[i] = this.transform(vec[i]);
+        }
+        return ret;
+    }
+
+    @Override
+    public IVec2IM[] transform(IVec2IM... vec) {
+        for (int i = 0; i != vec.length; i++) {
+            this.transform(vec[i]);
+        }
+        return vec;
+    }
+
+    @Override
+    public IVec2D[] transform(IVec2DC... vec) {
+        IVec2D[] ret = new IVec2D[vec.length];
+        for (int i = 0; i != vec.length; i++) {
+            ret[i] = this.transform(vec[i]);
+        }
+        return ret;
+    }
+
+    @Override
+    public IVec2DM[] transform(IVec2DM... vec) {
+        for (int i = 0; i != vec.length; i++) {
+            this.transform(vec[i]);
+        }
+        return vec;
+    }
+
+    @Override
+    public IBox3I transform(IBox3IC box) {
+        return new Box3I(
+            BananaMath.round((this.m00 * box.minX()) + (this.m01 * box.minY()) + (this.m02 * box.minZ()) + this.m03),
+            BananaMath.round((this.m10 * box.minX()) + (this.m11 * box.minY()) + (this.m12 * box.minZ()) + this.m13),
+            BananaMath.round((this.m20 * box.minX()) + (this.m21 * box.minY()) + (this.m22 * box.minZ()) + this.m23),
+
+            BananaMath.round((this.m00 * box.maxX()) + (this.m01 * box.maxY()) + (this.m02 * box.maxZ()) + this.m03),
+            BananaMath.round((this.m10 * box.maxX()) + (this.m11 * box.maxY()) + (this.m12 * box.maxZ()) + this.m13),
+            BananaMath.round((this.m20 * box.maxX()) + (this.m21 * box.maxY()) + (this.m22 * box.maxZ()) + this.m23)
+        );
+    }
+
+    @Override
+    public IBox3IM transform(IBox3IM box) {
+        return box.set(
+            BananaMath.round((this.m00 * box.minX()) + (this.m01 * box.minY()) + (this.m02 * box.minZ()) + this.m03),
+            BananaMath.round((this.m10 * box.minX()) + (this.m11 * box.minY()) + (this.m12 * box.minZ()) + this.m13),
+            BananaMath.round((this.m20 * box.minX()) + (this.m21 * box.minY()) + (this.m22 * box.minZ()) + this.m23),
+
+            BananaMath.round((this.m00 * box.maxX()) + (this.m01 * box.maxY()) + (this.m02 * box.maxZ()) + this.m03),
+            BananaMath.round((this.m10 * box.maxX()) + (this.m11 * box.maxY()) + (this.m12 * box.maxZ()) + this.m13),
+            BananaMath.round((this.m20 * box.maxX()) + (this.m21 * box.maxY()) + (this.m22 * box.maxZ()) + this.m23)
+        );
+    }
+
+    @Override
+    public IBox3D transform(IBox3DC box) {
+        return new Box3D(
+            (this.m00 * box.minX()) + (this.m01 * box.minY()) + (this.m02 * box.minZ()) + this.m03,
+            (this.m10 * box.minX()) + (this.m11 * box.minY()) + (this.m12 * box.minZ()) + this.m13,
+            (this.m20 * box.minX()) + (this.m21 * box.minY()) + (this.m22 * box.minZ()) + this.m23,
+
+            (this.m00 * box.maxX()) + (this.m01 * box.maxY()) + (this.m02 * box.maxZ()) + this.m03,
+            (this.m10 * box.maxX()) + (this.m11 * box.maxY()) + (this.m12 * box.maxZ()) + this.m13,
+            (this.m20 * box.maxX()) + (this.m21 * box.maxY()) + (this.m22 * box.maxZ()) + this.m23
+        );
+    }
+
+    @Override
+    public IBox3DM transform(IBox3DM box) {
+        return box.set(
+            (this.m00 * box.minX()) + (this.m01 * box.minY()) + (this.m02 * box.minZ()) + this.m03,
+            (this.m10 * box.minX()) + (this.m11 * box.minY()) + (this.m12 * box.minZ()) + this.m13,
+            (this.m20 * box.minX()) + (this.m21 * box.minY()) + (this.m22 * box.minZ()) + this.m23,
+
+            (this.m00 * box.maxX()) + (this.m01 * box.maxY()) + (this.m02 * box.maxZ()) + this.m03,
+            (this.m10 * box.maxX()) + (this.m11 * box.maxY()) + (this.m12 * box.maxZ()) + this.m13,
+            (this.m20 * box.maxX()) + (this.m21 * box.maxY()) + (this.m22 * box.maxZ()) + this.m23
+        );
+    }
+
+    @Override
+    public IBox3I[] transform(IBox3IC... box) {
+        IBox3I[] ret = new IBox3I[box.length];
+        for (int i = 0; i != box.length; i++) {
+            ret[i] = this.transform(box[i]);
+        }
+        return ret;
+    }
+
+    @Override
+    public IBox3IM[] transform(IBox3IM... box) {
+        for (int i = 0; i != box.length; i++) {
+            this.transform(box[i]);
+        }
+        return box;
+    }
+
+    @Override
+    public IBox3D[] transform(IBox3DC... box) {
+        IBox3D[] ret = new IBox3D[box.length];
+        for (int i = 0; i != box.length; i++) {
+            ret[i] = this.transform(box[i]);
+        }
+        return ret;
+    }
+
+    @Override
+    public IBox3DM[] transform(IBox3DM... box) {
+        for (int i = 0; i != box.length; i++) {
+            this.transform(box[i]);
+        }
+        return box;
+    }
+
+    @Override
+    public DoubleBuffer writeToBuffer(DoubleBuffer buf) {
+        buf.put(this.m00);
+        buf.put(this.m01);
+        buf.put(this.m02);
+        buf.put(this.m03);
+
+        buf.put(this.m10);
+        buf.put(this.m11);
+        buf.put(this.m12);
+        buf.put(this.m13);
+
+        buf.put(this.m20);
+        buf.put(this.m21);
+        buf.put(this.m22);
+        buf.put(this.m23);
+
+        buf.put(0.0D);
+        buf.put(0.0D);
+        buf.put(0.0D);
+        buf.put(1.0D);
+
+        return buf;
+    }
+
+    @Override
+    public IMatrix3DM toMutable() {
+        return null;//new Matrix3DM(this);
+    }
+
+    @Override
+    public IMatrix3D toImmutable() {
+        return this;
+    }
+
+    @Override
+    public IMatrix3F toFloat() {
+        return null;//new Matrix3F(this);
+    }
+
+    @Override
+    public IMatrix3D copy() {
+        return new Matrix3D(this);
+    }
+
+    @Override
+    public String toString() {
+        return "[" + this.m00 + ", " + this.m01 + ", " + this.m02 + ", " + this.m03 + "]\n" +
+                "[" + this.m10 + ", " + this.m11 + ", " + this.m12 + ", " + this.m13 + "]\n" +
+                "[" + this.m20 + ", " + this.m21 + ", " + this.m22 + ", " + this.m23 + "]\n" +
+                "[" + 0.0 + ", " + 0.0 + ", " + 0.0 + ", " + 1.0 + "]";
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof IMatrix3D) {
+            IMatrix3D m = ((IMatrix3D) obj);
+            return
+                    m.m00() == this.m00 && m.m01() == this.m01 && m.m02() == this.m02 && m.m03() == this.m03 &&
+                    m.m10() == this.m10 && m.m11() == this.m11 && m.m12() == this.m12 && m.m13() == this.m13 &&
+                    m.m20() == this.m20 && m.m21() == this.m21 && m.m22() == this.m22 && m.m23() == this.m23 &&
+                    m.m30() == 0.0D && m.m31() == 0.0D && m.m32() == 0.0D && m.m33() == 1.0D;
+        } else if (obj instanceof IMatrix3F) {
+            IMatrix3F m = ((IMatrix3F) obj);
+            return
+                    m.m00() == this.m00 && m.m01() == this.m01 && m.m02() == this.m02 && m.m03() == this.m03 &&
+                    m.m10() == this.m10 && m.m11() == this.m11 && m.m12() == this.m12 && m.m13() == this.m13 &&
+                    m.m20() == this.m20 && m.m21() == this.m21 && m.m22() == this.m22 && m.m23() == this.m23 &&
+                    m.m30() == 0.0D && m.m31() == 0.0D && m.m32() == 0.0D && m.m33() == 1.0D;
+        }
+        return false;
+    }
+
+    @Override
+    public boolean equalsEps(Object obj, double eps) {
+        if (obj instanceof IMatrix3D) {
+            IMatrix3D m = ((IMatrix3D) obj);
+            return
+                    Math.abs(m.m00() - this.m00) <= eps &&
+                    Math.abs(m.m01() - this.m01) <= eps &&
+                    Math.abs(m.m02() - this.m02) <= eps &&
+                    Math.abs(m.m03() - this.m03) <= eps &&
+
+                    Math.abs(m.m10() - this.m10) <= eps &&
+                    Math.abs(m.m11() - this.m11) <= eps &&
+                    Math.abs(m.m12() - this.m12) <= eps &&
+                    Math.abs(m.m13() - this.m13) <= eps &&
+
+                    Math.abs(m.m20() - this.m20) <= eps &&
+                    Math.abs(m.m21() - this.m21) <= eps &&
+                    Math.abs(m.m22() - this.m22) <= eps &&
+                    Math.abs(m.m23() - this.m23) <= eps &&
+
+                    Math.abs(m.m30() - 0.0D) <= eps &&
+                    Math.abs(m.m31() - 0.0D) <= eps &&
+                    Math.abs(m.m32() - 0.0D) <= eps &&
+                    Math.abs(m.m33() - 1.0D) <= eps;
+        } else if (obj instanceof IMatrix3F) {
+            IMatrix3F m = ((IMatrix3F) obj);
+            return
+                    Math.abs(m.m00() - this.m00) <= eps &&
+                    Math.abs(m.m01() - this.m01) <= eps &&
+                    Math.abs(m.m02() - this.m02) <= eps &&
+                    Math.abs(m.m03() - this.m03) <= eps &&
+
+                    Math.abs(m.m10() - this.m10) <= eps &&
+                    Math.abs(m.m11() - this.m11) <= eps &&
+                    Math.abs(m.m12() - this.m12) <= eps &&
+                    Math.abs(m.m13() - this.m13) <= eps &&
+
+                    Math.abs(m.m20() - this.m20) <= eps &&
+                    Math.abs(m.m21() - this.m21) <= eps &&
+                    Math.abs(m.m22() - this.m22) <= eps &&
+                    Math.abs(m.m23() - this.m23) <= eps &&
+
+                    Math.abs(m.m30() - 0.0D) <= eps &&
+                    Math.abs(m.m31() - 0.0D) <= eps &&
+                    Math.abs(m.m32() - 0.0D) <= eps &&
+                    Math.abs(m.m33() - 1.0D) <= eps;
+        }
+        return false;
+    }
+
+    @Override
+    public int hashCode() {
+        return this.hash;
+    }
+}

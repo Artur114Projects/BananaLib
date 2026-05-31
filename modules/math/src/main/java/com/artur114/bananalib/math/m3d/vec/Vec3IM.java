@@ -735,7 +735,7 @@ public class Vec3IM implements IVec3IM {
 
         double rad = Math.toRadians(degrees);
         double sin = BananaMath.sin(rad), cos = BananaMath.cos(rad);
-        return this.set(this.x, this.y * cos + this.z * sin, this.z * cos - this.y * sin);
+        return this.set(this.x, this.y * cos - this.z * sin, this.z * cos + this.y * sin);
     }
 
     @Override
@@ -757,7 +757,7 @@ public class Vec3IM implements IVec3IM {
 
         double rad = Math.toRadians(degrees);
         double sin = BananaMath.sin(rad), cos = BananaMath.cos(rad);
-        return this.set(this.x * cos + this.y * sin, this.y * cos - this.x * sin, this.z);
+        return this.set(this.x * cos - this.y * sin, this.y * cos + this.x * sin, this.z);
     }
 
     @Override
@@ -768,7 +768,7 @@ public class Vec3IM implements IVec3IM {
 
         double rad = Math.toRadians(degrees);
         double sin = BananaMath.sin(rad), cos = BananaMath.cos(rad);
-        return this.set(this.x, ((this.y - y) * cos + (this.z - z) * sin) + y, ((this.z - z) * cos - (this.y - y) * sin) + z);
+        return this.set(this.x, ((this.y - y) * cos - (this.z - z) * sin) + y, ((this.z - z) * cos + (this.y - y) * sin) + z);
     }
 
     @Override
@@ -779,7 +779,7 @@ public class Vec3IM implements IVec3IM {
 
         double rad = Math.toRadians(degrees);
         double sin = BananaMath.sin(rad), cos = BananaMath.cos(rad);
-        return this.set(this.x, ((this.y - y) * cos + (this.z - z) * sin) + y, ((this.z - z) * cos - (this.y - y) * sin) + z);
+        return this.set(this.x, ((this.y - y) * cos - (this.z - z) * sin) + y, ((this.z - z) * cos + (this.y - y) * sin) + z);
     }
 
     @Override
@@ -832,7 +832,7 @@ public class Vec3IM implements IVec3IM {
 
         double rad = Math.toRadians(degrees);
         double sin = BananaMath.sin(rad), cos = BananaMath.cos(rad);
-        return this.set(((this.x - x) * cos + (this.y - y) * sin) + x, ((this.y - y) * cos - (this.x - x) * sin) + y, this.z);
+        return this.set(((this.x - x) * cos - (this.y - y) * sin) + x, ((this.y - y) * cos + (this.x - x) * sin) + y, this.z);
     }
 
     @Override
@@ -843,7 +843,7 @@ public class Vec3IM implements IVec3IM {
 
         double rad = Math.toRadians(degrees);
         double sin = BananaMath.sin(rad), cos = BananaMath.cos(rad);
-        return this.set(((this.x - x) * cos + (this.y - y) * sin) + x, ((this.y - y) * cos - (this.x - x) * sin) + y, this.z);
+        return this.set(((this.x - x) * cos - (this.y - y) * sin) + x, ((this.y - y) * cos + (this.x - x) * sin) + y, this.z);
     }
 
     @Override

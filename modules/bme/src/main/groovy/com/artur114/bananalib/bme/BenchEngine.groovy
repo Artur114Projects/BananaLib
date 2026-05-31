@@ -1,7 +1,9 @@
 package com.artur114.bananalib.bme
 
 import com.artur114.bananalib.bme.conf.BenchGroup
+import groovy.transform.CompileStatic
 
+@CompileStatic
 class BenchEngine implements Runnable {
     private Map<String, List<BenchEntry>> tests = new HashMap<>()
     private int iterations = 1000000
