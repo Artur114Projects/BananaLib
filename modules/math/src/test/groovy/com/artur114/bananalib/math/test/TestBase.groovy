@@ -23,6 +23,10 @@ import com.artur114.bananalib.math.m3d.vec.Vec3I
 abstract class TestBase {
     public Random rand = new Random(0xBADCEFFE)
 
+    int defMultiCount() {
+        return 20
+    }
+
     def multiTest(int count, Closure<Void> closure) {
         for (i in 1..count) {
             closure.call(i)
@@ -30,7 +34,7 @@ abstract class TestBase {
     }
 
     def multiTest(Closure<Void> closure) {
-        for (i in 1..20) {
+        for (i in 1..defMultiCount()) {
             closure.call(i)
         }
     }
@@ -68,7 +72,7 @@ abstract class TestBase {
     }
 
     def equalsEps(double d0, double d1) {
-        return equalsEps(d0, d1, BananaMath.DOUBLE_EPS)
+        return equalsEps(d0, d1, BananaMath.DOUBLE_EQUALS_EPS)
     }
 
     def equalsEps(float d0, float d1, float eps) {
@@ -76,7 +80,7 @@ abstract class TestBase {
     }
 
     def equalsEps(float d0, float d1) {
-        return equalsEps(d0, d1, BananaMath.FLOAT_EPS)
+        return equalsEps(d0, d1, BananaMath.FLOAT_EQUALS_EPS)
     }
 
     IMatrix3D mat3d() {

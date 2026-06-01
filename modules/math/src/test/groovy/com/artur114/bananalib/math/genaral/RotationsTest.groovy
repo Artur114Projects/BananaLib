@@ -39,6 +39,15 @@ class RotationsTest extends TestBase {
         assert mat3d().rotateX(90).transform(vec3d(0,1,0)).equalsEps(vec3d(0,0,1))
         assert mat3d().rotateY(90).transform(vec3d(0,0,1)).equalsEps(vec3d(1,0,0))
 
+        assert mat3d().rotate(90, 0, 0, 1).transform(vec3d(1,0,0)).equalsEps(vec3d(0,1,0))
+        assert mat3d().rotate(90, 1, 0, 0).transform(vec3d(0,1,0)).equalsEps(vec3d(0,0,1))
+        assert mat3d().rotate(90, 0, 1, 0).transform(vec3d(0,0,1)).equalsEps(vec3d(1,0,0))
+        assert mat3d().localRotateZ(90).transform(vec3d(1,0,0)).equalsEps(vec3d(0,1,0))
+        assert mat3d().localRotateX(90).transform(vec3d(0,1,0)).equalsEps(vec3d(0,0,1))
+        assert mat3d().localRotateY(90).transform(vec3d(0,0,1)).equalsEps(vec3d(1,0,0))
+        assert mat3d().localRotate(90, 0, 0, 1).transform(vec3d(1,0,0)).equalsEps(vec3d(0,1,0))
+        assert mat3d().localRotate(90, 1, 0, 0).transform(vec3d(0,1,0)).equalsEps(vec3d(0,0,1))
+        assert mat3d().localRotate(90, 0, 1, 0).transform(vec3d(0,0,1)).equalsEps(vec3d(1,0,0))
 
         assert vec2d(1, 0).rotateAround(vec2DZ, 90).equalsEps(vec2d(0, 1))
         assert vec2d(1, 0).toMutable().rotateAround(vec2DZ, 90).equalsEps(vec2d(0, 1))
@@ -63,6 +72,15 @@ class RotationsTest extends TestBase {
         assert mat3d().rotateZAround(vec3DZ, 90).transform(vec3d(1,0,0)).equalsEps(vec3d(0,1,0))
         assert mat3d().rotateXAround(vec3DZ, 90).transform(vec3d(0,1,0)).equalsEps(vec3d(0,0,1))
         assert mat3d().rotateYAround(vec3DZ, 90).transform(vec3d(0,0,1)).equalsEps(vec3d(1,0,0))
+        assert mat3d().rotateAround(vec3DZ, 90, 0, 0, 1).transform(vec3d(1,0,0)).equalsEps(vec3d(0,1,0))
+        assert mat3d().rotateAround(vec3DZ, 90, 1, 0, 0).transform(vec3d(0,1,0)).equalsEps(vec3d(0,0,1))
+        assert mat3d().rotateAround(vec3DZ, 90, 0, 1, 0).transform(vec3d(0,0,1)).equalsEps(vec3d(1,0,0))
+        assert mat3d().localRotateZAround(vec3DZ, 90).transform(vec3d(1,0,0)).equalsEps(vec3d(0,1,0))
+        assert mat3d().localRotateXAround(vec3DZ, 90).transform(vec3d(0,1,0)).equalsEps(vec3d(0,0,1))
+        assert mat3d().localRotateYAround(vec3DZ, 90).transform(vec3d(0,0,1)).equalsEps(vec3d(1,0,0))
+        assert mat3d().localRotateAround(vec3DZ, 90, 0, 0, 1).transform(vec3d(1,0,0)).equalsEps(vec3d(0,1,0))
+        assert mat3d().localRotateAround(vec3DZ, 90, 1, 0, 0).transform(vec3d(0,1,0)).equalsEps(vec3d(0,0,1))
+        assert mat3d().localRotateAround(vec3DZ, 90, 0, 1, 0).transform(vec3d(0,0,1)).equalsEps(vec3d(1,0,0))
 
 
         assert vec2d(1, 0).rotateAround(vec2IZ, 90).equalsEps(vec2d(0, 1))
@@ -88,6 +106,15 @@ class RotationsTest extends TestBase {
         assert mat3d().rotateZAround(vec3IZ, 90).transform(vec3d(1,0,0)).equalsEps(vec3d(0,1,0))
         assert mat3d().rotateXAround(vec3IZ, 90).transform(vec3d(0,1,0)).equalsEps(vec3d(0,0,1))
         assert mat3d().rotateYAround(vec3IZ, 90).transform(vec3d(0,0,1)).equalsEps(vec3d(1,0,0))
+        assert mat3d().rotateAround(vec3IZ, 90, 0, 0, 1).transform(vec3d(1,0,0)).equalsEps(vec3d(0,1,0))
+        assert mat3d().rotateAround(vec3IZ, 90, 1, 0, 0).transform(vec3d(0,1,0)).equalsEps(vec3d(0,0,1))
+        assert mat3d().rotateAround(vec3IZ, 90, 0, 1, 0).transform(vec3d(0,0,1)).equalsEps(vec3d(1,0,0))
+        assert mat3d().localRotateZAround(vec3IZ, 90).transform(vec3d(1,0,0)).equalsEps(vec3d(0,1,0))
+        assert mat3d().localRotateXAround(vec3IZ, 90).transform(vec3d(0,1,0)).equalsEps(vec3d(0,0,1))
+        assert mat3d().localRotateYAround(vec3IZ, 90).transform(vec3d(0,0,1)).equalsEps(vec3d(1,0,0))
+        assert mat3d().localRotateAround(vec3IZ, 90, 0, 0, 1).transform(vec3d(1,0,0)).equalsEps(vec3d(0,1,0))
+        assert mat3d().localRotateAround(vec3IZ, 90, 1, 0, 0).transform(vec3d(0,1,0)).equalsEps(vec3d(0,0,1))
+        assert mat3d().localRotateAround(vec3IZ, 90, 0, 1, 0).transform(vec3d(0,0,1)).equalsEps(vec3d(1,0,0))
     }
 
     @Test

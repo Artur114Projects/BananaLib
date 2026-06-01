@@ -320,37 +320,81 @@ public class Matrix3D implements IMatrix3D {
     @Override
     public IMatrix3D scale(int val) {
         return new Matrix3D(
-            this.m00 * val, this.m01 * val, this.m02 * val, this.m03 * val,
-            this.m10 * val, this.m11 * val, this.m12 * val, this.m13 * val,
-            this.m20 * val, this.m21 * val, this.m22 * val, this.m23 * val
+            (val * this.m00),
+            (val * this.m01),
+            (val * this.m02),
+            (val * this.m03),
+
+            (val * this.m10),
+            (val * this.m11),
+            (val * this.m12),
+            (val * this.m13),
+
+            (val * this.m20),
+            (val * this.m21),
+            (val * this.m22),
+            (val * this.m23)
         );
     }
 
     @Override
     public IMatrix3D scale(double val) {
         return new Matrix3D(
-            this.m00 * val, this.m01 * val, this.m02 * val, this.m03 * val,
-            this.m10 * val, this.m11 * val, this.m12 * val, this.m13 * val,
-            this.m20 * val, this.m21 * val, this.m22 * val, this.m23 * val
+            (val * this.m00),
+            (val * this.m01),
+            (val * this.m02),
+            (val * this.m03),
+
+            (val * this.m10),
+            (val * this.m11),
+            (val * this.m12),
+            (val * this.m13),
+
+            (val * this.m20),
+            (val * this.m21),
+            (val * this.m22),
+            (val * this.m23)
         );
     }
 
     @Override
     public IMatrix3D scale(int x, int y, int z) {
-        return this.mul(new Matrix3D(
-            x, 0.0D, 0.0D, 0.0D,
-            0.0D, y, 0.0D, 0.0D,
-            0.0D, 0.0D, z, 0.0D
-        ));
+        return new Matrix3D(
+            (x * this.m00),
+            (x * this.m01),
+            (x * this.m02),
+            (x * this.m03),
+
+            (y * this.m10),
+            (y * this.m11),
+            (y * this.m12),
+            (y * this.m13),
+
+            (z * this.m20),
+            (z * this.m21),
+            (z * this.m22),
+            (z * this.m23)
+        );
     }
 
     @Override
     public IMatrix3D scale(double x, double y, double z) {
-        return this.mul(new Matrix3D(
-            x, 0.0D, 0.0D, 0.0D,
-            0.0D, y, 0.0D, 0.0D,
-            0.0D, 0.0D, z, 0.0D
-        ));
+        return new Matrix3D(
+            (x * this.m00),
+            (x * this.m01),
+            (x * this.m02),
+            (x * this.m03),
+
+            (y * this.m10),
+            (y * this.m11),
+            (y * this.m12),
+            (y * this.m13),
+
+            (z * this.m20),
+            (z * this.m21),
+            (z * this.m22),
+            (z * this.m23)
+        );
     }
 
     @Override
@@ -395,20 +439,20 @@ public class Matrix3D implements IMatrix3D {
 
     @Override
     public IMatrix3D translate(int x, int y, int z) {
-        return this.mul(new Matrix3D(
-            1.0D, 0.0D, 0.0D, x,
-            0.0D, 1.0D, 0.0D, y,
-            0.0D, 0.0D, 1.0D, z
-        ));
+        return new Matrix3D(
+            this.m00, this.m01, this.m02, this.m03 + x,
+            this.m10, this.m11, this.m12, this.m13 + y,
+            this.m20, this.m21, this.m22, this.m23 + z
+        );
     }
 
     @Override
     public IMatrix3D translate(double x, double y, double z) {
-        return this.mul(new Matrix3D(
-            1.0D, 0.0D, 0.0D, x,
-            0.0D, 1.0D, 0.0D, y,
-            0.0D, 0.0D, 1.0D, z
-        ));
+        return new Matrix3D(
+            this.m00, this.m01, this.m02, this.m03 + x,
+            this.m10, this.m11, this.m12, this.m13 + y,
+            this.m20, this.m21, this.m22, this.m23 + z
+        );
     }
 
     @Override
@@ -461,11 +505,21 @@ public class Matrix3D implements IMatrix3D {
         double sin = BananaMath.sin(rads);
         double cos = BananaMath.cos(rads);
 
-        return this.mul(new Matrix3D(
-            1.0D, 0.0D, 0.0D, 0.0D,
-            0.0D, cos, -sin, 0.0D,
-            0.0D, sin, cos, 0.0D
-        ));
+        double m2v10 = this.m10, m2v11 = this.m11, m2v12 = this.m12, m2v13 = this.m13;
+        double m2v20 = this.m20, m2v21 = this.m21, m2v22 = this.m22, m2v23 = this.m23;
+        return new Matrix3D(
+            this.m00, this.m01, this.m02, this.m03,
+
+            (cos * m2v10) + (-sin * m2v20),
+            (cos * m2v11) + (-sin * m2v21),
+            (cos * m2v12) + (-sin * m2v22),
+            (cos * m2v13) + (-sin * m2v23),
+
+            (sin * m2v10) + (cos * m2v20),
+            (sin * m2v11) + (cos * m2v21),
+            (sin * m2v12) + (cos * m2v22),
+            (sin * m2v13) + (cos * m2v23)
+        );
     }
 
     @Override
@@ -478,11 +532,21 @@ public class Matrix3D implements IMatrix3D {
         double sin = BananaMath.sin(rads);
         double cos = BananaMath.cos(rads);
 
-        return this.mul(new Matrix3D(
-            cos, 0.0D, sin, 0.0D,
-            0.0D, 1.0D, 0.0D, 0.0D,
-            -sin, 0.0D, cos, 0.0D
-        ));
+        double m2v00 = this.m00, m2v01 = this.m01, m2v02 = this.m02, m2v03 = this.m03;
+        double m2v20 = this.m20, m2v21 = this.m21, m2v22 = this.m22, m2v23 = this.m23;
+        return new Matrix3D(
+            (cos * m2v00) + (sin * m2v20),
+            (cos * m2v01) + (sin * m2v21),
+            (cos * m2v02) + (sin * m2v22),
+            (cos * m2v03) + (sin * m2v23),
+
+            this.m10, this.m11, this.m12, this.m13,
+
+            (-sin * m2v00) + (cos * m2v20),
+            (-sin * m2v01) + (cos * m2v21),
+            (-sin * m2v02) + (cos * m2v22),
+            (-sin * m2v03) + (cos * m2v23)
+        );
     }
 
     @Override
@@ -495,11 +559,21 @@ public class Matrix3D implements IMatrix3D {
         double sin = BananaMath.sin(rads);
         double cos = BananaMath.cos(rads);
 
-        return this.mul(new Matrix3D(
-            cos, -sin, 0.0D, 0.0D,
-            sin, cos, 0.0D, 0.0D,
-            0.0D, 0.0D, 1.0D, 0.0D
-        ));
+        double m2v00 = this.m00, m2v01 = this.m01, m2v02 = this.m02, m2v03 = this.m03;
+        double m2v10 = this.m10, m2v11 = this.m11, m2v12 = this.m12, m2v13 = this.m13;
+        return new Matrix3D(
+            (cos * m2v00) + (-sin * m2v10),
+            (cos * m2v01) + (-sin * m2v11),
+            (cos * m2v02) + (-sin * m2v12),
+            (cos * m2v03) + (-sin * m2v13),
+
+            (sin * m2v00) + (cos * m2v10),
+            (sin * m2v01) + (cos * m2v11),
+            (sin * m2v02) + (cos * m2v12),
+            (sin * m2v03) + (cos * m2v13),
+
+            this.m20, this.m21, this.m22, this.m23
+        );
     }
 
     @Override
@@ -517,11 +591,29 @@ public class Matrix3D implements IMatrix3D {
         double cos = BananaMath.cos(rads);
         double cosM1 = 1 - cos;
 
-        return this.mul(new Matrix3D(
-            cos + ax * ax * cosM1, ax * ay * cosM1 - az * sin, ax * az * cosM1 + ay * sin, 0.0D,
-            ay * ax * cosM1 + az * sin, cos + ay * ay * cosM1, ay * az * cosM1 - ax * sin, 0.0D,
-            az * ax * cosM1 - ay * sin, az * ay * cosM1 + ax * sin, cos + az * az * cosM1, 0.0D
-        ));
+        double m1v00 = cos + ax * ax * cosM1, m1v01 = ax * ay * cosM1 - az * sin, m1v02 = ax * az * cosM1 + ay * sin;
+        double m1v10 = ay * ax * cosM1 + az * sin, m1v11 = cos + ay * ay * cosM1, m1v12 = ay * az * cosM1 - ax * sin;
+        double m1v20 = az * ax * cosM1 - ay * sin, m1v21 = az * ay * cosM1 + ax * sin, m1v22 = cos + az * az * cosM1;
+
+        double m2v00 = this.m00, m2v01 = this.m01, m2v02 = this.m02, m2v03 = this.m03;
+        double m2v10 = this.m10, m2v11 = this.m11, m2v12 = this.m12, m2v13 = this.m13;
+        double m2v20 = this.m20, m2v21 = this.m21, m2v22 = this.m22, m2v23 = this.m23;
+        return new Matrix3D(
+            (m1v00 * m2v00) + (m1v01 * m2v10) + (m1v02 * m2v20),
+            (m1v00 * m2v01) + (m1v01 * m2v11) + (m1v02 * m2v21),
+            (m1v00 * m2v02) + (m1v01 * m2v12) + (m1v02 * m2v22),
+            (m1v00 * m2v03) + (m1v01 * m2v13) + (m1v02 * m2v23),
+
+            (m1v10 * m2v00) + (m1v11 * m2v10) + (m1v12 * m2v20),
+            (m1v10 * m2v01) + (m1v11 * m2v11) + (m1v12 * m2v21),
+            (m1v10 * m2v02) + (m1v11 * m2v12) + (m1v12 * m2v22),
+            (m1v10 * m2v03) + (m1v11 * m2v13) + (m1v12 * m2v23),
+
+            (m1v20 * m2v00) + (m1v21 * m2v10) + (m1v22 * m2v20),
+            (m1v20 * m2v01) + (m1v21 * m2v11) + (m1v22 * m2v21),
+            (m1v20 * m2v02) + (m1v21 * m2v12) + (m1v22 * m2v22),
+            (m1v20 * m2v03) + (m1v21 * m2v13) + (m1v22 * m2v23)
+        );
     }
 
     @Override
@@ -539,11 +631,29 @@ public class Matrix3D implements IMatrix3D {
         double cos = BananaMath.cos(rads);
         double cosM1 = 1 - cos;
 
-        return this.mul(new Matrix3D(
-            cos + ax * ax * cosM1, ax * ay * cosM1 - az * sin, ax * az * cosM1 + ay * sin, 0.0D,
-            ay * ax * cosM1 + az * sin, cos + ay * ay * cosM1, ay * az * cosM1 - ax * sin, 0.0D,
-            az * ax * cosM1 - ay * sin, az * ay * cosM1 + ax * sin, cos + az * az * cosM1, 0.0D
-        ));
+        double m1v00 = cos + ax * ax * cosM1, m1v01 = ax * ay * cosM1 - az * sin, m1v02 = ax * az * cosM1 + ay * sin;
+        double m1v10 = ay * ax * cosM1 + az * sin, m1v11 = cos + ay * ay * cosM1, m1v12 = ay * az * cosM1 - ax * sin;
+        double m1v20 = az * ax * cosM1 - ay * sin, m1v21 = az * ay * cosM1 + ax * sin, m1v22 = cos + az * az * cosM1;
+
+        double m2v00 = this.m00, m2v01 = this.m01, m2v02 = this.m02, m2v03 = this.m03;
+        double m2v10 = this.m10, m2v11 = this.m11, m2v12 = this.m12, m2v13 = this.m13;
+        double m2v20 = this.m20, m2v21 = this.m21, m2v22 = this.m22, m2v23 = this.m23;
+        return new Matrix3D(
+            (m1v00 * m2v00) + (m1v01 * m2v10) + (m1v02 * m2v20),
+            (m1v00 * m2v01) + (m1v01 * m2v11) + (m1v02 * m2v21),
+            (m1v00 * m2v02) + (m1v01 * m2v12) + (m1v02 * m2v22),
+            (m1v00 * m2v03) + (m1v01 * m2v13) + (m1v02 * m2v23),
+
+            (m1v10 * m2v00) + (m1v11 * m2v10) + (m1v12 * m2v20),
+            (m1v10 * m2v01) + (m1v11 * m2v11) + (m1v12 * m2v21),
+            (m1v10 * m2v02) + (m1v11 * m2v12) + (m1v12 * m2v22),
+            (m1v10 * m2v03) + (m1v11 * m2v13) + (m1v12 * m2v23),
+
+            (m1v20 * m2v00) + (m1v21 * m2v10) + (m1v22 * m2v20),
+            (m1v20 * m2v01) + (m1v21 * m2v11) + (m1v22 * m2v21),
+            (m1v20 * m2v02) + (m1v21 * m2v12) + (m1v22 * m2v22),
+            (m1v20 * m2v03) + (m1v21 * m2v13) + (m1v22 * m2v23)
+        );
     }
 
     @Override
@@ -588,12 +698,56 @@ public class Matrix3D implements IMatrix3D {
 
     @Override
     public IMatrix3D rotateXAround(int x, int y, int z, double degrees) {
-        return this.translate(-x, -y, -z).rotateX(degrees).translate(x, y, z);
+        if (Math.abs(degrees) < BananaMath.DOUBLE_EPS) {
+            return this;
+        }
+
+        double rads = Math.toRadians(degrees);
+        double sin = BananaMath.sin(rads);
+        double cos = BananaMath.cos(rads);
+
+        double m2v10 = this.m10, m2v11 = this.m11, m2v12 = this.m12, m2v13 = this.m13 - y;
+        double m2v20 = this.m20, m2v21 = this.m21, m2v22 = this.m22, m2v23 = this.m23 - z;
+        return new Matrix3D(
+            this.m00, this.m01, this.m02, this.m03,
+
+            (cos * m2v10) + (-sin * m2v20),
+            (cos * m2v11) + (-sin * m2v21),
+            (cos * m2v12) + (-sin * m2v22),
+            (cos * m2v13) + (-sin * m2v23) + y,
+
+            (sin * m2v10) + (cos * m2v20),
+            (sin * m2v11) + (cos * m2v21),
+            (sin * m2v12) + (cos * m2v22),
+            (sin * m2v13) + (cos * m2v23) + z
+        );
     }
 
     @Override
     public IMatrix3D rotateXAround(double x, double y, double z, double degrees) {
-        return this.translate(-x, -y, -z).rotateX(degrees).translate(x, y, z);
+        if (Math.abs(degrees) < BananaMath.DOUBLE_EPS) {
+            return this;
+        }
+
+        double rads = Math.toRadians(degrees);
+        double sin = BananaMath.sin(rads);
+        double cos = BananaMath.cos(rads);
+
+        double m2v10 = this.m10, m2v11 = this.m11, m2v12 = this.m12, m2v13 = this.m13 - y;
+        double m2v20 = this.m20, m2v21 = this.m21, m2v22 = this.m22, m2v23 = this.m23 - z;
+        return new Matrix3D(
+            this.m00, this.m01, this.m02, this.m03,
+
+            (cos * m2v10) + (-sin * m2v20),
+            (cos * m2v11) + (-sin * m2v21),
+            (cos * m2v12) + (-sin * m2v22),
+            (cos * m2v13) + (-sin * m2v23) + y,
+
+            (sin * m2v10) + (cos * m2v20),
+            (sin * m2v11) + (cos * m2v21),
+            (sin * m2v12) + (cos * m2v22),
+            (sin * m2v13) + (cos * m2v23) + z
+        );
     }
 
     @Override
@@ -638,12 +792,56 @@ public class Matrix3D implements IMatrix3D {
 
     @Override
     public IMatrix3D rotateYAround(int x, int y, int z, double degrees) {
-        return this.translate(-x, -y, -z).rotateY(degrees).translate(x, y, z);
+        if (Math.abs(degrees) < BananaMath.DOUBLE_EPS) {
+            return this;
+        }
+
+        double rads = Math.toRadians(degrees);
+        double sin = BananaMath.sin(rads);
+        double cos = BananaMath.cos(rads);
+
+        double m2v00 = this.m00, m2v01 = this.m01, m2v02 = this.m02, m2v03 = this.m03 - x;
+        double m2v20 = this.m20, m2v21 = this.m21, m2v22 = this.m22, m2v23 = this.m23 - z;
+        return new Matrix3D(
+            (cos * m2v00) + (sin * m2v20),
+            (cos * m2v01) + (sin * m2v21),
+            (cos * m2v02) + (sin * m2v22),
+            (cos * m2v03) + (sin * m2v23) + x,
+
+            this.m10, this.m11, this.m12, this.m13,
+
+            (-sin * m2v00) + (cos * m2v20),
+            (-sin * m2v01) + (cos * m2v21),
+            (-sin * m2v02) + (cos * m2v22),
+            (-sin * m2v03) + (cos * m2v23) + z
+        );
     }
 
     @Override
     public IMatrix3D rotateYAround(double x, double y, double z, double degrees) {
-        return this.translate(-x, -y, -z).rotateY(degrees).translate(x, y, z);
+        if (Math.abs(degrees) < BananaMath.DOUBLE_EPS) {
+            return this;
+        }
+
+        double rads = Math.toRadians(degrees);
+        double sin = BananaMath.sin(rads);
+        double cos = BananaMath.cos(rads);
+
+        double m2v00 = this.m00, m2v01 = this.m01, m2v02 = this.m02, m2v03 = this.m03 - x;
+        double m2v20 = this.m20, m2v21 = this.m21, m2v22 = this.m22, m2v23 = this.m23 - z;
+        return new Matrix3D(
+            (cos * m2v00) + (sin * m2v20),
+            (cos * m2v01) + (sin * m2v21),
+            (cos * m2v02) + (sin * m2v22),
+            (cos * m2v03) + (sin * m2v23) + x,
+
+            this.m10, this.m11, this.m12, this.m13,
+
+            (-sin * m2v00) + (cos * m2v20),
+            (-sin * m2v01) + (cos * m2v21),
+            (-sin * m2v02) + (cos * m2v22),
+            (-sin * m2v03) + (cos * m2v23) + z
+        );
     }
 
     @Override
@@ -688,12 +886,56 @@ public class Matrix3D implements IMatrix3D {
 
     @Override
     public IMatrix3D rotateZAround(int x, int y, int z, double degrees) {
-        return this.translate(-x, -y, -z).rotateZ(degrees).translate(x, y, z);
+        if (Math.abs(degrees) < BananaMath.DOUBLE_EPS) {
+            return this;
+        }
+
+        double rads = Math.toRadians(degrees);
+        double sin = BananaMath.sin(rads);
+        double cos = BananaMath.cos(rads);
+
+        double m2v00 = this.m00, m2v01 = this.m01, m2v02 = this.m02, m2v03 = this.m03 - x;
+        double m2v10 = this.m10, m2v11 = this.m11, m2v12 = this.m12, m2v13 = this.m13 - y;
+        return new Matrix3D(
+            (cos * m2v00) + (-sin * m2v10),
+            (cos * m2v01) + (-sin * m2v11),
+            (cos * m2v02) + (-sin * m2v12),
+            (cos * m2v03) + (-sin * m2v13) + x,
+
+            (sin * m2v00) + (cos * m2v10),
+            (sin * m2v01) + (cos * m2v11),
+            (sin * m2v02) + (cos * m2v12),
+            (sin * m2v03) + (cos * m2v13) + y,
+
+            this.m20, this.m21, this.m22, this.m23
+        );
     }
 
     @Override
     public IMatrix3D rotateZAround(double x, double y, double z, double degrees) {
-        return this.translate(-x, -y, -z).rotateZ(degrees).translate(x, y, z);
+        if (Math.abs(degrees) < BananaMath.DOUBLE_EPS) {
+            return this;
+        }
+
+        double rads = Math.toRadians(degrees);
+        double sin = BananaMath.sin(rads);
+        double cos = BananaMath.cos(rads);
+
+        double m2v00 = this.m00, m2v01 = this.m01, m2v02 = this.m02, m2v03 = this.m03 - x;
+        double m2v10 = this.m10, m2v11 = this.m11, m2v12 = this.m12, m2v13 = this.m13 - y;
+        return new Matrix3D(
+            (cos * m2v00) + (-sin * m2v10),
+            (cos * m2v01) + (-sin * m2v11),
+            (cos * m2v02) + (-sin * m2v12),
+            (cos * m2v03) + (-sin * m2v13) + x,
+
+            (sin * m2v00) + (cos * m2v10),
+            (sin * m2v01) + (cos * m2v11),
+            (sin * m2v02) + (cos * m2v12),
+            (sin * m2v03) + (cos * m2v13) + y,
+
+            this.m20, this.m21, this.m22, this.m23
+        );
     }
 
     @Override
@@ -738,12 +980,82 @@ public class Matrix3D implements IMatrix3D {
 
     @Override
     public IMatrix3D rotateAround(IVec3DC point, double degrees, int x, int y, int z) {
-        return this.translate(-point.x(), -point.y(), -point.z()).rotate(degrees, x, y, z).translate(point);
+        if (Math.abs(degrees) < BananaMath.DOUBLE_EPS) {
+            return this;
+        }
+        double l = Math.sqrt(x * x + y * y + z * z);
+        if (l < BananaMath.DOUBLE_EPS) {
+            return this;
+        }
+        double ax = x / l, ay = y / l, az = z / l;
+        double rads = Math.toRadians(degrees);
+        double sin = BananaMath.sin(rads);
+        double cos = BananaMath.cos(rads);
+        double cosM1 = 1 - cos;
+
+        double m1v00 = cos + ax * ax * cosM1, m1v01 = ax * ay * cosM1 - az * sin, m1v02 = ax * az * cosM1 + ay * sin;
+        double m1v10 = ay * ax * cosM1 + az * sin, m1v11 = cos + ay * ay * cosM1, m1v12 = ay * az * cosM1 - ax * sin;
+        double m1v20 = az * ax * cosM1 - ay * sin, m1v21 = az * ay * cosM1 + ax * sin, m1v22 = cos + az * az * cosM1;
+
+        double m2v00 = this.m00, m2v01 = this.m01, m2v02 = this.m02, m2v03 = this.m03 - point.x();
+        double m2v10 = this.m10, m2v11 = this.m11, m2v12 = this.m12, m2v13 = this.m13 - point.y();
+        double m2v20 = this.m20, m2v21 = this.m21, m2v22 = this.m22, m2v23 = this.m23 - point.z();
+        return new Matrix3D(
+            (m1v00 * m2v00) + (m1v01 * m2v10) + (m1v02 * m2v20),
+            (m1v00 * m2v01) + (m1v01 * m2v11) + (m1v02 * m2v21),
+            (m1v00 * m2v02) + (m1v01 * m2v12) + (m1v02 * m2v22),
+            (m1v00 * m2v03) + (m1v01 * m2v13) + (m1v02 * m2v23) + point.x(),
+
+            (m1v10 * m2v00) + (m1v11 * m2v10) + (m1v12 * m2v20),
+            (m1v10 * m2v01) + (m1v11 * m2v11) + (m1v12 * m2v21),
+            (m1v10 * m2v02) + (m1v11 * m2v12) + (m1v12 * m2v22),
+            (m1v10 * m2v03) + (m1v11 * m2v13) + (m1v12 * m2v23) + point.y(),
+
+            (m1v20 * m2v00) + (m1v21 * m2v10) + (m1v22 * m2v20),
+            (m1v20 * m2v01) + (m1v21 * m2v11) + (m1v22 * m2v21),
+            (m1v20 * m2v02) + (m1v21 * m2v12) + (m1v22 * m2v22),
+            (m1v20 * m2v03) + (m1v21 * m2v13) + (m1v22 * m2v23) + point.z()
+        );
     }
 
     @Override
     public IMatrix3D rotateAround(IVec3DC point, double degrees, double x, double y, double z) {
-        return this.translate(-point.x(), -point.y(), -point.z()).rotate(degrees, x, y, z).translate(point);
+        if (Math.abs(degrees) < BananaMath.DOUBLE_EPS) {
+            return this;
+        }
+        double l = Math.sqrt(x * x + y * y + z * z);
+        if (l < BananaMath.DOUBLE_EPS) {
+            return this;
+        }
+        double ax = x / l, ay = y / l, az = z / l;
+        double rads = Math.toRadians(degrees);
+        double sin = BananaMath.sin(rads);
+        double cos = BananaMath.cos(rads);
+        double cosM1 = 1 - cos;
+
+        double m1v00 = cos + ax * ax * cosM1, m1v01 = ax * ay * cosM1 - az * sin, m1v02 = ax * az * cosM1 + ay * sin;
+        double m1v10 = ay * ax * cosM1 + az * sin, m1v11 = cos + ay * ay * cosM1, m1v12 = ay * az * cosM1 - ax * sin;
+        double m1v20 = az * ax * cosM1 - ay * sin, m1v21 = az * ay * cosM1 + ax * sin, m1v22 = cos + az * az * cosM1;
+
+        double m2v00 = this.m00, m2v01 = this.m01, m2v02 = this.m02, m2v03 = this.m03 - point.x();
+        double m2v10 = this.m10, m2v11 = this.m11, m2v12 = this.m12, m2v13 = this.m13 - point.y();
+        double m2v20 = this.m20, m2v21 = this.m21, m2v22 = this.m22, m2v23 = this.m23 - point.z();
+        return new Matrix3D(
+            (m1v00 * m2v00) + (m1v01 * m2v10) + (m1v02 * m2v20),
+            (m1v00 * m2v01) + (m1v01 * m2v11) + (m1v02 * m2v21),
+            (m1v00 * m2v02) + (m1v01 * m2v12) + (m1v02 * m2v22),
+            (m1v00 * m2v03) + (m1v01 * m2v13) + (m1v02 * m2v23) + point.x(),
+
+            (m1v10 * m2v00) + (m1v11 * m2v10) + (m1v12 * m2v20),
+            (m1v10 * m2v01) + (m1v11 * m2v11) + (m1v12 * m2v21),
+            (m1v10 * m2v02) + (m1v11 * m2v12) + (m1v12 * m2v22),
+            (m1v10 * m2v03) + (m1v11 * m2v13) + (m1v12 * m2v23) + point.y(),
+
+            (m1v20 * m2v00) + (m1v21 * m2v10) + (m1v22 * m2v20),
+            (m1v20 * m2v01) + (m1v21 * m2v11) + (m1v22 * m2v21),
+            (m1v20 * m2v02) + (m1v21 * m2v12) + (m1v22 * m2v22),
+            (m1v20 * m2v03) + (m1v21 * m2v13) + (m1v22 * m2v23) + point.z()
+        );
     }
 
     @Override
@@ -788,12 +1100,82 @@ public class Matrix3D implements IMatrix3D {
 
     @Override
     public IMatrix3D rotateAround(IVec3IC point, double degrees, int x, int y, int z) {
-        return this.translate(-point.x(), -point.y(), -point.z()).rotate(degrees, x, y, z).translate(point);
+        if (Math.abs(degrees) < BananaMath.DOUBLE_EPS) {
+            return this;
+        }
+        double l = Math.sqrt(x * x + y * y + z * z);
+        if (l < BananaMath.DOUBLE_EPS) {
+            return this;
+        }
+        double ax = x / l, ay = y / l, az = z / l;
+        double rads = Math.toRadians(degrees);
+        double sin = BananaMath.sin(rads);
+        double cos = BananaMath.cos(rads);
+        double cosM1 = 1 - cos;
+
+        double m1v00 = cos + ax * ax * cosM1, m1v01 = ax * ay * cosM1 - az * sin, m1v02 = ax * az * cosM1 + ay * sin;
+        double m1v10 = ay * ax * cosM1 + az * sin, m1v11 = cos + ay * ay * cosM1, m1v12 = ay * az * cosM1 - ax * sin;
+        double m1v20 = az * ax * cosM1 - ay * sin, m1v21 = az * ay * cosM1 + ax * sin, m1v22 = cos + az * az * cosM1;
+
+        double m2v00 = this.m00, m2v01 = this.m01, m2v02 = this.m02, m2v03 = this.m03 - point.x();
+        double m2v10 = this.m10, m2v11 = this.m11, m2v12 = this.m12, m2v13 = this.m13 - point.y();
+        double m2v20 = this.m20, m2v21 = this.m21, m2v22 = this.m22, m2v23 = this.m23 - point.z();
+        return new Matrix3D(
+                (m1v00 * m2v00) + (m1v01 * m2v10) + (m1v02 * m2v20),
+                (m1v00 * m2v01) + (m1v01 * m2v11) + (m1v02 * m2v21),
+                (m1v00 * m2v02) + (m1v01 * m2v12) + (m1v02 * m2v22),
+                (m1v00 * m2v03) + (m1v01 * m2v13) + (m1v02 * m2v23) + point.x(),
+
+                (m1v10 * m2v00) + (m1v11 * m2v10) + (m1v12 * m2v20),
+                (m1v10 * m2v01) + (m1v11 * m2v11) + (m1v12 * m2v21),
+                (m1v10 * m2v02) + (m1v11 * m2v12) + (m1v12 * m2v22),
+                (m1v10 * m2v03) + (m1v11 * m2v13) + (m1v12 * m2v23) + point.y(),
+
+                (m1v20 * m2v00) + (m1v21 * m2v10) + (m1v22 * m2v20),
+                (m1v20 * m2v01) + (m1v21 * m2v11) + (m1v22 * m2v21),
+                (m1v20 * m2v02) + (m1v21 * m2v12) + (m1v22 * m2v22),
+                (m1v20 * m2v03) + (m1v21 * m2v13) + (m1v22 * m2v23) + point.z()
+        );
     }
 
     @Override
     public IMatrix3D rotateAround(IVec3IC point, double degrees, double x, double y, double z) {
-        return this.translate(-point.x(), -point.y(), -point.z()).rotate(degrees, x, y, z).translate(point);
+        if (Math.abs(degrees) < BananaMath.DOUBLE_EPS) {
+            return this;
+        }
+        double l = Math.sqrt(x * x + y * y + z * z);
+        if (l < BananaMath.DOUBLE_EPS) {
+            return this;
+        }
+        double ax = x / l, ay = y / l, az = z / l;
+        double rads = Math.toRadians(degrees);
+        double sin = BananaMath.sin(rads);
+        double cos = BananaMath.cos(rads);
+        double cosM1 = 1 - cos;
+
+        double m1v00 = cos + ax * ax * cosM1, m1v01 = ax * ay * cosM1 - az * sin, m1v02 = ax * az * cosM1 + ay * sin;
+        double m1v10 = ay * ax * cosM1 + az * sin, m1v11 = cos + ay * ay * cosM1, m1v12 = ay * az * cosM1 - ax * sin;
+        double m1v20 = az * ax * cosM1 - ay * sin, m1v21 = az * ay * cosM1 + ax * sin, m1v22 = cos + az * az * cosM1;
+
+        double m2v00 = this.m00, m2v01 = this.m01, m2v02 = this.m02, m2v03 = this.m03 - point.x();
+        double m2v10 = this.m10, m2v11 = this.m11, m2v12 = this.m12, m2v13 = this.m13 - point.y();
+        double m2v20 = this.m20, m2v21 = this.m21, m2v22 = this.m22, m2v23 = this.m23 - point.z();
+        return new Matrix3D(
+                (m1v00 * m2v00) + (m1v01 * m2v10) + (m1v02 * m2v20),
+                (m1v00 * m2v01) + (m1v01 * m2v11) + (m1v02 * m2v21),
+                (m1v00 * m2v02) + (m1v01 * m2v12) + (m1v02 * m2v22),
+                (m1v00 * m2v03) + (m1v01 * m2v13) + (m1v02 * m2v23) + point.x(),
+
+                (m1v10 * m2v00) + (m1v11 * m2v10) + (m1v12 * m2v20),
+                (m1v10 * m2v01) + (m1v11 * m2v11) + (m1v12 * m2v21),
+                (m1v10 * m2v02) + (m1v11 * m2v12) + (m1v12 * m2v22),
+                (m1v10 * m2v03) + (m1v11 * m2v13) + (m1v12 * m2v23) + point.y(),
+
+                (m1v20 * m2v00) + (m1v21 * m2v10) + (m1v22 * m2v20),
+                (m1v20 * m2v01) + (m1v21 * m2v11) + (m1v22 * m2v21),
+                (m1v20 * m2v02) + (m1v21 * m2v12) + (m1v22 * m2v22),
+                (m1v20 * m2v03) + (m1v21 * m2v13) + (m1v22 * m2v23) + point.z()
+        );
     }
 
     @Override
@@ -838,427 +1220,943 @@ public class Matrix3D implements IMatrix3D {
 
     @Override
     public IMatrix3D localScale(int val) {
-        return null;
+        return new Matrix3D(
+            (this.m00 * val),
+            (this.m01 * val),
+            (this.m02 * val),
+            this.m03,
+
+            (this.m10 * val),
+            (this.m11 * val),
+            (this.m12 * val),
+            this.m13,
+
+            (this.m20 * val),
+            (this.m21 * val),
+            (this.m22 * val),
+            this.m23
+        );
     }
 
     @Override
     public IMatrix3D localScale(double val) {
-        return null;
+        return new Matrix3D(
+            (this.m00 * val),
+            (this.m01 * val),
+            (this.m02 * val),
+            this.m03,
+
+            (this.m10 * val),
+            (this.m11 * val),
+            (this.m12 * val),
+            this.m13,
+
+            (this.m20 * val),
+            (this.m21 * val),
+            (this.m22 * val),
+            this.m23
+        );
     }
 
     @Override
     public IMatrix3D localScale(int x, int y, int z) {
-        return null;
+        return new Matrix3D(
+            (this.m00 * x),
+            (this.m01 * x),
+            (this.m02 * x),
+            this.m03,
+
+            (this.m10 * y),
+            (this.m11 * y),
+            (this.m12 * y),
+            this.m13,
+
+            (this.m20 * z),
+            (this.m21 * z),
+            (this.m22 * z),
+            this.m23
+        );
     }
 
     @Override
     public IMatrix3D localScale(double x, double y, double z) {
-        return null;
+        return new Matrix3D(
+            (this.m00 * x),
+            (this.m01 * x),
+            (this.m02 * x),
+            this.m03,
+
+            (this.m10 * y),
+            (this.m11 * y),
+            (this.m12 * y),
+            this.m13,
+
+            (this.m20 * z),
+            (this.m21 * z),
+            (this.m22 * z),
+            this.m23
+        );
     }
 
     @Override
     public IMatrix3D localScale(IVec3DC vec) {
-        return null;
+        return this.localScale(vec.x(), vec.y(), vec.z());
     }
 
     @Override
     public IMatrix3D localScale(IVec3IC vec) {
-        return null;
+        return this.localScale(vec.x(), vec.y(), vec.z());
     }
 
     @Override
     public IMatrix3D localScale(IVec2IC vec, int z) {
-        return null;
+        return this.localScale(vec.x(), vec.y(), z);
     }
 
     @Override
     public IMatrix3D localScale(IVec2IC vec, double z) {
-        return null;
+        return this.localScale(vec.x(), vec.y(), z);
     }
 
     @Override
     public IMatrix3D localScale(IVec2DC vec, int z) {
-        return null;
+        return this.localScale(vec.x(), vec.y(), z);
     }
 
     @Override
     public IMatrix3D localScale(IVec2DC vec, double z) {
-        return null;
+        return this.localScale(vec.x(), vec.y(), z);
     }
 
     @Override
     public IMatrix3D localScale(IVec2IC vec) {
-        return null;
+        return this.localScale(vec.x(), vec.y(), 1);
     }
 
     @Override
     public IMatrix3D localScale(IVec2DC vec) {
-        return null;
+        return this.localScale(vec.x(), vec.y(), 1.0D);
     }
 
     @Override
     public IMatrix3D localTranslate(int x, int y, int z) {
-        return null;
+        double m1v00 = this.m00, m1v01 = this.m01, m1v02 = this.m02;
+        double m1v10 = this.m10, m1v11 = this.m11, m1v12 = this.m12;
+        double m1v20 = this.m20, m1v21 = this.m21, m1v22 = this.m22;
+        return new Matrix3D(
+            m1v00, m1v01, m1v02,
+            (m1v00 * x) + (m1v01 * y) + (m1v02 * z) + (this.m03),
+
+            m1v10, m1v11, m1v12,
+            (m1v10 * x) + (m1v11 * y) + (m1v12 * z) + (this.m13),
+
+            m1v20, m1v21, m1v22,
+            (m1v20 * x) + (m1v21 * y) + (m1v22 * z) + (this.m23)
+        );
     }
 
     @Override
     public IMatrix3D localTranslate(double x, double y, double z) {
-        return null;
+        double m1v00 = this.m00, m1v01 = this.m01, m1v02 = this.m02;
+        double m1v10 = this.m10, m1v11 = this.m11, m1v12 = this.m12;
+        double m1v20 = this.m20, m1v21 = this.m21, m1v22 = this.m22;
+        return new Matrix3D(
+            m1v00, m1v01, m1v02,
+            (m1v00 * x) + (m1v01 * y) + (m1v02 * z) + (this.m03),
+
+            m1v10, m1v11, m1v12,
+            (m1v10 * x) + (m1v11 * y) + (m1v12 * z) + (this.m13),
+
+            m1v20, m1v21, m1v22,
+            (m1v20 * x) + (m1v21 * y) + (m1v22 * z) + (this.m23)
+        );
     }
 
     @Override
     public IMatrix3D localTranslate(IVec3DC vec) {
-        return null;
+        return this.localTranslate(vec.x(), vec.y(), vec.z());
     }
 
     @Override
     public IMatrix3D localTranslate(IVec3IC vec) {
-        return null;
+        return this.localTranslate(vec.x(), vec.y(), vec.z());
     }
 
     @Override
     public IMatrix3D localTranslate(IVec2IC vec, int z) {
-        return null;
+        return this.localTranslate(vec.x(), vec.y(), z);
     }
 
     @Override
     public IMatrix3D localTranslate(IVec2IC vec, double z) {
-        return null;
+        return this.localTranslate(vec.x(), vec.y(), z);
     }
 
     @Override
     public IMatrix3D localTranslate(IVec2DC vec, int z) {
-        return null;
+        return this.localTranslate(vec.x(), vec.y(), z);
     }
 
     @Override
     public IMatrix3D localTranslate(IVec2DC vec, double z) {
-        return null;
+        return this.localTranslate(vec.x(), vec.y(), z);
     }
 
     @Override
     public IMatrix3D localTranslate(IVec2IC vec) {
-        return null;
+        return this.localTranslate(vec.x(), vec.y(), 0.0D);
     }
 
     @Override
     public IMatrix3D localTranslate(IVec2DC vec) {
-        return null;
+        return this.localTranslate(vec.x(), vec.y(), 0.0D);
     }
 
     @Override
     public IMatrix3D localRotateX(double degrees) {
-        return null;
+        if (Math.abs(degrees) < BananaMath.DOUBLE_EPS) {
+            return this;
+        }
+
+        double rads = Math.toRadians(degrees);
+        double sin = BananaMath.sin(rads);
+        double cos = BananaMath.cos(rads);
+
+        double m1v01 = this.m01, m1v02 = this.m02;
+        double m1v11 = this.m11, m1v12 = this.m12;
+        double m1v21 = this.m21, m1v22 = this.m22;
+        return new Matrix3D(
+            this.m00,
+            (m1v01 * cos) + (m1v02 * sin),
+            (m1v01 * -sin) + (m1v02 * cos),
+            this.m03,
+
+            this.m10,
+            (m1v11 * cos) + (m1v12 * sin),
+            (m1v11 * -sin) + (m1v12 * cos),
+            this.m13,
+
+            this.m20,
+            (m1v21 * cos) + (m1v22 * sin),
+            (m1v21 * -sin) + (m1v22 * cos),
+            this.m23
+        );
     }
 
     @Override
     public IMatrix3D localRotateY(double degrees) {
-        return null;
+        if (Math.abs(degrees) < BananaMath.DOUBLE_EPS) {
+            return this;
+        }
+
+        double rads = Math.toRadians(degrees);
+        double sin = BananaMath.sin(rads);
+        double cos = BananaMath.cos(rads);
+
+        double m1v00 = this.m00, m1v02 = this.m02;
+        double m1v10 = this.m10, m1v12 = this.m12;
+        double m1v20 = this.m20, m1v22 = this.m22;
+        return new Matrix3D(
+            (m1v00 * cos) + (m1v02 * -sin),
+            this.m01,
+            (m1v00 * sin) + (m1v02 * cos),
+            this.m03,
+
+            (m1v10 * cos) + (m1v12 * -sin),
+            this.m11,
+            (m1v10 * sin) + (m1v12 * cos),
+            this.m13,
+
+            (m1v20 * cos) + (m1v22 * -sin),
+            this.m21,
+            (m1v20 * sin) + (m1v22 * cos),
+            this.m23
+        );
     }
 
     @Override
     public IMatrix3D localRotateZ(double degrees) {
-        return null;
+        if (Math.abs(degrees) < BananaMath.DOUBLE_EPS) {
+            return this;
+        }
+
+        double rads = Math.toRadians(degrees);
+        double sin = BananaMath.sin(rads);
+        double cos = BananaMath.cos(rads);
+
+        double m1v00 = this.m00, m1v01 = this.m01;
+        double m1v10 = this.m10, m1v11 = this.m11;
+        double m1v20 = this.m20, m1v21 = this.m21;
+        return new Matrix3D(
+            (m1v00 * cos) + (m1v01 * sin),
+            (m1v00 * -sin) + (m1v01 * cos),
+            this.m02,
+            this.m03,
+
+            (m1v10 * cos) + (m1v11 * sin),
+            (m1v10 * -sin) + (m1v11 * cos),
+            this.m12,
+            this.m13,
+
+            (m1v20 * cos) + (m1v21 * sin),
+            (m1v20 * -sin) + (m1v21 * cos),
+            this.m22,
+            this.m23
+        );
     }
 
     @Override
     public IMatrix3D localRotate(double degrees, int x, int y, int z) {
-        return null;
+        if (Math.abs(degrees) < BananaMath.DOUBLE_EPS) {
+            return this;
+        }
+        double l = Math.sqrt(x * x + y * y + z * z);
+        if (l < BananaMath.DOUBLE_EPS) {
+            return this;
+        }
+        double ax = x / l, ay = y / l, az = z / l;
+        double rads = Math.toRadians(degrees);
+        double sin = BananaMath.sin(rads);
+        double cos = BananaMath.cos(rads);
+        double cosM1 = 1 - cos;
+
+        double m1v00 = this.m00, m1v01 = this.m01, m1v02 = this.m02;
+        double m1v10 = this.m10, m1v11 = this.m11, m1v12 = this.m12;
+        double m1v20 = this.m20, m1v21 = this.m21, m1v22 = this.m22;
+        double m2v00 = cos + ax * ax * cosM1, m2v01 = ax * ay * cosM1 - az * sin, m2v02 = ax * az * cosM1 + ay * sin;
+        double m2v10 = ay * ax * cosM1 + az * sin, m2v11 = cos + ay * ay * cosM1, m2v12 = ay * az * cosM1 - ax * sin;
+        double m2v20 = az * ax * cosM1 - ay * sin, m2v21 = az * ay * cosM1 + ax * sin, m2v22 = cos + az * az * cosM1;
+        return new Matrix3D(
+            (m1v00 * m2v00) + (m1v01 * m2v10) + (m1v02 * m2v20),
+            (m1v00 * m2v01) + (m1v01 * m2v11) + (m1v02 * m2v21),
+            (m1v00 * m2v02) + (m1v01 * m2v12) + (m1v02 * m2v22),
+            this.m03,
+
+            (m1v10 * m2v00) + (m1v11 * m2v10) + (m1v12 * m2v20),
+            (m1v10 * m2v01) + (m1v11 * m2v11) + (m1v12 * m2v21),
+            (m1v10 * m2v02) + (m1v11 * m2v12) + (m1v12 * m2v22),
+            this.m13,
+
+            (m1v20 * m2v00) + (m1v21 * m2v10) + (m1v22 * m2v20),
+            (m1v20 * m2v01) + (m1v21 * m2v11) + (m1v22 * m2v21),
+            (m1v20 * m2v02) + (m1v21 * m2v12) + (m1v22 * m2v22),
+            this.m23
+        );
     }
 
     @Override
     public IMatrix3D localRotate(double degrees, double x, double y, double z) {
-        return null;
+        if (Math.abs(degrees) < BananaMath.DOUBLE_EPS) {
+            return this;
+        }
+        double l = Math.sqrt(x * x + y * y + z * z);
+        if (l < BananaMath.DOUBLE_EPS) {
+            return this;
+        }
+        double ax = x / l, ay = y / l, az = z / l;
+        double rads = Math.toRadians(degrees);
+        double sin = BananaMath.sin(rads);
+        double cos = BananaMath.cos(rads);
+        double cosM1 = 1 - cos;
+
+        double m1v00 = this.m00, m1v01 = this.m01, m1v02 = this.m02;
+        double m1v10 = this.m10, m1v11 = this.m11, m1v12 = this.m12;
+        double m1v20 = this.m20, m1v21 = this.m21, m1v22 = this.m22;
+        double m2v00 = cos + ax * ax * cosM1, m2v01 = ax * ay * cosM1 - az * sin, m2v02 = ax * az * cosM1 + ay * sin;
+        double m2v10 = ay * ax * cosM1 + az * sin, m2v11 = cos + ay * ay * cosM1, m2v12 = ay * az * cosM1 - ax * sin;
+        double m2v20 = az * ax * cosM1 - ay * sin, m2v21 = az * ay * cosM1 + ax * sin, m2v22 = cos + az * az * cosM1;
+        return new Matrix3D(
+            (m1v00 * m2v00) + (m1v01 * m2v10) + (m1v02 * m2v20),
+            (m1v00 * m2v01) + (m1v01 * m2v11) + (m1v02 * m2v21),
+            (m1v00 * m2v02) + (m1v01 * m2v12) + (m1v02 * m2v22),
+            this.m03,
+
+            (m1v10 * m2v00) + (m1v11 * m2v10) + (m1v12 * m2v20),
+            (m1v10 * m2v01) + (m1v11 * m2v11) + (m1v12 * m2v21),
+            (m1v10 * m2v02) + (m1v11 * m2v12) + (m1v12 * m2v22),
+            this.m13,
+
+            (m1v20 * m2v00) + (m1v21 * m2v10) + (m1v22 * m2v20),
+            (m1v20 * m2v01) + (m1v21 * m2v11) + (m1v22 * m2v21),
+            (m1v20 * m2v02) + (m1v21 * m2v12) + (m1v22 * m2v22),
+            this.m23
+        );
     }
 
     @Override
     public IMatrix3D localRotate(double degrees, IVec3DC vec) {
-        return null;
+        return this.localRotate(degrees, vec.x(), vec.y(), vec.z());
     }
 
     @Override
     public IMatrix3D localRotate(double degrees, IVec3IC vec) {
-        return null;
+        return this.localRotate(degrees, vec.x(), vec.y(), vec.z());
     }
 
     @Override
     public IMatrix3D localRotate(double degrees, IVec2IC vec, int z) {
-        return null;
+        return this.localRotate(degrees, vec.x(), vec.y(), z);
     }
 
     @Override
     public IMatrix3D localRotate(double degrees, IVec2IC vec, double z) {
-        return null;
+        return this.localRotate(degrees, vec.x(), vec.y(), z);
     }
 
     @Override
     public IMatrix3D localRotate(double degrees, IVec2DC vec, int z) {
-        return null;
+        return this.localRotate(degrees, vec.x(), vec.y(), z);
     }
 
     @Override
     public IMatrix3D localRotate(double degrees, IVec2DC vec, double z) {
-        return null;
+        return this.localRotate(degrees, vec.x(), vec.y(), z);
     }
 
     @Override
     public IMatrix3D localRotate(double degrees, IVec2IC vec) {
-        return null;
+        return this.localRotate(degrees, vec.x(), vec.y(), 0);
     }
 
     @Override
     public IMatrix3D localRotate(double degrees, IVec2DC vec) {
-        return null;
+        return this.localRotate(degrees, vec.x(), vec.y(), 0.0D);
     }
 
     @Override
     public IMatrix3D localRotateXAround(int x, int y, int z, double degrees) {
-        return null;
+        if (Math.abs(degrees) < BananaMath.DOUBLE_EPS) {
+            return this;
+        }
+
+        double rads = Math.toRadians(degrees);
+        double sin = BananaMath.sin(rads);
+        double cos = BananaMath.cos(rads);
+
+        double m1v00 = this.m00, m1v01 = this.m01, m1v02 = this.m02;
+        double m1v10 = this.m10, m1v11 = this.m11, m1v12 = this.m12;
+        double m1v20 = this.m20, m1v21 = this.m21, m1v22 = this.m22;
+
+        double m2v01 = (m1v01 * cos) + (m1v02 * sin), m2v02 = (m1v01 * -sin) + (m1v02 * cos), m2v03 = (m1v00 * x) + (m1v01 * y) + (m1v02 * z) + (this.m03);
+        double m2v11 = (m1v11 * cos) + (m1v12 * sin), m2v12 = (m1v11 * -sin) + (m1v12 * cos), m2v13 = (m1v10 * x) + (m1v11 * y) + (m1v12 * z) + (this.m13);
+        double m2v21 = (m1v21 * cos) + (m1v22 * sin), m2v22 = (m1v21 * -sin) + (m1v22 * cos), m2v23 = (m1v20 * x) + (m1v21 * y) + (m1v22 * z) + (this.m23);
+
+        return new Matrix3D(
+            m1v00, m2v01, m2v02,
+            (m1v00 * -x) + (m2v01 * -y) + (m2v02 * -z) + (m2v03),
+
+            m1v10, m2v11, m2v12,
+            (m1v10 * -x) + (m2v11 * -y) + (m2v12 * -z) + (m2v13),
+
+            m1v20, m2v21, m2v22,
+            (m1v20 * -x) + (m2v21 * -y) + (m2v22 * -z) + (m2v23)
+        );
     }
 
     @Override
     public IMatrix3D localRotateXAround(double x, double y, double z, double degrees) {
-        return null;
+        if (Math.abs(degrees) < BananaMath.DOUBLE_EPS) {
+            return this;
+        }
+
+        double rads = Math.toRadians(degrees);
+        double sin = BananaMath.sin(rads);
+        double cos = BananaMath.cos(rads);
+
+        double m1v00 = this.m00, m1v01 = this.m01, m1v02 = this.m02;
+        double m1v10 = this.m10, m1v11 = this.m11, m1v12 = this.m12;
+        double m1v20 = this.m20, m1v21 = this.m21, m1v22 = this.m22;
+
+        double m2v01 = (m1v01 * cos) + (m1v02 * sin), m2v02 = (m1v01 * -sin) + (m1v02 * cos), m2v03 = (m1v00 * x) + (m1v01 * y) + (m1v02 * z) + (this.m03);
+        double m2v11 = (m1v11 * cos) + (m1v12 * sin), m2v12 = (m1v11 * -sin) + (m1v12 * cos), m2v13 = (m1v10 * x) + (m1v11 * y) + (m1v12 * z) + (this.m13);
+        double m2v21 = (m1v21 * cos) + (m1v22 * sin), m2v22 = (m1v21 * -sin) + (m1v22 * cos), m2v23 = (m1v20 * x) + (m1v21 * y) + (m1v22 * z) + (this.m23);
+
+        return new Matrix3D(
+            m1v00, m2v01, m2v02,
+            (m1v00 * -x) + (m2v01 * -y) + (m2v02 * -z) + (m2v03),
+
+            m1v10, m2v11, m2v12,
+            (m1v10 * -x) + (m2v11 * -y) + (m2v12 * -z) + (m2v13),
+
+            m1v20, m2v21, m2v22,
+            (m1v20 * -x) + (m2v21 * -y) + (m2v22 * -z) + (m2v23)
+        );
     }
 
     @Override
     public IMatrix3D localRotateXAround(IVec3IC point, double degrees) {
-        return null;
+        return this.localRotateXAround(point.x(), point.y(), point.z(), degrees);
     }
 
     @Override
     public IMatrix3D localRotateXAround(IVec3DC point, double degrees) {
-        return null;
+        return this.localRotateXAround(point.x(), point.y(), point.z(), degrees);
     }
 
     @Override
     public IMatrix3D localRotateXAround(IVec2IC vec, int z, double degrees) {
-        return null;
+        return this.localRotateXAround(vec.x(), vec.y(), z, degrees);
     }
 
     @Override
     public IMatrix3D localRotateXAround(IVec2IC vec, double z, double degrees) {
-        return null;
+        return this.localRotateXAround(vec.x(), vec.y(), z, degrees);
     }
 
     @Override
     public IMatrix3D localRotateXAround(IVec2DC vec, int z, double degrees) {
-        return null;
+        return this.localRotateXAround(vec.x(), vec.y(), z, degrees);
     }
 
     @Override
     public IMatrix3D localRotateXAround(IVec2DC vec, double z, double degrees) {
-        return null;
+        return this.localRotateXAround(vec.x(), vec.y(), z, degrees);
     }
 
     @Override
     public IMatrix3D localRotateXAround(IVec2IC vec, double degrees) {
-        return null;
+        return this.localRotateXAround(vec.x(), vec.y(), 0, degrees);
     }
 
     @Override
     public IMatrix3D localRotateXAround(IVec2DC vec, double degrees) {
-        return null;
+        return this.localRotateXAround(vec.x(), vec.y(), 0.0D, degrees);
     }
 
     @Override
     public IMatrix3D localRotateYAround(int x, int y, int z, double degrees) {
-        return null;
+        if (Math.abs(degrees) < BananaMath.DOUBLE_EPS) {
+            return this;
+        }
+
+        double rads = Math.toRadians(degrees);
+        double sin = BananaMath.sin(rads);
+        double cos = BananaMath.cos(rads);
+
+        double m1v00 = this.m00, m1v01 = this.m01, m1v02 = this.m02;
+        double m1v10 = this.m10, m1v11 = this.m11, m1v12 = this.m12;
+        double m1v20 = this.m20, m1v21 = this.m21, m1v22 = this.m22;
+
+        double m2v00 = (m1v00 * cos) + (m1v02 * -sin), m2v02 = (m1v00 * sin) + (m1v02 * cos), m2v03 = (m1v00 * x) + (m1v01 * y) + (m1v02 * z) + (this.m03);
+        double m2v10 = (m1v10 * cos) + (m1v12 * -sin), m2v12 = (m1v10 * sin) + (m1v12 * cos), m2v13 = (m1v10 * x) + (m1v11 * y) + (m1v12 * z) + (this.m13);
+        double m2v20 = (m1v20 * cos) + (m1v22 * -sin), m2v22 = (m1v20 * sin) + (m1v22 * cos), m2v23 = (m1v20 * x) + (m1v21 * y) + (m1v22 * z) + (this.m23);
+
+        return new Matrix3D(
+            m2v00, m1v01, m2v02,
+            (m2v00 * -x) + (m1v01 * -y) + (m2v02 * -z) + (m2v03),
+
+            m2v10, m1v11, m2v12,
+            (m2v10 * -x) + (m1v11 * -y) + (m2v12 * -z) + (m2v13),
+
+            m2v20, m1v21, m2v22,
+            (m2v20 * -x) + (m1v21 * -y) + (m2v22 * -z) + (m2v23)
+        );
     }
 
     @Override
     public IMatrix3D localRotateYAround(double x, double y, double z, double degrees) {
-        return null;
+        if (Math.abs(degrees) < BananaMath.DOUBLE_EPS) {
+            return this;
+        }
+
+        double rads = Math.toRadians(degrees);
+        double sin = BananaMath.sin(rads);
+        double cos = BananaMath.cos(rads);
+
+        double m1v00 = this.m00, m1v01 = this.m01, m1v02 = this.m02;
+        double m1v10 = this.m10, m1v11 = this.m11, m1v12 = this.m12;
+        double m1v20 = this.m20, m1v21 = this.m21, m1v22 = this.m22;
+
+        double m2v00 = (m1v00 * cos) + (m1v02 * -sin), m2v02 = (m1v00 * sin) + (m1v02 * cos), m2v03 = (m1v00 * x) + (m1v01 * y) + (m1v02 * z) + (this.m03);
+        double m2v10 = (m1v10 * cos) + (m1v12 * -sin), m2v12 = (m1v10 * sin) + (m1v12 * cos), m2v13 = (m1v10 * x) + (m1v11 * y) + (m1v12 * z) + (this.m13);
+        double m2v20 = (m1v20 * cos) + (m1v22 * -sin), m2v22 = (m1v20 * sin) + (m1v22 * cos), m2v23 = (m1v20 * x) + (m1v21 * y) + (m1v22 * z) + (this.m23);
+
+        return new Matrix3D(
+            m2v00, m1v01, m2v02,
+            (m2v00 * -x) + (m1v01 * -y) + (m2v02 * -z) + (m2v03),
+
+            m2v10, m1v11, m2v12,
+            (m2v10 * -x) + (m1v11 * -y) + (m2v12 * -z) + (m2v13),
+
+            m2v20, m1v21, m2v22,
+            (m2v20 * -x) + (m1v21 * -y) + (m2v22 * -z) + (m2v23)
+        );
     }
 
     @Override
     public IMatrix3D localRotateYAround(IVec3IC point, double degrees) {
-        return null;
+        return this.localRotateYAround(point.x(), point.y(), point.z(), degrees);
     }
 
     @Override
     public IMatrix3D localRotateYAround(IVec3DC point, double degrees) {
-        return null;
+        return this.localRotateYAround(point.x(), point.y(), point.z(), degrees);
     }
 
     @Override
     public IMatrix3D localRotateYAround(IVec2IC vec, int z, double degrees) {
-        return null;
+        return this.localRotateYAround(vec.x(), vec.y(), z, degrees);
     }
 
     @Override
     public IMatrix3D localRotateYAround(IVec2IC vec, double z, double degrees) {
-        return null;
+        return this.localRotateYAround(vec.x(), vec.y(), z, degrees);
     }
 
     @Override
     public IMatrix3D localRotateYAround(IVec2DC vec, int z, double degrees) {
-        return null;
+        return this.localRotateYAround(vec.x(), vec.y(), z, degrees);
     }
 
     @Override
     public IMatrix3D localRotateYAround(IVec2DC vec, double z, double degrees) {
-        return null;
+        return this.localRotateYAround(vec.x(), vec.y(), z, degrees);
     }
 
     @Override
     public IMatrix3D localRotateYAround(IVec2IC vec, double degrees) {
-        return null;
+        return this.localRotateYAround(vec.x(), vec.y(), 0, degrees);
     }
 
     @Override
     public IMatrix3D localRotateYAround(IVec2DC vec, double degrees) {
-        return null;
+        return this.localRotateYAround(vec.x(), vec.y(), 0.0D, degrees);
     }
 
     @Override
     public IMatrix3D localRotateZAround(int x, int y, int z, double degrees) {
-        return null;
+        if (Math.abs(degrees) < BananaMath.DOUBLE_EPS) {
+            return this;
+        }
+
+        double rads = Math.toRadians(degrees);
+        double sin = BananaMath.sin(rads);
+        double cos = BananaMath.cos(rads);
+
+        double m1v00 = this.m00, m1v01 = this.m01, m1v02 = this.m02;
+        double m1v10 = this.m10, m1v11 = this.m11, m1v12 = this.m12;
+        double m1v20 = this.m20, m1v21 = this.m21, m1v22 = this.m22;
+
+        double m2v00 = (m1v00 * cos) + (m1v01 * sin), m2v01 = (m1v00 * -sin) + (m1v01 * cos), m2v03 = (m1v00 * x) + (m1v01 * y) + (m1v02 * z) + (this.m03);
+        double m2v10 = (m1v10 * cos) + (m1v11 * sin), m2v11 = (m1v10 * -sin) + (m1v11 * cos), m2v13 = (m1v10 * x) + (m1v11 * y) + (m1v12 * z) + (this.m13);
+        double m2v20 = (m1v20 * cos) + (m1v21 * sin), m2v21 = (m1v20 * -sin) + (m1v21 * cos), m2v23 = (m1v20 * x) + (m1v21 * y) + (m1v22 * z) + (this.m23);
+
+        return new Matrix3D(
+            m2v00, m2v01, m1v02,
+            (m2v00 * -x) + (m2v01 * -y) + (m1v02 * -z) + (m2v03),
+
+            m2v10, m2v11, m1v12,
+            (m2v10 * -x) + (m2v11 * -y) + (m1v12 * -z) + (m2v13),
+
+            m2v20, m2v21, m1v22,
+            (m2v20 * -x) + (m2v21 * -y) + (m1v22 * -z) + (m2v23)
+        );
     }
 
     @Override
     public IMatrix3D localRotateZAround(double x, double y, double z, double degrees) {
-        return null;
+        if (Math.abs(degrees) < BananaMath.DOUBLE_EPS) {
+            return this;
+        }
+
+        double rads = Math.toRadians(degrees);
+        double sin = BananaMath.sin(rads);
+        double cos = BananaMath.cos(rads);
+
+        double m1v00 = this.m00, m1v01 = this.m01, m1v02 = this.m02;
+        double m1v10 = this.m10, m1v11 = this.m11, m1v12 = this.m12;
+        double m1v20 = this.m20, m1v21 = this.m21, m1v22 = this.m22;
+
+        double m2v00 = (m1v00 * cos) + (m1v01 * sin), m2v01 = (m1v00 * -sin) + (m1v01 * cos), m2v03 = (m1v00 * x) + (m1v01 * y) + (m1v02 * z) + (this.m03);
+        double m2v10 = (m1v10 * cos) + (m1v11 * sin), m2v11 = (m1v10 * -sin) + (m1v11 * cos), m2v13 = (m1v10 * x) + (m1v11 * y) + (m1v12 * z) + (this.m13);
+        double m2v20 = (m1v20 * cos) + (m1v21 * sin), m2v21 = (m1v20 * -sin) + (m1v21 * cos), m2v23 = (m1v20 * x) + (m1v21 * y) + (m1v22 * z) + (this.m23);
+
+        return new Matrix3D(
+            m2v00, m2v01, m1v02,
+            (m2v00 * -x) + (m2v01 * -y) + (m1v02 * -z) + (m2v03),
+
+            m2v10, m2v11, m1v12,
+            (m2v10 * -x) + (m2v11 * -y) + (m1v12 * -z) + (m2v13),
+
+            m2v20, m2v21, m1v22,
+            (m2v20 * -x) + (m2v21 * -y) + (m1v22 * -z) + (m2v23)
+        );
     }
 
     @Override
     public IMatrix3D localRotateZAround(IVec3IC point, double degrees) {
-        return null;
+        return this.localRotateZAround(point.x(), point.y(), point.z(), degrees);
     }
 
     @Override
     public IMatrix3D localRotateZAround(IVec3DC point, double degrees) {
-        return null;
+        return this.localRotateZAround(point.x(), point.y(), point.z(), degrees);
     }
 
     @Override
     public IMatrix3D localRotateZAround(IVec2IC vec, int z, double degrees) {
-        return null;
+        return this.localRotateZAround(vec.x(), vec.y(), z, degrees);
     }
 
     @Override
     public IMatrix3D localRotateZAround(IVec2IC vec, double z, double degrees) {
-        return null;
+        return this.localRotateZAround(vec.x(), vec.y(), z, degrees);
     }
 
     @Override
     public IMatrix3D localRotateZAround(IVec2DC vec, int z, double degrees) {
-        return null;
+        return this.localRotateZAround(vec.x(), vec.y(), z, degrees);
     }
 
     @Override
     public IMatrix3D localRotateZAround(IVec2DC vec, double z, double degrees) {
-        return null;
+        return this.localRotateZAround(vec.x(), vec.y(), z, degrees);
     }
 
     @Override
     public IMatrix3D localRotateZAround(IVec2IC vec, double degrees) {
-        return null;
+        return this.localRotateZAround(vec.x(), vec.y(), 0, degrees);
     }
 
     @Override
     public IMatrix3D localRotateZAround(IVec2DC vec, double degrees) {
-        return null;
+        return this.localRotateZAround(vec.x(), vec.y(), 0.0D, degrees);
     }
 
     @Override
     public IMatrix3D localRotateAround(IVec3DC point, double degrees, int x, int y, int z) {
-        return null;
+        if (Math.abs(degrees) < BananaMath.DOUBLE_EPS) {
+            return this;
+        }
+        double l = Math.sqrt(x * x + y * y + z * z);
+        if (l < BananaMath.DOUBLE_EPS) {
+            return this;
+        }
+        double ax = x / l, ay = y / l, az = z / l;
+        double rads = Math.toRadians(degrees);
+        double sin = BananaMath.sin(rads);
+        double cos = BananaMath.cos(rads);
+        double cosM1 = 1 - cos;
+
+        double m1v00 = this.m00, m1v01 = this.m01, m1v02 = this.m02;
+        double m1v10 = this.m10, m1v11 = this.m11, m1v12 = this.m12;
+        double m1v20 = this.m20, m1v21 = this.m21, m1v22 = this.m22;
+        double m2v00 = cos + ax * ax * cosM1, m2v01 = ax * ay * cosM1 - az * sin, m2v02 = ax * az * cosM1 + ay * sin, m2v03 = (m1v00 * point.x()) + (m1v01 * point.y()) + (m1v02 * point.z()) + (this.m03);
+        double m2v10 = ay * ax * cosM1 + az * sin, m2v11 = cos + ay * ay * cosM1, m2v12 = ay * az * cosM1 - ax * sin, m2v13 = (m1v10 * point.x()) + (m1v11 * point.y()) + (m1v12 * point.z()) + (this.m13);
+        double m2v20 = az * ax * cosM1 - ay * sin, m2v21 = az * ay * cosM1 + ax * sin, m2v22 = cos + az * az * cosM1, m2v23 = (m1v20 * point.x()) + (m1v21 * point.y()) + (m1v22 * point.z()) + (this.m23);
+        return new Matrix3D(
+            (m1v00 * m2v00) + (m1v01 * m2v10) + (m1v02 * m2v20),
+            (m1v00 * m2v01) + (m1v01 * m2v11) + (m1v02 * m2v21),
+            (m1v00 * m2v02) + (m1v01 * m2v12) + (m1v02 * m2v22),
+            (m2v00 * -point.x()) + (m2v01 * -point.y()) + (m2v02 * -point.z()) + (m2v03),
+
+            (m1v10 * m2v00) + (m1v11 * m2v10) + (m1v12 * m2v20),
+            (m1v10 * m2v01) + (m1v11 * m2v11) + (m1v12 * m2v21),
+            (m1v10 * m2v02) + (m1v11 * m2v12) + (m1v12 * m2v22),
+            (m2v10 * -point.x()) + (m2v11 * -point.y()) + (m2v12 * -point.z()) + (m2v13),
+
+            (m1v20 * m2v00) + (m1v21 * m2v10) + (m1v22 * m2v20),
+            (m1v20 * m2v01) + (m1v21 * m2v11) + (m1v22 * m2v21),
+            (m1v20 * m2v02) + (m1v21 * m2v12) + (m1v22 * m2v22),
+            (m2v20 * -point.x()) + (m2v21 * -point.y()) + (m2v22 * -point.z()) + (m2v23)
+        );
     }
 
     @Override
     public IMatrix3D localRotateAround(IVec3DC point, double degrees, double x, double y, double z) {
-        return null;
+        if (Math.abs(degrees) < BananaMath.DOUBLE_EPS) {
+            return this;
+        }
+        double l = Math.sqrt(x * x + y * y + z * z);
+        if (l < BananaMath.DOUBLE_EPS) {
+            return this;
+        }
+        double ax = x / l, ay = y / l, az = z / l;
+        double rads = Math.toRadians(degrees);
+        double sin = BananaMath.sin(rads);
+        double cos = BananaMath.cos(rads);
+        double cosM1 = 1 - cos;
+
+        double m1v00 = this.m00, m1v01 = this.m01, m1v02 = this.m02;
+        double m1v10 = this.m10, m1v11 = this.m11, m1v12 = this.m12;
+        double m1v20 = this.m20, m1v21 = this.m21, m1v22 = this.m22;
+        double m2v00 = cos + ax * ax * cosM1, m2v01 = ax * ay * cosM1 - az * sin, m2v02 = ax * az * cosM1 + ay * sin, m2v03 = (m1v00 * point.x()) + (m1v01 * point.y()) + (m1v02 * point.z()) + (this.m03);
+        double m2v10 = ay * ax * cosM1 + az * sin, m2v11 = cos + ay * ay * cosM1, m2v12 = ay * az * cosM1 - ax * sin, m2v13 = (m1v10 * point.x()) + (m1v11 * point.y()) + (m1v12 * point.z()) + (this.m13);
+        double m2v20 = az * ax * cosM1 - ay * sin, m2v21 = az * ay * cosM1 + ax * sin, m2v22 = cos + az * az * cosM1, m2v23 = (m1v20 * point.x()) + (m1v21 * point.y()) + (m1v22 * point.z()) + (this.m23);
+        return new Matrix3D(
+            (m1v00 * m2v00) + (m1v01 * m2v10) + (m1v02 * m2v20),
+            (m1v00 * m2v01) + (m1v01 * m2v11) + (m1v02 * m2v21),
+            (m1v00 * m2v02) + (m1v01 * m2v12) + (m1v02 * m2v22),
+            (m2v00 * -point.x()) + (m2v01 * -point.y()) + (m2v02 * -point.z()) + (m2v03),
+
+            (m1v10 * m2v00) + (m1v11 * m2v10) + (m1v12 * m2v20),
+            (m1v10 * m2v01) + (m1v11 * m2v11) + (m1v12 * m2v21),
+            (m1v10 * m2v02) + (m1v11 * m2v12) + (m1v12 * m2v22),
+            (m2v10 * -point.x()) + (m2v11 * -point.y()) + (m2v12 * -point.z()) + (m2v13),
+
+            (m1v20 * m2v00) + (m1v21 * m2v10) + (m1v22 * m2v20),
+            (m1v20 * m2v01) + (m1v21 * m2v11) + (m1v22 * m2v21),
+            (m1v20 * m2v02) + (m1v21 * m2v12) + (m1v22 * m2v22),
+            (m2v20 * -point.x()) + (m2v21 * -point.y()) + (m2v22 * -point.z()) + (m2v23)
+        );
     }
 
     @Override
     public IMatrix3D localRotateAround(IVec3DC point, double degrees, IVec3DC vec) {
-        return null;
+        return this.localRotateAround(point, degrees, vec.x(), vec.y(), vec.z());
     }
 
     @Override
     public IMatrix3D localRotateAround(IVec3DC point, double degrees, IVec3IC vec) {
-        return null;
+        return this.localRotateAround(point, degrees, vec.x(), vec.y(), vec.z());
     }
 
     @Override
     public IMatrix3D localRotateAround(IVec3DC point, double degrees, IVec2IC vec, int z) {
-        return null;
+        return this.localRotateAround(point, degrees, vec.x(), vec.y(), z);
     }
 
     @Override
     public IMatrix3D localRotateAround(IVec3DC point, double degrees, IVec2IC vec, double z) {
-        return null;
+        return this.localRotateAround(point, degrees, vec.x(), vec.y(), z);
     }
 
     @Override
     public IMatrix3D localRotateAround(IVec3DC point, double degrees, IVec2DC vec, int z) {
-        return null;
+        return this.localRotateAround(point, degrees, vec.x(), vec.y(), z);
     }
 
     @Override
     public IMatrix3D localRotateAround(IVec3DC point, double degrees, IVec2DC vec, double z) {
-        return null;
+        return this.localRotateAround(point, degrees, vec.x(), vec.y(), z);
     }
 
     @Override
     public IMatrix3D localRotateAround(IVec3DC point, double degrees, IVec2IC vec) {
-        return null;
+        return this.localRotateAround(point, degrees, vec.x(), vec.y(), 0);
     }
 
     @Override
     public IMatrix3D localRotateAround(IVec3DC point, double degrees, IVec2DC vec) {
-        return null;
+        return this.localRotateAround(point, degrees, vec.x(), vec.y(), 0.0D);
     }
 
     @Override
     public IMatrix3D localRotateAround(IVec3IC point, double degrees, int x, int y, int z) {
-        return null;
+        if (Math.abs(degrees) < BananaMath.DOUBLE_EPS) {
+            return this;
+        }
+        double l = Math.sqrt(x * x + y * y + z * z);
+        if (l < BananaMath.DOUBLE_EPS) {
+            return this;
+        }
+        double ax = x / l, ay = y / l, az = z / l;
+        double rads = Math.toRadians(degrees);
+        double sin = BananaMath.sin(rads);
+        double cos = BananaMath.cos(rads);
+        double cosM1 = 1 - cos;
+
+        double m1v00 = this.m00, m1v01 = this.m01, m1v02 = this.m02;
+        double m1v10 = this.m10, m1v11 = this.m11, m1v12 = this.m12;
+        double m1v20 = this.m20, m1v21 = this.m21, m1v22 = this.m22;
+        double m2v00 = cos + ax * ax * cosM1, m2v01 = ax * ay * cosM1 - az * sin, m2v02 = ax * az * cosM1 + ay * sin, m2v03 = (m1v00 * point.x()) + (m1v01 * point.y()) + (m1v02 * point.z()) + (this.m03);
+        double m2v10 = ay * ax * cosM1 + az * sin, m2v11 = cos + ay * ay * cosM1, m2v12 = ay * az * cosM1 - ax * sin, m2v13 = (m1v10 * point.x()) + (m1v11 * point.y()) + (m1v12 * point.z()) + (this.m13);
+        double m2v20 = az * ax * cosM1 - ay * sin, m2v21 = az * ay * cosM1 + ax * sin, m2v22 = cos + az * az * cosM1, m2v23 = (m1v20 * point.x()) + (m1v21 * point.y()) + (m1v22 * point.z()) + (this.m23);
+        return new Matrix3D(
+            (m1v00 * m2v00) + (m1v01 * m2v10) + (m1v02 * m2v20),
+            (m1v00 * m2v01) + (m1v01 * m2v11) + (m1v02 * m2v21),
+            (m1v00 * m2v02) + (m1v01 * m2v12) + (m1v02 * m2v22),
+            (m2v00 * -point.x()) + (m2v01 * -point.y()) + (m2v02 * -point.z()) + (m2v03),
+
+            (m1v10 * m2v00) + (m1v11 * m2v10) + (m1v12 * m2v20),
+            (m1v10 * m2v01) + (m1v11 * m2v11) + (m1v12 * m2v21),
+            (m1v10 * m2v02) + (m1v11 * m2v12) + (m1v12 * m2v22),
+            (m2v10 * -point.x()) + (m2v11 * -point.y()) + (m2v12 * -point.z()) + (m2v13),
+
+            (m1v20 * m2v00) + (m1v21 * m2v10) + (m1v22 * m2v20),
+            (m1v20 * m2v01) + (m1v21 * m2v11) + (m1v22 * m2v21),
+            (m1v20 * m2v02) + (m1v21 * m2v12) + (m1v22 * m2v22),
+            (m2v20 * -point.x()) + (m2v21 * -point.y()) + (m2v22 * -point.z()) + (m2v23)
+        );
     }
 
     @Override
     public IMatrix3D localRotateAround(IVec3IC point, double degrees, double x, double y, double z) {
-        return null;
+        if (Math.abs(degrees) < BananaMath.DOUBLE_EPS) {
+            return this;
+        }
+        double l = Math.sqrt(x * x + y * y + z * z);
+        if (l < BananaMath.DOUBLE_EPS) {
+            return this;
+        }
+        double ax = x / l, ay = y / l, az = z / l;
+        double rads = Math.toRadians(degrees);
+        double sin = BananaMath.sin(rads);
+        double cos = BananaMath.cos(rads);
+        double cosM1 = 1 - cos;
+
+        double m1v00 = this.m00, m1v01 = this.m01, m1v02 = this.m02;
+        double m1v10 = this.m10, m1v11 = this.m11, m1v12 = this.m12;
+        double m1v20 = this.m20, m1v21 = this.m21, m1v22 = this.m22;
+        double m2v00 = cos + ax * ax * cosM1, m2v01 = ax * ay * cosM1 - az * sin, m2v02 = ax * az * cosM1 + ay * sin, m2v03 = (m1v00 * point.x()) + (m1v01 * point.y()) + (m1v02 * point.z()) + (this.m03);
+        double m2v10 = ay * ax * cosM1 + az * sin, m2v11 = cos + ay * ay * cosM1, m2v12 = ay * az * cosM1 - ax * sin, m2v13 = (m1v10 * point.x()) + (m1v11 * point.y()) + (m1v12 * point.z()) + (this.m13);
+        double m2v20 = az * ax * cosM1 - ay * sin, m2v21 = az * ay * cosM1 + ax * sin, m2v22 = cos + az * az * cosM1, m2v23 = (m1v20 * point.x()) + (m1v21 * point.y()) + (m1v22 * point.z()) + (this.m23);
+        return new Matrix3D(
+            (m1v00 * m2v00) + (m1v01 * m2v10) + (m1v02 * m2v20),
+            (m1v00 * m2v01) + (m1v01 * m2v11) + (m1v02 * m2v21),
+            (m1v00 * m2v02) + (m1v01 * m2v12) + (m1v02 * m2v22),
+            (m2v00 * -point.x()) + (m2v01 * -point.y()) + (m2v02 * -point.z()) + (m2v03),
+
+            (m1v10 * m2v00) + (m1v11 * m2v10) + (m1v12 * m2v20),
+            (m1v10 * m2v01) + (m1v11 * m2v11) + (m1v12 * m2v21),
+            (m1v10 * m2v02) + (m1v11 * m2v12) + (m1v12 * m2v22),
+            (m2v10 * -point.x()) + (m2v11 * -point.y()) + (m2v12 * -point.z()) + (m2v13),
+
+            (m1v20 * m2v00) + (m1v21 * m2v10) + (m1v22 * m2v20),
+            (m1v20 * m2v01) + (m1v21 * m2v11) + (m1v22 * m2v21),
+            (m1v20 * m2v02) + (m1v21 * m2v12) + (m1v22 * m2v22),
+            (m2v20 * -point.x()) + (m2v21 * -point.y()) + (m2v22 * -point.z()) + (m2v23)
+        );
     }
 
     @Override
     public IMatrix3D localRotateAround(IVec3IC point, double degrees, IVec3DC vec) {
-        return null;
+        return this.localRotateAround(point, degrees, vec.x(), vec.y(), vec.z());
     }
 
     @Override
     public IMatrix3D localRotateAround(IVec3IC point, double degrees, IVec3IC vec) {
-        return null;
+        return this.localRotateAround(point, degrees, vec.x(), vec.y(), vec.z());
     }
 
     @Override
     public IMatrix3D localRotateAround(IVec3IC point, double degrees, IVec2IC vec, int z) {
-        return null;
+        return this.localRotateAround(point, degrees, vec.x(), vec.y(), z);
     }
 
     @Override
     public IMatrix3D localRotateAround(IVec3IC point, double degrees, IVec2IC vec, double z) {
-        return null;
+        return this.localRotateAround(point, degrees, vec.x(), vec.y(), z);
     }
 
     @Override
     public IMatrix3D localRotateAround(IVec3IC point, double degrees, IVec2DC vec, int z) {
-        return null;
+        return this.localRotateAround(point, degrees, vec.x(), vec.y(), z);
     }
 
     @Override
     public IMatrix3D localRotateAround(IVec3IC point, double degrees, IVec2DC vec, double z) {
-        return null;
+        return this.localRotateAround(point, degrees, vec.x(), vec.y(), z);
     }
 
     @Override
     public IMatrix3D localRotateAround(IVec3IC point, double degrees, IVec2IC vec) {
-        return null;
+        return this.localRotateAround(point, degrees, vec.x(), vec.y(), 0);
     }
 
     @Override
     public IMatrix3D localRotateAround(IVec3IC point, double degrees, IVec2DC vec) {
-        return null;
+        return this.localRotateAround(point, degrees, vec.x(), vec.y(), 0.0D);
     }
 
     @Override
