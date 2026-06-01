@@ -618,7 +618,11 @@ public class Matrix2DM implements IMatrix2DM {
 
     @Override
     public IMatrix2DM copy() {
-        return new Matrix2DM(this);
+        Matrix2DM copy = new Matrix2DM(this);
+        if (this.stateStack != null) {
+            copy.stateStack = this.stateStack.copy();
+        }
+        return copy;
     }
 
     @Override

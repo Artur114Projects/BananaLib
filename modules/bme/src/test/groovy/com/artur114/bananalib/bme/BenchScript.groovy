@@ -3,59 +3,68 @@ package com.artur114.bananalib.bme
 import com.artur114.bananalib.math.m2d.matrix.Matrix2FM
 import com.artur114.bananalib.math.m2d.vec.IVec2DM
 import com.artur114.bananalib.math.m2d.vec.Vec2DM
+import com.artur114.bananalib.math.m3d.matrix.Matrix3F
+import com.artur114.bananalib.math.m3d.matrix.Matrix3FM
 import org.joml.Matrix3f
+import org.joml.Matrix4f
 import org.joml.Vector3f
 
 BananaBench.run {
-    iterations 16000000
-    warmup 6000000
+    iterations 8000000
+    warmup 4000000
     repeats 6
-    runs 3
+    runs 2
 
-    bench("Matrix2FM") {
+    bench("Matrix3FM") {
         setup {
-            def matrixOrig = new Matrix2FM().translate(10, 20).rotate(45).scale(2, 3)
-            def matrix0 = new Matrix2FM().translate(10, 20).rotate(45).scale(2, 3)
-            def matrix1 = new Matrix2FM().translate(140, 9).rotate(85).scale(1, 3)
-            IVec2DM vec = new Vec2DM()
+            def m0Orig = new Matrix3F().rotate(234, 1, 0 ,0).translate(1, 4, 7).scale(1, 2, 1)
+            def m0 = new Matrix3FM().rotate(234, 1, 0 ,0).translate(1, 4, 7).scale(1, 2, 1)
+            def m1 = new Matrix3FM().rotate(134, 1, 2 ,0).translate(2, 8, 7).scale(2, 3, 1)
 
-            [matrixOrig, matrix0, matrix1, vec]
+            [m0Orig, m0, m1]
         }
 
         beforeEach {
             it[1].set(it[0])
         }
 
-        test("transform") {
-            it.consume it.data[1].transform(it.data[3])
+        test("invert") {
+            it.consume it.data[1].invert()
         }
 
         test("mul") {
             it.consume it.data[1].mul(it.data[2])
         }
+
+        test("localTranslate") {
+            it.consume it.data[1].localTranslate(25, -82, 34)
+        }
     }
 
-    bench("Matrix3f") {
+    bench("Matrix4f") {
         setup {
-            def out = new Matrix3f()
-            def matrixOrig = new Matrix3f().rotateZ(Math.toRadians(45) as float).scale(2, 3, 1)
-            def matrix0 = new Matrix3f().rotateZ(Math.toRadians(45) as float).scale(2, 3, 1)
-            def matrix1 = new Matrix3f().rotateZ(Math.toRadians(76) as float).scale(4, 1, 1)
-            Vector3f vector3f = new Vector3f()
+            def m0Orig = new Matrix4f().rotate(234, 1, 0 ,0).translate(1, 4, 7).scale(1, 2, 1)
+            def m0 = new Matrix4f().rotate(234, 1, 0 ,0).translate(1, 4, 7).scale(1, 2, 1)
+            def m1 = new Matrix4f().rotate(134, 1, 2 ,0).translate(2, 8, 7).scale(2, 3, 1)
+            def out = new Matrix4f()
 
-            [matrixOrig, matrix0, matrix1, out, vector3f]
+            [m0Orig, m0, m1, out]
         }
 
         beforeEach {
-            it[1].set(it[0])
+            ((Matrix4f) it[1]).set(((Matrix4f) it[0]))
         }
 
-        test("transform") {
-            it.consume it.data[1].transform(it.data[4])
+        test("invert") {
+            it.consume ((Matrix4f) it.data[1]).invert(((Matrix4f) it.data[3]))
         }
 
         test("mul") {
             it.consume it.data[1].mul(it.data[2], it.data[3])
+        }
+
+        test("translate") {
+            it.consume it.data[1].translate(25, -82, 34)
         }
     }
 }

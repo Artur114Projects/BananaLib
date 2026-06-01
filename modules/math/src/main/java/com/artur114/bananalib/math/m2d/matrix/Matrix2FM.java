@@ -657,7 +657,11 @@ public class Matrix2FM implements IMatrix2FM {
 
     @Override
     public IMatrix2FM copy() {
-        return new Matrix2FM(this);
+        Matrix2FM copy = new Matrix2FM(this);
+        if (this.stateStack != null) {
+            copy.stateStack = this.stateStack.copy();
+        }
+        return copy;
     }
 
     @Override

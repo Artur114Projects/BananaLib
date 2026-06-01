@@ -47,6 +47,10 @@ abstract class TestBase {
         return randDouble(-360, 360)
     }
 
+    def randDegreesF() {
+        return randFloat(-360, 360)
+    }
+
     def randDouble(double min, double max) {
         return this.rand.nextDouble() * (max - min) + min
     }

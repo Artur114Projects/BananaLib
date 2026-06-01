@@ -5,7 +5,50 @@ import com.artur114.bananalib.math.m2d.vec.Vec2D
 import com.artur114.bananalib.math.m3d.matrix.Matrix3D
 
 
-def v = new Vec2D(1, 0)
+def maxArgs = 32 + 8
+def types = ['int','long','float','double','boolean','char','short','byte','Object']
+def className = 'UltraHasher'
 
-println(Matrix2D.IDENTITY.rotate(90).transform(v))
-println(Matrix3D.IDENTITY.rotateZ(90).transform(v))
+new File("${className}.txt").withPrintWriter { pw ->
+    pw.println()
+    pw.println "import java.util.Objects;"
+    pw.println()
+    pw.println("/**\n" +
+            " * This file is generated. Do not edit, or the hash gods will curse you.\n" +
+            " */")
+    pw.println "public final class ${className} {"
+
+    types.each { type ->
+        (1..maxArgs).each { n ->
+            def args = (0..<n).collect { "$type v$it" }.join(', ')
+            def body = (1..<n).collect {"${it == 1 ? "" : "        " * (it)}31 * ${it == (n - 1) ? "" : "("}${n > 2 ? "\n" : ""}"}.join()
+            body += ("        " * (n <= 2 ? 0 : n)) + hashMethod(type, 0)
+            body += (1..<n).collect {" + ${hashMethod(type, it)}${it == (n - 1) ? "" : "\n${"        " * (n - (it + 1))})"}"}.join()
+            pw.println "    public static int hash($args) {\n        return $body;\n    }"
+            pw.println()
+        }
+    }
+
+    pw.println "}"
+}
+
+
+
+println "${className}.java generated with ${types.size()} types and up to ${maxArgs} arguments per overload."
+
+
+def hashMethod(String type, int arg) {
+    def typesHashMap = [
+            int: "Integer.hashCode",
+            long: "Long.hashCode",
+            float: "Float.hashCode",
+            double: "Double.hashCode",
+            char: "Character.hashCode",
+            short: "Short.hashCode",
+            byte: "Byte.hashCode",
+            Object: "Objects.hashCode",
+            boolean: "Boolean.hashCode"
+    ]
+
+    return "${typesHashMap.get(type)}(v$arg)"
+}
