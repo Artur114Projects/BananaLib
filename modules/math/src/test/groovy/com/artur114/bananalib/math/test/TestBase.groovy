@@ -14,7 +14,9 @@ import com.artur114.bananalib.math.m2d.vec.IVec2I
 import com.artur114.bananalib.math.m2d.vec.Vec2D
 import com.artur114.bananalib.math.m2d.vec.Vec2I
 import com.artur114.bananalib.math.m3d.matrix.IMatrix3D
+import com.artur114.bananalib.math.m3d.matrix.IMatrix3F
 import com.artur114.bananalib.math.m3d.matrix.Matrix3D
+import com.artur114.bananalib.math.m3d.matrix.Matrix3F
 import com.artur114.bananalib.math.m3d.vec.IVec3D
 import com.artur114.bananalib.math.m3d.vec.IVec3I
 import com.artur114.bananalib.math.m3d.vec.Vec3D
@@ -89,6 +91,10 @@ abstract class TestBase {
 
     IMatrix3D mat3d() {
         return Matrix3D.IDENTITY
+    }
+
+    IMatrix3F mat3f() {
+        return Matrix3F.IDENTITY
     }
 
     IMatrix2D mat2d() {

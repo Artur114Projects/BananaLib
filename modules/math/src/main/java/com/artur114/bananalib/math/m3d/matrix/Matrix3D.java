@@ -53,7 +53,7 @@ public class Matrix3D implements IMatrix3D {
                 m02 * (m10 * m21 - m11 * m20);
     }
 
-    public Matrix3D(IMatrix3D m) {
+    public Matrix3D(IMatrix3DC m) {
         this(
             m.m00(), m.m01(), m.m02(), m.m03(),
             m.m10(), m.m11(), m.m12(), m.m13(),
@@ -61,7 +61,7 @@ public class Matrix3D implements IMatrix3D {
         );
     }
 
-    public Matrix3D(IMatrix3F m) {
+    public Matrix3D(IMatrix3FC m) {
         this(
             m.m00(), m.m01(), m.m02(), m.m03(),
             m.m10(), m.m11(), m.m12(), m.m13(),
@@ -2448,7 +2448,7 @@ public class Matrix3D implements IMatrix3D {
 
     @Override
     public IMatrix3DM toMutable() {
-        return null;//new Matrix3DM(this);
+        return new Matrix3DM(this);
     }
 
     @Override
@@ -2458,7 +2458,7 @@ public class Matrix3D implements IMatrix3D {
 
     @Override
     public IMatrix3F toFloat() {
-        return null;//new Matrix3F(this);
+        return new Matrix3F(this);
     }
 
     @Override

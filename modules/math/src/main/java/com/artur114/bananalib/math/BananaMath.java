@@ -1,6 +1,6 @@
 package com.artur114.bananalib.math;
 
-public class BananaMath {
+public final class BananaMath {
     public static final double DOUBLE_EQUALS_EPS = 1.0E-12D;
     public static final float FLOAT_EQUALS_EPS = 1E-4F;
     public static final double DOUBLE_EPS = 1.0E-12D;

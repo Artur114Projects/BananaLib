@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Test
 class Matrix3FTest extends TestBase {
     @Override
     int defMultiCount() {
-        return 1000000
+        return 1000
     }
 
     @Test

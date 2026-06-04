@@ -24,9 +24,9 @@ class Vec3DG implements IVec3D {
     private final double x, y, z;
 
     Vec3DG(double x, double y, double z) {
-        this.x = x;
-        this.y = y;
-        this.z = z;
+        this.x = x
+        this.y = y
+        this.z = z
     }
 
     Vec3DG(int x, int y, int z) {
@@ -911,45 +911,5 @@ class Vec3DG implements IVec3D {
     @Override
     int hashCode() {
         return Hasher.hash(this.x, this.y, this.z);
-    }
-
-    Vec3DG plus(IVec3D v) {
-        return add(v) as Vec3DG;
-    }
-
-    Vec3DG minus(IVec3D v) {
-        return subtract(v) as Vec3DG
-    }
-
-    Vec3DG plus(IVec3I v) {
-        return add(v) as Vec3DG;
-    }
-
-    Vec3DG minus(IVec3I v) {
-        return subtract(v) as Vec3DG
-    }
-
-    Vec3DG multiply(double k) {
-        return scale(k) as Vec3DG
-    }
-
-    Vec3DG multiply(IVec3I k) {
-        return scale(k) as Vec3DG
-    }
-
-    Vec3DG multiply(IVec3D k) {
-        return scale(k) as Vec3DG
-    }
-
-    Vec3DG div(double k) {
-        return divide(k) as Vec3DG
-    }
-
-    Vec3DG div(IVec3I k) {
-        return divide(k) as Vec3DG
-    }
-
-    Vec3DG div(IVec3D k) {
-        return divide(k) as Vec3DG
     }
 }

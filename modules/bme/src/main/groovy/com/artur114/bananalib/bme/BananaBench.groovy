@@ -2,7 +2,7 @@ package com.artur114.bananalib.bme
 
 import org.gradle.api.Action
 
-class BananaBench {
+final class BananaBench {
     static void run(Action<? extends BenchEngine> action) {
         BenchEngine engine = new BenchEngine();
         action.execute(engine)

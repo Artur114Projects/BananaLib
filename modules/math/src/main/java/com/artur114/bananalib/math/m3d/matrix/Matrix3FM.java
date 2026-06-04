@@ -60,7 +60,7 @@ public class Matrix3FM implements IMatrix3FM {
         this.m20 = m20; this.m21 = m21; this.m22 = m22; this.m23 = m23;
     }
 
-    public Matrix3FM(IMatrix3D m) {
+    public Matrix3FM(IMatrix3DC m) {
         this(
             m.m00(), m.m01(), m.m02(), m.m03(),
             m.m10(), m.m11(), m.m12(), m.m13(),
@@ -68,7 +68,7 @@ public class Matrix3FM implements IMatrix3FM {
         );
     }
 
-    public Matrix3FM(IMatrix3F m) {
+    public Matrix3FM(IMatrix3FC m) {
         this(
             m.m00(), m.m01(), m.m02(), m.m03(),
             m.m10(), m.m11(), m.m12(), m.m13(),

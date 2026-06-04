@@ -909,4 +909,50 @@ public class Vec3D implements IVec3D {
     public int hashCode() {
         return Hasher.hash(this.x, this.y, this.z);
     }
+
+    /*===============================GROOVY-DSL-METHODS===============================*/
+
+    public Vec3D plus(IVec3D v) {
+        return (Vec3D) this.add(v);
+    }
+
+    public Vec3D minus(IVec3D v) {
+        return (Vec3D) this.subtract(v);
+    }
+
+    public Vec3D plus(IVec3I v) {
+        return (Vec3D) this.add(v);
+    }
+
+    public Vec3D minus(IVec3I v) {
+        return (Vec3D) this.subtract(v);
+    }
+
+    public Vec3D multiply(double k) {
+        return (Vec3D) this.scale(k);
+    }
+
+    public Vec3D multiply(IVec3I k) {
+        return (Vec3D) this.scale(k);
+    }
+
+    public Vec3D multiply(IVec3D k) {
+        return (Vec3D) this.scale(k);
+    }
+
+    public Vec3D div(double k) {
+        return (Vec3D) this.divide(k);
+    }
+
+    public Vec3D div(IVec3I k) {
+        return (Vec3D) this.divide(k);
+    }
+
+    public Vec3D div(IVec3D k) {
+        return (Vec3D) this.divide(k);
+    }
+
+    public double getAt(int index) {
+        return index == 0 ? this.x : index == 1 ? this.y : index == 2 ? this.z : -1;
+    }
 }

@@ -1,15 +1,10 @@
 package com.artur114.bananalib.math
 
-import com.artur114.bananalib.math.m2d.matrix.Matrix2D
-import com.artur114.bananalib.math.m2d.vec.Vec2D
-import com.artur114.bananalib.math.m3d.matrix.Matrix3D
-
-
-def maxArgs = 32 + 8
+def maxArgs = 32
 def types = ['int','long','float','double','boolean','char','short','byte','Object']
-def className = 'UltraHasher'
+def className = 'Hasher'
 
-new File("${className}.txt").withPrintWriter { pw ->
+new File("${className}.java").withPrintWriter { pw ->
     pw.println()
     pw.println "import java.util.Objects;"
     pw.println()

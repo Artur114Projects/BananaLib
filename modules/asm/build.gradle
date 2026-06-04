@@ -1,15 +1,14 @@
 plugins {
     id 'maven-publish'
     id 'java-library'
-    id 'groovy'
 }
 
 group = 'com.artur114.bananalib'
-version = project.mathVersion
-archivesBaseName = "BananaMath"
+version = '1.0.0'
 
 dependencies {
-    testImplementation localGroovy()
+    implementation "org.ow2.asm:asm:6.2"
+    implementation "org.ow2.asm:asm-tree:6.2"
 }
 
 apply from: rootProject.file('scripts/base.gradle')
