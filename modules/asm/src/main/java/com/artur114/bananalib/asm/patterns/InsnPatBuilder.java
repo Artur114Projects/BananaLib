@@ -36,6 +36,10 @@ public class InsnPatBuilder {
         return this.then(InsnCodes.INSN.with(opcode));
     }
 
+    public InsnPatBuilder thenAnyInsn(int opcode) {
+        return this.then(InsnCodes.ANY_INSN);
+    }
+
     public InsnPatBuilder thenIntInsn(int opcode, int operand) {
         return this.then(InsnCodes.INT_INSN.with(opcode, operand));
     }

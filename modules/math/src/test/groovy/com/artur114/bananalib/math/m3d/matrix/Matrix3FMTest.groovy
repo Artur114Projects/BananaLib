@@ -50,6 +50,8 @@ class Matrix3FMTest  extends TestBase {
         multiTest {
             def point = randVec3d
             assert identityMatrix.transform(point).equalsEps(point, BananaMath.FLOAT_EQUALS_EPS)
+            def mat = randomMatrix
+            assert mat.copy().mul(identityMatrix).equalsEps(mat, BananaMath.FLOAT_EQUALS_EPS)
         }
     }
 

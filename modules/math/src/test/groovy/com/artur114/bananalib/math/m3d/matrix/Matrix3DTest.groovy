@@ -50,6 +50,8 @@ class Matrix3DTest extends TestBase {
         multiTest {
             def point = randVec3d
             assert identityMatrix.transform(point).equalsEps(point)
+            def mat = randomMatrix
+            assert mat.mul(identityMatrix).equalsEps(mat)
         }
     }
 

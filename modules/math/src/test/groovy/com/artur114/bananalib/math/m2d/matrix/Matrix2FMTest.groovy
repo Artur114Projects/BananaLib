@@ -5,7 +5,6 @@ import com.artur114.bananalib.math.m2d.vec.IVec2D
 import com.artur114.bananalib.math.m2d.vec.IVec2I
 import com.artur114.bananalib.math.m2d.vec.Vec2D
 import com.artur114.bananalib.math.test.TestBase
-import org.gradle.internal.impldep.org.testng.Assert
 import org.junit.jupiter.api.Test
 
 import static org.junit.jupiter.api.Assertions.assertThrows

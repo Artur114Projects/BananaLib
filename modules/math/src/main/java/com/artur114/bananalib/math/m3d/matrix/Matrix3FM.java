@@ -2724,7 +2724,7 @@ public class Matrix3FM implements IMatrix3FM {
 
     @Override
     public IMatrix3DM toDouble() {
-        return null;//new Matrix3D(this);
+        return new Matrix3DM(this);
     }
 
     @Override

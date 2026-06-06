@@ -5,6 +5,7 @@ import org.objectweb.asm.Handle;
 import org.objectweb.asm.tree.*;
 
 import java.util.Collection;
+import java.util.function.Consumer;
 
 public class InsnBuilder implements InsnCodes {
     private InsnListAdv buildHeap = new InsnListAdv();
@@ -93,13 +94,28 @@ public class InsnBuilder implements InsnCodes {
         return this;
     }
 
+    public InsnBuilder thenIf(Consumer<InsnBuilder> body) {
+        LabelNode node = new LabelNode();
+        this.then(new JumpInsnNode(IFEQ, node));
+        body.accept(this);
+        this.then(node);
+        return this;
+    }
+
+    public InsnBuilder thenIfNo(Consumer<InsnBuilder> body) {
+        LabelNode node = new LabelNode();
+        this.then(new JumpInsnNode(IFNE, node));
+        body.accept(this);
+        this.then(node);
+        return this;
+    }
+
     public InsnBuilder loadVars(String... vars) {
         for (String v : vars) {
-            String[] vs = v.split("\\|");
-            if (vs.length != 2 || vs[0].length() != 1 || !this.canFormat(vs[1])) {
+            String[] vs = v.split(":");
+            if (vs.length != 2 || vs[0].length() != 1) {
                 throw new IllegalArgumentException("Invalid var string! string:" + v);
-            }
-            this.then(this.loadVar(vs[0].charAt(0), Integer.parseInt(vs[1])));
+            } this.then(this.loadVar(vs[0].charAt(0), Integer.parseInt(vs[1])));
         }
         return this;
     }
@@ -124,14 +140,6 @@ public class InsnBuilder implements InsnCodes {
                 return new VarInsnNode(ALOAD, index);
             default:
                 throw new IllegalArgumentException("Invalid id! id:" + id);
-        }
-    }
-
-    private boolean canFormat(String string) {
-        try {
-            Integer.parseInt(string);return true;
-        } catch (NumberFormatException e) {
-            return false;
         }
     }
 }

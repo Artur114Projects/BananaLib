@@ -1,5 +1,7 @@
 package com.artur114.bananalib.asm;
 
+import com.artur114.bananalib.asm.util.IASMLogger;
+
 import java.io.PrintStream;
 import java.util.*;
 import java.util.function.BiConsumer;
@@ -27,11 +29,11 @@ public class ASMTransformBuss {
         this.sortTransformers();
     }
 
-    public byte[] transform(PrintStream logOut, String className, byte[] bytecode) {
+    public byte[] transform(IASMLogger logger, String className, byte[] bytecode) {
         for (IASMTransformer transformer : this.transformers) {
             if (transformer.isTarget(className)) {
                 try {
-                    bytecode = transformer.transform(logOut, className, bytecode);
+                    bytecode = transformer.transform(logger, className, bytecode);
                 } catch (Exception e) {
                     for (BiConsumer<IASMTransformer, Exception> listener : this.downListeners) {
                         try {

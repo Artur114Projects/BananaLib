@@ -1,5 +1,6 @@
 package com.artur114.bananalib.math.m3d.matrix
 
+import com.artur114.bananalib.math.BananaMath
 import com.artur114.bananalib.math.m2d.matrix.Matrix2D
 import com.artur114.bananalib.math.m2d.vec.IVec2D
 import com.artur114.bananalib.math.m3d.vec.IVec3D
@@ -49,6 +50,8 @@ class Matrix3DMTest extends TestBase {
         multiTest {
             def point = randVec3d
             assert identityMatrix.transform(point).equalsEps(point)
+            def mat = randomMatrix
+            assert mat.copy().mul(identityMatrix).equalsEps(mat, BananaMath.FLOAT_EQUALS_EPS)
         }
     }
 
