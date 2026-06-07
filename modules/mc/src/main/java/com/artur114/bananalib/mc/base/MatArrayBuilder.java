@@ -1,4 +1,4 @@
-package com.artur114.bananalib.mc.register;
+package com.artur114.bananalib.mc.base;
 
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;

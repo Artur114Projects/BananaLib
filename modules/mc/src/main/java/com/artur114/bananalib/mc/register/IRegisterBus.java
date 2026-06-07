@@ -5,13 +5,13 @@ import net.minecraft.item.Item;
 import net.minecraft.util.SoundEvent;
 import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 
-public interface IRegisterBuss {
+public interface IRegisterBus {
     void putNetWrapper(SimpleNetworkWrapper wrapper);
     void subscribe();
     void preInit();
 
-    void registerSound(SoundEvent sound);
-    void registerBlock(Block block);
-    void registerItem(Item item);
-    void register(Object object);
+    <T extends SoundEvent> T registerSound(T sound);
+    <T extends Block> T registerBlock(T block);
+    <T extends Item> T registerItem(T item);
+    <T> T register(T object);
 }

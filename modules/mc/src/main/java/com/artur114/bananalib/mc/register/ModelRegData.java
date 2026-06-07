@@ -28,4 +28,8 @@ public class ModelRegData {
     public static ModelRegData of(Item item, int meta, String id) {
         return new ModelRegData(item, meta, id);
     }
+
+    public static ModelRegData inventory(Item item, int meta) {
+        return new ModelRegData(item, meta, "inventory");
+    }
 }
