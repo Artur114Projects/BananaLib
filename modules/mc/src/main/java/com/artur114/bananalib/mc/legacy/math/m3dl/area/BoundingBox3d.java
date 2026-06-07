@@ -1,7 +1,6 @@
 package com.artur114.bananalib.mc.legacy.math.m3dl.area;
 
-import com.artur114.bananalib.mc.legacy.math.m3dl.EnumRotate;
-import com.artur114.bananalib.mc.legacy.math.m3dl.vec.Pos3d;
+import com.artur114.bananalib.mc.util.EnumRot;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.client.renderer.RenderGlobal;
 import net.minecraft.util.math.BlockPos;
@@ -43,11 +42,11 @@ public class BoundingBox3d implements IArea3d {
         return new BoundingBox3d(this.start.add(-x, -y, -z), this.end.add(x, y, z));
     }
 
-    public BoundingBox3d rotate(Vec3d center, EnumRotate rotate) {
-        Pos3d vecStart = new Pos3d(this.start.getX(), this.start.getY(), this.start.getZ()).deduct(center).rotateY(rotate.toMc()).add(center);
-        Pos3d vecEnd = new Pos3d(this.end.getX(), this.end.getY(), this.end.getZ()).deduct(center).rotateY(rotate.toMc()).add(center);
-        return new BoundingBox3d(vecStart, vecEnd);
-    }
+//    public BoundingBox3d rotate(Vec3d center, EnumRot rotate) {
+//        Pos3d vecStart = new Pos3d(this.start.getX(), this.start.getY(), this.start.getZ()).deduct(center).rotateY(rotate.toMc()).add(center);
+//        Pos3d vecEnd = new Pos3d(this.end.getX(), this.end.getY(), this.end.getZ()).deduct(center).rotateY(rotate.toMc()).add(center);
+//        return new BoundingBox3d(vecStart, vecEnd);
+//    }
 
     @Override
     public int areaSize() {

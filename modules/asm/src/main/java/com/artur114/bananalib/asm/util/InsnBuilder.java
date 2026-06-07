@@ -1,7 +1,10 @@
 package com.artur114.bananalib.asm.util;
 
+import com.artur114.bananalib.asm.patterns.InsnPatBuilder;
 import com.artur114.bananalib.asm.tree.InsnListAdv;
 import org.objectweb.asm.Handle;
+import org.objectweb.asm.Type;
+import org.objectweb.asm.commons.Remapper;
 import org.objectweb.asm.tree.*;
 
 import java.util.Collection;
@@ -9,6 +12,12 @@ import java.util.function.Consumer;
 
 public class InsnBuilder implements InsnCodes {
     private InsnListAdv buildHeap = new InsnListAdv();
+    private Remapper mapping = null;
+
+    public InsnBuilder mapping(Remapper remapper) {
+        this.mapping = remapper;
+        return this;
+    }
 
     public InsnBuilder then(AbstractInsnNode node) {
         this.buildHeap.add(node);
@@ -43,19 +52,46 @@ public class InsnBuilder implements InsnCodes {
     }
 
     public InsnBuilder typeInsn(int opcode, String desc) {
-        return this.then(new TypeInsnNode(opcode, desc));
+        if (this.mapping == null) {
+            return this.then(new TypeInsnNode(opcode, desc));
+        } else {
+            return this.then(new TypeInsnNode(opcode, this.mapping.mapType(desc)));
+        }
     }
 
     public InsnBuilder fieldInsn(int opcode, String owner, String name, String desc) {
-        return this.then(new FieldInsnNode(opcode, owner, name, desc));
+        if (this.mapping == null) {
+            return this.then(new FieldInsnNode(opcode, owner, name, desc));
+        } else {
+            return this.then(new FieldInsnNode(opcode,
+                this.mapping.mapType(owner),
+                this.mapping.mapFieldName(owner, name, desc),
+                this.mapping.mapDesc(desc)
+            ));
+        }
     }
 
     public InsnBuilder methodInsn(int opcode, String owner, String name, String desc, boolean itf) {
-        return this.then(new MethodInsnNode(opcode, owner, name, desc, itf));
+        if (this.mapping == null) {
+            return this.then(new MethodInsnNode(opcode, owner, name, desc, itf));
+        } else {
+            return this.then(new MethodInsnNode(opcode,
+                this.mapping.mapType(owner),
+                this.mapping.mapMethodName(owner, name, desc),
+                this.mapping.mapDesc(desc), itf
+            ));
+        }
     }
 
     public InsnBuilder invokeDynamicInsn(String name, String desc, Handle bsm, Object[] bsmArgs) {
-        return this.then(new InvokeDynamicInsnNode(name, desc, bsm, bsmArgs));
+        if (this.mapping == null) {
+            return this.then(new InvokeDynamicInsnNode(name, desc, bsm, bsmArgs));
+        } else {
+            return this.then(new InvokeDynamicInsnNode(
+                this.mapping.mapInvokeDynamicMethodName(name, desc),
+                this.mapping.mapDesc(desc), bsm, bsmArgs
+            ));
+        }
     }
 
     public InsnBuilder jumpInsn(int opcode, LabelNode label) {
@@ -63,19 +99,23 @@ public class InsnBuilder implements InsnCodes {
     }
 
     public InsnBuilder ldcInsn(Object cst) {
-        return this.then(new LdcInsnNode(cst));
+        if (this.mapping != null && cst instanceof Type) {
+            return this.then(new LdcInsnNode(this.mapping.mapValue(cst)));
+        } else {
+            return this.then(new LdcInsnNode(cst));
+        }
     }
 
     public InsnBuilder invokeStatic(String owner, String name, String desc) {
-        return this.then(new MethodInsnNode(INVOKESTATIC, owner, name, desc, false));
+        return this.methodInsn(INVOKESTATIC, owner, name, desc, false);
     }
 
     public InsnBuilder invokeVirtual(String owner, String name, String desc, boolean itf) {
-        return this.then(new MethodInsnNode(INVOKEVIRTUAL, owner, name, desc, itf));
+        return this.methodInsn(INVOKEVIRTUAL, owner, name, desc, itf);
     }
 
     public InsnBuilder invokeSpecial(String owner, String name, String desc) {
-        return this.then(new MethodInsnNode(INVOKESPECIAL, owner, name, desc, false));
+        return this.methodInsn(INVOKESPECIAL, owner, name, desc, false);
     }
 
     public InsnBuilder ifFalseReturn(int returnOpcode) {
@@ -123,6 +163,7 @@ public class InsnBuilder implements InsnCodes {
     public InsnListAdv build() {
         InsnListAdv ret = this.buildHeap;
         this.buildHeap = new InsnListAdv();
+        this.mapping = null;
         return ret;
     }
 

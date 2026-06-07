@@ -1,0 +1,58 @@
+package com.artur114.bananalib.mc.math.m2d.vec;
+
+import com.artur114.bananalib.math.core.m2d.vec.IVec2DC;
+import com.artur114.bananalib.math.core.m2d.vec.IVec2IC;
+import com.artur114.bananalib.math.m2d.box.IBox2D;
+import com.artur114.bananalib.math.m2d.box.IBox2I;
+import com.artur114.bananalib.math.m2d.vec.IVec2I;
+import com.artur114.bananalib.mc.math.m3d.vec.IPosMc3I;
+import net.minecraft.util.math.ChunkPos;
+
+public interface IPosMc2I extends IVec2I {
+    IPosMc3I block(int x, int y, int z);
+    IPosMc2I add(int x, int y);
+    IPosMc2I add(double x, double y);
+    IPosMc2I add(ChunkPos pos);
+    IPosMc2I add(IVec2IC vec);
+    IPosMc2I add(IVec2DC vec);
+    IPosMc2I subtract(int x, int y);
+    IPosMc2I subtract(double x, double y);
+    IPosMc2I subtract(ChunkPos pos);
+    IPosMc2I subtract(IVec2IC vec);
+    IPosMc2I subtract(IVec2DC vec);
+    IPosMc2I scale(int val);
+    IPosMc2I scale(int x, int y);
+    IPosMc2I scale(double val);
+    IPosMc2I scale(double x, double y);
+    IPosMc2I scale(ChunkPos pos);
+    IPosMc2I scale(IVec2IC vec);
+    IPosMc2I scale(IVec2DC vec);
+    IPosMc2I divide(int val);
+    IPosMc2I divide(int x, int y);
+    IPosMc2I divide(double val);
+    IPosMc2I divide(double x, double y);
+    IPosMc2I divide(ChunkPos pos);
+    IPosMc2I divide(IVec2IC vec);
+    IPosMc2I divide(IVec2DC vec);
+    IPosMc2I rotate(double degrees);
+    IPosMc2I rotateAround(int x, int y, double degrees);
+    IPosMc2I rotateAround(double x, double y, double degrees);
+    IPosMc2I rotateAround(IVec2DC point, double degrees);
+    IPosMc2I rotateAround(IVec2IC point, double degrees);
+    IPosMc2I lerp(int x, int y, double delta);
+    IPosMc2I lerp(double x, double y, double delta);
+    IPosMc2I lerp(IVec2IC vec, double delta);
+    IPosMc2I lerp(IVec2DC vec, double delta);
+    IPosMc2I wrap(IBox2I box);
+    IPosMc2I wrap(IBox2D box);
+    IPosMc2I wrap(int x, int y);
+    IPosMc2I wrap(double x, double y);
+    IPosMc2I wrap(int minX, int minY, int maxX, int maxY);
+    IPosMc2I wrap(double minX, double minY, double maxX, double maxY);
+    IPosMc2I clamp(IBox2I box);
+    IPosMc2I clamp(IBox2D box);
+    IPosMc2I clamp(int x, int y);
+    IPosMc2I clamp(double x, double y);
+    IPosMc2I clamp(int minX, int minY, int maxX, int maxY);
+    IPosMc2I clamp(double minX, double minY, double maxX, double maxY);
+}

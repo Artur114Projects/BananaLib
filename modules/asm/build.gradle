@@ -4,11 +4,15 @@ plugins {
 }
 
 group = 'com.artur114.bananalib'
-version = '1.0.0'
+version = project.asmVersion
+archivesBaseName = 'BananaASM'
 
 dependencies {
     implementation "org.ow2.asm:asm:6.2"
+    implementation "org.ow2.asm:asm-util:6.2"
+    implementation "org.ow2.asm:asm-analysis:6.2"
     implementation "org.ow2.asm:asm-tree:6.2"
+    implementation "org.ow2.asm:asm-debug-all:5.2"
 }
 
 apply from: rootProject.file('scripts/base.gradle')

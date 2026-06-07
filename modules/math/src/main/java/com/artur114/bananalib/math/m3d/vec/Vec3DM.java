@@ -954,12 +954,12 @@ public class Vec3DM implements IVec3DM {
 
     @Override
     public IVec3DM wrap(IBox2IC box) {
-        return this.wrap(box.minX(), box.minY(), 0, box.maxX(), box.maxY(), 1);
+        return this.wrap(box.minX(), box.minY(), Integer.MIN_VALUE, box.maxX(), box.maxY(), Integer.MAX_VALUE);
     }
 
     @Override
     public IVec3DM wrap(IBox2DC box) {
-        return this.wrap(box.minX(), box.minY(), 0, box.maxX(), box.maxY(), 1);
+        return this.wrap(box.minX(), box.minY(), Integer.MIN_VALUE, box.maxX(), box.maxY(), Integer.MAX_VALUE);
     }
 
     @Override
@@ -1016,12 +1016,12 @@ public class Vec3DM implements IVec3DM {
 
     @Override
     public IVec3DM clamp(IBox2IC box) {
-        return this.clamp(box.minX(), box.minY(), 0, box.maxX(), box.maxY(), 0);
+        return this.clamp(box.minX(), box.minY(), Integer.MIN_VALUE, box.maxX(), box.maxY(), Integer.MAX_VALUE);
     }
 
     @Override
     public IVec3DM clamp(IBox2DC box) {
-        return this.clamp(box.minX(), box.minY(), 0, box.maxX(), box.maxY(), 0);
+        return this.clamp(box.minX(), box.minY(), Integer.MIN_VALUE, box.maxX(), box.maxY(), Integer.MAX_VALUE);
     }
 
     @Override

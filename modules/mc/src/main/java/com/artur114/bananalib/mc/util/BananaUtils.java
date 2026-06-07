@@ -1,4 +1,4 @@
-package com.artur114.bananalib.mc.legacy.util;
+package com.artur114.bananalib.mc.util;
 
 import com.artur114.bananalib.math.m2d.box.IBox2I;
 import com.artur114.bananalib.math.m2d.vec.IVec2I;

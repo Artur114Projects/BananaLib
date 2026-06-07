@@ -6,22 +6,22 @@ plugins {
 group = 'com.artur114.bananalib'
 version = project.allVersion
 archivesBaseName = 'BananaLibAll'
+def includeList = ['asm', 'math', 'mc']
 
 configurations {
     include; implementation.extendsFrom(include)
 }
 
 dependencies {
-    rootProject.subprojects.each {
-        if (it.path.startsWith(':modules:') && it.path != ':modules:all') {
-            include(project(it.path)) {
-                transitive = false
-            }
+    includeList.each {
+        include(project(":" + it)) {
+            transitive = false
         }
     }
 }
 
 jar {
+    dependsOn rootProject.subprojects.findAll { it != project && includeList.contains(it.name)}.collect { it.tasks.named('jar') }
     from {
         configurations.include.collect {
             it.isDirectory() ? it : zipTree(it)
@@ -33,6 +33,7 @@ jar {
                 "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ"),
                 "Implementation-Vendor"   : author,
                 "Math-Module-Version": mathVersion,
+                "ASM-Module-Version": asmVersion,
                 "Mc-Module-Version": mcVersion
         ])
     }

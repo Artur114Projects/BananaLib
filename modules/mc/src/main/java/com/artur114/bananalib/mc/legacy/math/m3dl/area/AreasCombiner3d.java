@@ -1,6 +1,6 @@
 package com.artur114.bananalib.mc.legacy.math.m3dl.area;
 
-import com.artur114.bananalib.mc.legacy.math.m3dl.vec.AdvancedBlockPos;
+import com.artur114.bananalib.mc.math.m3d.vec.PosMc3IM;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.client.renderer.RenderGlobal;
@@ -242,7 +242,7 @@ public class AreasCombiner3d {
     }
 
     private static class Raw implements IArea3d {
-        private final AdvancedBlockPos util = new AdvancedBlockPos();
+        private final PosMc3IM util = new PosMc3IM();
         private final List<BlockPos> area;
 
         private Raw(List<BlockPos> area) {
@@ -256,8 +256,8 @@ public class AreasCombiner3d {
 
         @Override
         public boolean isCollide(double x, double y, double z) {
-            this.util.setPos(x, y, z);
-            return this.area.stream().anyMatch((b) -> b.equals(util));
+            this.util.set(x, y, z);
+            return this.area.stream().anyMatch((b) -> b.equals(this.util));
         }
 
         @Override

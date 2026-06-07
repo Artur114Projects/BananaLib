@@ -10,7 +10,7 @@ archivesBaseName = "BananaBench"
 
 dependencies {
     implementation 'org.joml:joml:1.10.5'
-    implementation project(":modules:math")
+    implementation project(":math")
 }
 
 apply from: rootProject.file('scripts/base.gradle')
