@@ -1,9 +1,10 @@
 package com.artur114.bananalib.mc.register.interf;
 
+import com.artur114.bananalib.mc.register.data.BiomeRegData;
 import com.artur114.bananalib.mc.register.data.ModelRegData;
 
 import java.util.List;
 
-public interface IHasModelRegister {
-    void registerModels(List<ModelRegData> models);
+public interface IHasBiome {
+    List<BiomeRegData> registerBiomesData();
 }

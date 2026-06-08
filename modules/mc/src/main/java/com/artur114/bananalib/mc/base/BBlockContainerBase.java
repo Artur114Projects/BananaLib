@@ -1,12 +1,13 @@
 package com.artur114.bananalib.mc.base;
 
 import com.artur114.bananalib.mc.base.tileabs.*;
+import com.artur114.bananalib.mc.register.IRegisterBus;
+import com.artur114.bananalib.mc.register.data.ModelRegData;
 import com.artur114.bananalib.mc.register.data.TESRRegData;
 import com.artur114.bananalib.mc.register.data.TileRegData;
-import com.artur114.bananalib.mc.register.interf.IHasTileEntity;
-import com.artur114.bananalib.mc.register.interf.IHasTileSR;
-import com.artur114.bananalib.mc.register.interf.IOptionalRegister;
+import com.artur114.bananalib.mc.register.interf.*;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockContainer;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
@@ -16,6 +17,8 @@ import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
@@ -29,9 +32,11 @@ import net.minecraft.world.World;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
-public abstract class BBlockTileBase<T extends TileEntity> extends BBlockBase implements IHasTileEntity, IHasTileSR, IOptionalRegister {
+public abstract class BBlockContainerBase<T extends TileEntity> extends BlockContainer implements IHasTileEntity, IHasTileSR, IHasModel, IHasMoreRegisters, IOptionalRegister {
     private TileEntitySpecialRenderer<T> tileRender = null;
     private final boolean isRedstoneConnListener;
     private final boolean isNeighborListener;
@@ -39,10 +44,21 @@ public abstract class BBlockTileBase<T extends TileEntity> extends BBlockBase im
     private final boolean isBreakListener;
     private final boolean isPlaceListener;
     private final boolean isUseListener;
+    protected boolean isForCreative = false;
+    private boolean isOpaqueCube = true;
+    private boolean isFullCube = true;
+    public final @Nullable Item item;
 
-    public BBlockTileBase(String name, Material material, MapColor mapColor, float hardness, float resistance, SoundType soundType) {
-        super(name, material, mapColor, hardness, resistance, soundType);
+    public BBlockContainerBase(String name, Material material, MapColor mapColor, float hardness, float resistance, SoundType soundType) {
+        super(material, mapColor);
 
+        this.setRegistryName(name);
+        this.setUnlocalizedName(name);
+        this.setHardness(hardness);
+        this.setResistance(resistance);
+        this.setSoundType(soundType);
+
+        this.item = createItemBlock();
         this.isUseListener = ITileBlockUseListener.class.isAssignableFrom(this.tileClass());
         this.isPlaceListener = ITileBlockPlaceListener.class.isAssignableFrom(this.tileClass());
         this.isBreakListener = ITileBlockBreakListener.class.isAssignableFrom(this.tileClass());
@@ -51,11 +67,11 @@ public abstract class BBlockTileBase<T extends TileEntity> extends BBlockBase im
         this.isRedstoneConnListener = ITileCanRedstoneListener.class.isAssignableFrom(this.tileClass());
     }
 
-    public BBlockTileBase(String name, Material material, float hardness, float resistance, SoundType soundType) {
+    public BBlockContainerBase(String name, Material material, float hardness, float resistance, SoundType soundType) {
         this(name, material, material.getMaterialMapColor(), hardness, resistance, soundType);
     }
 
-    public BBlockTileBase(String name, MaterialArray mat) {
+    public BBlockContainerBase(String name, MaterialArray mat) {
         this(name, mat.material(), mat.hardness(), mat.resistance(), mat.soundType());
     }
 
@@ -74,11 +90,27 @@ public abstract class BBlockTileBase<T extends TileEntity> extends BBlockBase im
     }
 
     @Override
+    public List<ModelRegData> registerModelsData() {
+        if (this.item == null) return Collections.emptyList();
+        return Collections.singletonList(ModelRegData.inventory(this.item, 0));
+    }
+
+    @Override
+    public void registerOther(IRegisterBus bus) {
+        if (this.item == null) return;
+        bus.registerItem(this.item);
+    }
+
+    @Override
     public boolean shouldRegister(Class<?> registerSource) {
         if (registerSource == TESRRegData.class) {
             return this.tileRender != null;
         }
         return true;
+    }
+
+    protected @Nullable Item createItemBlock() {
+        return new ItemBlock(this).setRegistryName(Objects.requireNonNull(this.getRegistryName()));
     }
 
     @NotNull
@@ -89,6 +121,37 @@ public abstract class BBlockTileBase<T extends TileEntity> extends BBlockBase im
     @Override
     public boolean hasTileEntity(@NotNull IBlockState blockState) {
         return true;
+    }
+
+    public BBlockContainerBase<T> setNotFillAndOpaqueCube() {
+        this.isOpaqueCube = false;
+        this.isFullCube = false;
+        return this;
+    }
+
+    public BBlockContainerBase<T> setNotFullCube() {
+        this.isFullCube = false;
+        return this;
+    }
+
+    public BBlockContainerBase<T> setNotOpaqueCube() {
+        this.isOpaqueCube = false;
+        return this;
+    }
+
+    public BBlockContainerBase<T> setForCreative() {
+        this.isForCreative = true;
+        return this;
+    }
+
+    @Override
+    public boolean isFullCube(@NotNull IBlockState state) {
+        return this.isFullCube;
+    }
+
+    @Override
+    public boolean isOpaqueCube(@NotNull IBlockState state) {
+        return this.isOpaqueCube;
     }
 
     @Override

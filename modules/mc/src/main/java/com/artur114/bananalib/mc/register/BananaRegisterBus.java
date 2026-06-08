@@ -1,14 +1,22 @@
 package com.artur114.bananalib.mc.register;
 
+import com.artur114.bananalib.mc.register.ann.AutoInstantiate;
+import com.artur114.bananalib.mc.register.ann.IgnoreRegisters;
+import com.artur114.bananalib.mc.register.ann.RegistryContainer;
+import com.artur114.bananalib.mc.register.ann.RegistryEntry;
+import com.artur114.bananalib.mc.register.data.*;
 import com.artur114.bananalib.mc.register.interf.*;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.item.Item;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
+import net.minecraft.world.biome.Biome;
 import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.client.model.ModelLoader;
+import net.minecraftforge.common.BiomeDictionary;
+import net.minecraftforge.common.BiomeManager;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.crafting.CraftingHelper;
 import net.minecraftforge.common.crafting.IRecipeFactory;
@@ -19,14 +27,21 @@ import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
+import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class BananaRegisterBus implements IRegisterBus {
+    private static final Logger log = LogManager.getLogger("BANANA-REGISTRY-BUS");
     private final ClassObjListMap interfacesMap = new ClassObjListMap();
+    private final Set<Object> registered = new HashSet<>();
     private final List<SoundEvent> soundEvents = new ArrayList<>();
     private final List<Block> blocks = new ArrayList<>();
+    private final List<Biome> biomes = new ArrayList<>();
     private final List<Item> items = new ArrayList<>();
     private boolean subscribed = false;
     private SimpleNetworkWrapper net;
@@ -49,14 +64,92 @@ public class BananaRegisterBus implements IRegisterBus {
     }
 
     @Override
+    public void registerSound(SoundEvent... sound) {
+        for (SoundEvent obj : sound) {
+            this.registerSound(obj);
+        }
+    }
+
+    @Override
+    public void scanAndRegister(Class<?>... clazz) {
+        for (Class<?> obj : clazz) {
+            this.scanAndRegister(obj);
+        }
+    }
+
+    @Override
+    public void registerBlock(Block... block) {
+        for (Block obj : block) {
+            this.registerBlock(obj);
+        }
+    }
+
+    @Override
+    public void registerBiome(Biome... biome) {
+        for (Biome obj : biome) {
+            this.registerBiome(obj);
+        }
+    }
+
+    @Override
+    public void registerItem(Item... item) {
+        for (Item obj : item) {
+            this.registerItem(obj);
+        }
+    }
+
+    @Override
+    public void registerAuto(Object... object) {
+        for (Object obj : object) {
+            this.registerAuto(obj);
+        }
+    }
+
+    @Override
+    public void register(Object... object) {
+        for (Object obj : object) {
+            this.register(obj);
+        }
+    }
+
+    @Override
     public <T extends SoundEvent> T registerSound(T sound) {
+        if (sound == null) return null;
+        if (this.registered.contains(sound)) {
+            this.logDoubleReg(sound);
+            return sound;
+        }
         this.soundEvents.add(sound);
         this.register(sound);
         return sound;
     }
 
     @Override
+    public <T extends Class<?>> T scanAndRegister(T clazz) {
+        if (clazz == null) return null;
+        this.scanAndRegisterInternal(clazz);
+        return clazz;
+    }
+
+    @Override
+    public <T extends Biome> T registerBiome(T biome) {
+        if (biome == null) return null;
+        if (this.registered.contains(biome)) {
+            this.logDoubleReg(biome);
+            return biome;
+        }
+        this.biomes.add(biome);
+        this.register(biome);
+        return biome;
+    }
+
+    @Override
     public <T extends Block> T registerBlock(T block) {
+        if (block == null) return null;
+        if (this.registered.contains(block)) {
+            this.logDoubleReg(block);
+            return block;
+        }
         this.blocks.add(block);
         this.register(block);
         return block;
@@ -64,21 +157,109 @@ public class BananaRegisterBus implements IRegisterBus {
 
     @Override
     public <T extends Item> T registerItem(T item) {
+        if (item == null) return null;
+        if (this.registered.contains(item)) {
+            this.logDoubleReg(item);
+            return item;
+        }
         this.items.add(item);
         this.register(item);
         return item;
     }
 
     @Override
+    public <T> T registerAuto(T object) {
+        if (object == null) return null;
+        if (object instanceof Item) {
+            this.registerItem((Item) object);
+        } else if (object instanceof Block) {
+            this.registerBlock((Block) object);
+        } else if (object instanceof Biome) {
+            this.registerBiome((Biome) object);
+        } else if (object instanceof SoundEvent) {
+            this.registerSound((SoundEvent) object);
+        } else if (object instanceof Class<?>) {
+            this.scanAndRegister((Class<?>) object);
+        } else {
+            this.register(object);
+        }
+        return object;
+    }
+
+    @Override
     public <T> T register(T object) {
-        RegistryEntry<?> entry = new RegistryEntry<>(object);
+        if (object == null) return null;
+        if (this.registered.contains(object)) {
+            this.logDoubleReg(object);
+            return object;
+        }
+        RegEntry<?> entry = new RegEntry<>(object);
         for (Class<?> clazz : entry.flags) {
             this.interfacesMap.add(clazz, entry);
         }
         if (object instanceof IHasMoreRegisters) {
             ((IHasMoreRegisters) object).registerOther(this);
         }
+        this.registered.add(object);
         return object;
+    }
+
+    private void logDoubleReg(Object o) {
+        log.warn("Attempt to double register an object {}", o);
+    }
+
+    private void scanAndRegisterInternal(Class<?> clazz) {
+        if (clazz.isAnnotationPresent(AutoInstantiate.class)) {
+            try {
+                Object obj = clazz.getDeclaredConstructor().newInstance();
+                this.registerAuto(obj);
+            } catch (Exception e) {
+                log.warn("Failed to create instance of class: {}", clazz);
+            }
+        } else {
+            this.scanAndRegisterFields(clazz, !clazz.isAnnotationPresent(RegistryContainer.class));
+        }
+    }
+
+    private void scanAndRegisterFields(Class<?> clazz, boolean checkAnnotation) {
+        for (Field field : clazz.getDeclaredFields()) {
+            if (!Modifier.isStatic(field.getModifiers())) {
+                continue;
+            }
+            if (!checkAnnotation || field.isAnnotationPresent(RegistryEntry.class)) {
+                boolean as = field.isAccessible();
+                field.setAccessible(true);
+                try {
+                    Object val = field.get(null);
+                    this.registerAuto(val);
+                } catch (IllegalAccessException ignored) {}
+                field.setAccessible(as);
+            }
+        }
+    }
+
+    private void onBiomeRegister(RegistryEvent.Register<Biome> event) {
+        event.getRegistry().registerAll(this.biomes.toArray(new Biome[0]));
+
+        for(RegEntry<IHasBiome> reg : this.interfacesMap.find(IHasBiome.class)) {
+            if (this.checkOptionalRegister(reg, IHasBiome.class)) {
+                continue;
+            }
+            if (reg.has(IHasBiomeRegister.class)) {
+                reg.cast(IHasBiomeRegister.class).registerBiomes(reg.val().registerBiomesData());
+            } else {
+                List<BiomeRegData> data = reg.val().registerBiomesData();
+
+                for (BiomeRegData biome : data) {
+                    BiomeDictionary.addTypes(biome.biome(), biome.types());
+
+                    if (biome.biomeEntry() != null) {
+                        BiomeManager.addBiome(biome.biomeType(), biome.biomeEntry());
+                        BiomeManager.addSpawnBiome(biome.biome());
+                    }
+                }
+            }
+        }
     }
 
     private void onItemRegister(RegistryEvent.Register<Item> event) {
@@ -90,8 +271,8 @@ public class BananaRegisterBus implements IRegisterBus {
     }
 
     @SideOnly(Side.CLIENT)
-    private void registerParticlesTexture(TextureStitchEvent.Pre e) {
-        for (RegistryEntry<IHasAtlasSprite> reg : this.interfacesMap.find(IHasAtlasSprite.class)) {
+    private void registerTextures(TextureStitchEvent.Pre e) {
+        for (RegEntry<IHasAtlasSprite> reg : this.interfacesMap.find(IHasAtlasSprite.class)) {
             if (this.checkOptionalRegister(reg, IHasAtlasSprite.class)) {
                 continue;
             }
@@ -102,7 +283,7 @@ public class BananaRegisterBus implements IRegisterBus {
     @SideOnly(Side.CLIENT)
     @SuppressWarnings({"unchecked", "rawtypes"})
     private void onModelRegister(ModelRegistryEvent event) {
-        for(RegistryEntry<IHasModel> reg : this.interfacesMap.find(IHasModel.class)) {
+        for(RegEntry<IHasModel> reg : this.interfacesMap.find(IHasModel.class)) {
             if (this.checkOptionalRegister(reg, IHasModel.class)) {
                 continue;
             }
@@ -117,7 +298,7 @@ public class BananaRegisterBus implements IRegisterBus {
             }
         }
 
-        for (RegistryEntry<IHasTileSR> reg : this.interfacesMap.find(IHasTileSR.class)) {
+        for (RegEntry<IHasTileSR> reg : this.interfacesMap.find(IHasTileSR.class)) {
             if (this.checkOptionalRegister(reg, IHasTileSR.class)) {
                 continue;
             }
@@ -134,7 +315,7 @@ public class BananaRegisterBus implements IRegisterBus {
 
     @SuppressWarnings({"unchecked", "rawtypes"})
     private void initOther() {
-        for (RegistryEntry<IHasTileEntity> reg : this.interfacesMap.find(IHasTileEntity.class)) {
+        for (RegEntry<IHasTileEntity> reg : this.interfacesMap.find(IHasTileEntity.class)) {
             if (this.checkOptionalRegister(reg, IHasTileEntity.class)) {
                 continue;
             }
@@ -147,7 +328,7 @@ public class BananaRegisterBus implements IRegisterBus {
             }
         }
 
-        for (RegistryEntry<IHasCraftRecipe> reg : this.interfacesMap.find(IHasCraftRecipe.class)) {
+        for (RegEntry<IHasCraftRecipe> reg : this.interfacesMap.find(IHasCraftRecipe.class)) {
             if (this.checkOptionalRegister(reg, IHasCraftRecipe.class)) {
                 continue;
             }
@@ -164,7 +345,7 @@ public class BananaRegisterBus implements IRegisterBus {
         }
 
         if (this.net != null) {
-            for (RegistryEntry<IHasNetworkPacket> reg : this.interfacesMap.find(IHasNetworkPacket.class)) {
+            for (RegEntry<IHasNetworkPacket> reg : this.interfacesMap.find(IHasNetworkPacket.class)) {
                 if (this.checkOptionalRegister(reg, IHasNetworkPacket.class)) {
                     continue;
                 }
@@ -190,7 +371,7 @@ public class BananaRegisterBus implements IRegisterBus {
         }
     }
 
-    private boolean checkOptionalRegister(RegistryEntry<?> obj, Class<?> source) {
+    private boolean checkOptionalRegister(RegEntry<?> obj, Class<?> source) {
         if (obj.has(IOptionalRegister.class)) {
             return !obj.cast(IOptionalRegister.class).shouldRegister(source);
         }
@@ -198,19 +379,19 @@ public class BananaRegisterBus implements IRegisterBus {
     }
 
     private static final class ClassObjListMap {
-        private final Map<Class<?>, List<RegistryEntry<?>>> map = new HashMap<>();
+        private final Map<Class<?>, List<RegEntry<?>>> map = new HashMap<>();
 
-        public void add(Class<?> clazz, RegistryEntry<?> obj) {
+        public void add(Class<?> clazz, RegEntry<?> obj) {
             this.map.computeIfAbsent(clazz, (k) -> new ArrayList<>()).add(obj);
         }
 
         @SuppressWarnings("unchecked")
-        public <T> List<RegistryEntry<T>> find(Class<T> clazz) {
-            return (List<RegistryEntry<T>>) (List<?>) this.map.computeIfAbsent(clazz, (k) -> new ArrayList<>());
+        public <T> List<RegEntry<T>> find(Class<T> clazz) {
+            return (List<RegEntry<T>>) (List<?>) this.map.computeIfAbsent(clazz, (k) -> new ArrayList<>());
         }
     }
 
-    private static final class RegistryEntry<T> {
+    private static final class RegEntry<T> {
         private static final Map<Class<?>, Set<Class<?>>> ignoreCache = new ConcurrentHashMap<>();
         private static final Set<Class<?>> iHasClasses = Collections.unmodifiableSet(new LinkedHashSet<>(Arrays.asList(
             IHasAtlasSprite.class, IHasCraftRecipe.class, IHasCraftRegister.class,
@@ -222,7 +403,7 @@ public class BananaRegisterBus implements IRegisterBus {
         private final Set<Class<?>> flags;
         private final T value;
 
-        private RegistryEntry(T value) {
+        private RegEntry(T value) {
             Objects.requireNonNull(value);
             this.value = value;
             Set<Class<?>> flags = new HashSet<>();
@@ -258,37 +439,42 @@ public class BananaRegisterBus implements IRegisterBus {
     }
 
     public static class EventsSource {
-        private final BananaRegisterBus buss;
+        private final BananaRegisterBus bus;
 
         public EventsSource(BananaRegisterBus out) {
-            this.buss = out;
+            this.bus = out;
         }
 
         @SubscribeEvent
         @SideOnly(Side.CLIENT)
-        public void registerParticlesTexture(TextureStitchEvent.Pre e) {
-            this.buss.registerParticlesTexture(e);
+        public void registerTextures(TextureStitchEvent.Pre e) {
+            this.bus.registerTextures(e);
         }
 
         @SubscribeEvent
         @SideOnly(Side.CLIENT)
         public void onModelRegister(ModelRegistryEvent event) {
-            this.buss.onModelRegister(event);
+            this.bus.onModelRegister(event);
         }
 
         @SubscribeEvent
         public void onItemRegister(RegistryEvent.Register<Item> event) {
-            this.buss.onItemRegister(event);
+            this.bus.onItemRegister(event);
         }
 
         @SubscribeEvent
         public void onBlockRegister(RegistryEvent.Register<Block> event) {
-            this.buss.onBlockRegister(event);
+            this.bus.onBlockRegister(event);
         }
 
         @SubscribeEvent
         public void registerSounds(RegistryEvent.Register<SoundEvent> e) {
-            this.buss.registerSounds(e);
+            this.bus.registerSounds(e);
+        }
+
+        @SubscribeEvent
+        public void onBiomeRegister(RegistryEvent.Register<Biome> e) {
+            this.bus.onBiomeRegister(e);
         }
     }
 }

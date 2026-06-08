@@ -1,7 +1,7 @@
 package com.artur114.bananalib.mc.base;
 
 import com.artur114.bananalib.mc.register.IRegisterBus;
-import com.artur114.bananalib.mc.register.ModelRegData;
+import com.artur114.bananalib.mc.register.data.ModelRegData;
 import com.artur114.bananalib.mc.register.interf.IHasModel;
 import com.artur114.bananalib.mc.register.interf.IHasMoreRegisters;
 import net.minecraft.block.Block;
@@ -33,7 +33,7 @@ public abstract class BBlockBase extends Block implements IHasModel, IHasMoreReg
         this.setResistance(resistance);
         this.setSoundType(soundType);
 
-        this.item = createItemBlock();
+        this.item = this.createItemBlock();
     }
 
     public BBlockBase(String name, Material material, float hardness, float resistance, SoundType soundType) {
@@ -44,7 +44,7 @@ public abstract class BBlockBase extends Block implements IHasModel, IHasMoreReg
         this(name, mat.material(), mat.hardness(), mat.resistance(), mat.soundType());
     }
 
-    protected Item createItemBlock() {
+    protected @Nullable Item createItemBlock() {
         return new ItemBlock(this).setRegistryName(Objects.requireNonNull(this.getRegistryName()));
     }
 

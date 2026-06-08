@@ -1,4 +1,4 @@
-package com.artur114.bananalib.mc.register;
+package com.artur114.bananalib.mc.register.data;
 
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.tileentity.TileEntity;
