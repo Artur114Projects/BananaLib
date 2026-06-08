@@ -37,7 +37,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class BananaRegisterBus implements IRegisterBus {
     private static final Logger log = LogManager.getLogger("BANANA-REGISTRY-BUS");
-    private final ClassObjListMap interfacesMap = new ClassObjListMap();
+    private final Class2RegListMap interfacesMap = new Class2RegListMap();
     private final Set<Object> registered = new HashSet<>();
     private final List<SoundEvent> soundEvents = new ArrayList<>();
     private final List<Block> blocks = new ArrayList<>();
@@ -180,6 +180,8 @@ public class BananaRegisterBus implements IRegisterBus {
             this.registerSound((SoundEvent) object);
         } else if (object instanceof Class<?>) {
             this.scanAndRegister((Class<?>) object);
+        } else if (object.getClass().isArray()) {
+            this.registerAuto((Object[]) object);
         } else {
             this.register(object);
         }
@@ -378,7 +380,7 @@ public class BananaRegisterBus implements IRegisterBus {
         return false;
     }
 
-    private static final class ClassObjListMap {
+    private static final class Class2RegListMap {
         private final Map<Class<?>, List<RegEntry<?>>> map = new HashMap<>();
 
         public void add(Class<?> clazz, RegEntry<?> obj) {
