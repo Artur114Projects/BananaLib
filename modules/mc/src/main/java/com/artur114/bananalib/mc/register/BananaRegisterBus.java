@@ -62,8 +62,8 @@ public class BananaRegisterBus implements IRegisterBus {
     @Override
     public void preInit() {
         this.initOther();
-        for (RegEntry<INeedListenPreInit> listen : this.interfacesMap.find(INeedListenPreInit.class)) {
-            if (this.checkOptionalRegister(listen, INeedListenPreInit.class)) {
+        for (RegEntry<ILoadStagePre> listen : this.interfacesMap.find(ILoadStagePre.class)) {
+            if (this.checkOptionalRegister(listen, ILoadStagePre.class)) {
                 continue;
             }
             listen.val().onPreInit();
@@ -72,8 +72,8 @@ public class BananaRegisterBus implements IRegisterBus {
 
     @Override
     public void init() {
-        for (RegEntry<INeedListenInit> listen : this.interfacesMap.find(INeedListenInit.class)) {
-            if (this.checkOptionalRegister(listen, INeedListenInit.class)) {
+        for (RegEntry<ILoadStageInit> listen : this.interfacesMap.find(ILoadStageInit.class)) {
+            if (this.checkOptionalRegister(listen, ILoadStageInit.class)) {
                 continue;
             }
             listen.val().onInit();
@@ -82,8 +82,8 @@ public class BananaRegisterBus implements IRegisterBus {
 
     @Override
     public void postInit() {
-        for (RegEntry<INeedListenPostInit> listen : this.interfacesMap.find(INeedListenPostInit.class)) {
-            if (this.checkOptionalRegister(listen, INeedListenPostInit.class)) {
+        for (RegEntry<ILoadStagePost> listen : this.interfacesMap.find(ILoadStagePost.class)) {
+            if (this.checkOptionalRegister(listen, ILoadStagePost.class)) {
                 continue;
             }
             listen.val().onPostInit();
@@ -427,8 +427,8 @@ public class BananaRegisterBus implements IRegisterBus {
             IHasModel.class, IHasModelRegister.class, IHasNetworkPacket.class,
             IHasPacketRegister.class, IHasTileEntity.class, IHasTileRegister.class,
             IHasTileSR.class, IHasTileSRRegister.class, IOptionalRegister.class,
-            IHasBiome.class, IHasBiomeRegister.class, INeedListenInit.class,
-            INeedListenPreInit.class, INeedListenPostInit.class
+            IHasBiome.class, IHasBiomeRegister.class, ILoadStageInit.class,
+            ILoadStagePre.class, ILoadStagePost.class
         )));
 
         private final Set<Class<?>> flags;
