@@ -1,6 +1,6 @@
 package com.artur114.bananalib.math
 
-def maxArgs = 32
+def maxArgs = Long.MAX_VALUE
 def types = ['int','long','float','double','boolean','char','short','byte','Object']
 def className = 'Hasher'
 
@@ -26,8 +26,6 @@ new File("${className}.java").withPrintWriter { pw ->
 
     pw.println "}"
 }
-
-
 
 println "${className}.java generated with ${types.size()} types and up to ${maxArgs} arguments per overload."
 

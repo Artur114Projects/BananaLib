@@ -10,6 +10,8 @@ public interface IRegisterBus {
     void putNetWrapper(SimpleNetworkWrapper wrapper);
     void subscribe();
     void preInit();
+    void init();
+    void postInit();
 
     void registerSound(SoundEvent... sound);
     void scanAndRegister(Class<?>... clazz);

@@ -8,5 +8,6 @@ version = "0.0.0"
 tasks.register("publishAllToMavenLocal") {
     group = 'publishing'
     description = 'Publishes all subprojects to Maven Local'
+    dependsOn subprojects.collect {it.tasks.named('clean')}
     dependsOn subprojects.collect {it.tasks.named('publishToMavenLocal')}
 }

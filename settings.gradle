@@ -2,12 +2,10 @@ rootProject.name = 'bananalib'
 
 include ':math'
 include ':mc'
-include ':mc-all'
 include ':bme'
 include ':asm'
 
 project(':mc').projectDir = file('modules/mc')
 project(':math').projectDir = file('modules/math')
-project(':mc-all').projectDir = file('modules/mc-all')
 project(':bme').projectDir = file('modules/bme')
 project(':asm').projectDir = file('modules/asm')

@@ -20,9 +20,9 @@ tasks.withType(JavaCompile).configureEach {
 jar {
     manifest {
         attributes([
-                "Implementation-Version"  : "${version}",
-                "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ"),
-                "Implementation-Vendor"   : author
+            "Implementation-Version"  : "${version}",
+            "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ"),
+            "Implementation-Vendor"   : author
         ])
     }
 }

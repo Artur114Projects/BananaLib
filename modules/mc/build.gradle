@@ -13,7 +13,7 @@ plugins {
 }
 apply plugin: 'net.minecraftforge.gradle'
 
-group = 'com.artur114.bananalib.mc'
+group = 'com.artur114.bananalib'
 version = mcVersion
 
 repositories {
@@ -25,7 +25,7 @@ minecraft {
 }
 
 dependencies {
-    compileOnly project(':math')
+    implementation project(':math')
     testImplementation project(':math')
     minecraft 'net.minecraftforge:forge:1.12.2-14.23.5.2859'
 }

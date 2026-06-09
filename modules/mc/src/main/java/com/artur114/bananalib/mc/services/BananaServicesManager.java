@@ -12,7 +12,7 @@ import java.util.Map;
 import java.util.Set;
 
 public class BananaServicesManager implements IServicesManager {
-    private static final Logger log = LogManager.getLogger("BANANA-SERVICES");
+    private static final Logger log = LogManager.getLogger("B-SERVICES");
     private final Map<Class<? extends IService>, IService> serviceClassMap = new HashMap<>();
     private final Map<String, IService> serviceMap = new HashMap<>();
     private final Set<IService> subscribed = new HashSet<>();
@@ -133,13 +133,14 @@ public class BananaServicesManager implements IServicesManager {
     @SuppressWarnings("unchecked")
     public void register(Class<?> service) {
         Service ann = service.getAnnotation(Service.class);
+        boolean flag = false;
 
         if (ann != null && IService.class.isAssignableFrom(service)) {
             try {
                 IService ser = (IService) service.getDeclaredConstructor().newInstance();
                 this.serviceMap.put(ann.value(), ser);
                 this.serviceClassMap.put((Class<? extends IService>) service, ser);
-                return;
+                flag = true;
             } catch (Exception ignored) {}
         } else {
             for (Field field : service.getDeclaredFields()) {
@@ -154,13 +155,15 @@ public class BananaServicesManager implements IServicesManager {
                         IService ser = (IService) field.get(null);
                         this.serviceMap.put(an.value(), ser);
                         this.serviceClassMap.put((Class<? extends IService>) field.getType(), ser);
-                        return;
+                        flag = true;
                     } catch (IllegalAccessException ignored) {}
                     field.setAccessible(as);
                 }
             }
         }
 
-        log.warn("failed to register service {}", service);
+        if (!flag) {
+            log.warn("failed to register service {}", service);
+        }
     }
 }

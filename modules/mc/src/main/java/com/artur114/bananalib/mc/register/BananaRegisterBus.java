@@ -8,6 +8,7 @@ import com.artur114.bananalib.mc.register.data.*;
 import com.artur114.bananalib.mc.register.interf.*;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
+import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.item.Item;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
@@ -36,7 +37,7 @@ import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class BananaRegisterBus implements IRegisterBus {
-    private static final Logger log = LogManager.getLogger("BANANA-REGISTRY-BUS");
+    private static final Logger log = LogManager.getLogger("B-REGISTRY-BUS");
     private final Class2RegListMap interfacesMap = new Class2RegListMap();
     private final Set<Object> registered = new HashSet<>();
     private final List<SoundEvent> soundEvents = new ArrayList<>();
@@ -61,6 +62,32 @@ public class BananaRegisterBus implements IRegisterBus {
     @Override
     public void preInit() {
         this.initOther();
+        for (RegEntry<INeedListenPreInit> listen : this.interfacesMap.find(INeedListenPreInit.class)) {
+            if (this.checkOptionalRegister(listen, INeedListenPreInit.class)) {
+                continue;
+            }
+            listen.val().onPreInit();
+        }
+    }
+
+    @Override
+    public void init() {
+        for (RegEntry<INeedListenInit> listen : this.interfacesMap.find(INeedListenInit.class)) {
+            if (this.checkOptionalRegister(listen, INeedListenInit.class)) {
+                continue;
+            }
+            listen.val().onInit();
+        }
+    }
+
+    @Override
+    public void postInit() {
+        for (RegEntry<INeedListenPostInit> listen : this.interfacesMap.find(INeedListenPostInit.class)) {
+            if (this.checkOptionalRegister(listen, INeedListenPostInit.class)) {
+                continue;
+            }
+            listen.val().onPostInit();
+        }
     }
 
     @Override
@@ -310,7 +337,7 @@ public class BananaRegisterBus implements IRegisterBus {
             } else {
                 TESRRegData data = reg.val().registerTSRData();
 
-                ClientRegistry.bindTileEntitySpecialRenderer((Class) data.tileEntityClass(), data.specialRenderer());
+                ClientRegistry.bindTileEntitySpecialRenderer((Class) data.tileEntityClass(), (TileEntitySpecialRenderer) data.specialRenderer());
             }
         }
     }
@@ -399,7 +426,9 @@ public class BananaRegisterBus implements IRegisterBus {
             IHasAtlasSprite.class, IHasCraftRecipe.class, IHasCraftRegister.class,
             IHasModel.class, IHasModelRegister.class, IHasNetworkPacket.class,
             IHasPacketRegister.class, IHasTileEntity.class, IHasTileRegister.class,
-            IHasTileSR.class, IOptionalRegister.class
+            IHasTileSR.class, IHasTileSRRegister.class, IOptionalRegister.class,
+            IHasBiome.class, IHasBiomeRegister.class, INeedListenInit.class,
+            INeedListenPreInit.class, INeedListenPostInit.class
         )));
 
         private final Set<Class<?>> flags;

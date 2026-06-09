@@ -15,6 +15,18 @@ publishing {
             artifact javadocJar
             artifact jar
             artifactId = project.name
+
+            pom.withXml {
+                def depNodes = asNode().appendNode('dependencies')
+                configurations.implementation.allDependencies.each { dep ->
+                    if (dep.group != null && dep.version != null && dep.name != "unspecified") {
+                        def depNode = depNodes.appendNode('dependency')
+                        depNode.appendNode('groupId', dep.group)
+                        depNode.appendNode('artifactId', dep.name)
+                        depNode.appendNode('version', dep.version)
+                    }
+                }
+            }
         }
     }
 }
