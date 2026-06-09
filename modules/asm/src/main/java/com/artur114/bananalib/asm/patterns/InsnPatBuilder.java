@@ -44,7 +44,7 @@ public class InsnPatBuilder {
         return this.then(InsnCodes.INSN.with(opcode));
     }
 
-    public InsnPatBuilder thenAnyInsn(int opcode) {
+    public InsnPatBuilder thenAnyInsn() {
         return this.then(InsnCodes.ANY_INSN);
     }
 

@@ -48,8 +48,8 @@ public class BananaRegisterBus implements IRegisterBus {
     private SimpleNetworkWrapper net;
 
     @Override
-    public void putNetWrapper(SimpleNetworkWrapper wrapper) {
-        this.net = wrapper;
+    public IRegisterBus putNetWrapper(SimpleNetworkWrapper wrapper) {
+        this.net = wrapper; return this;
     }
 
     @Override

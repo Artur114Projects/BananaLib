@@ -7,7 +7,7 @@ import net.minecraft.world.biome.Biome;
 import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 
 public interface IRegisterBus {
-    void putNetWrapper(SimpleNetworkWrapper wrapper);
+    IRegisterBus putNetWrapper(SimpleNetworkWrapper wrapper);
     void subscribe();
     void preInit();
     void init();
