@@ -1,11 +1,11 @@
 package com.artur114.bananalib.mc.base;
 
 import com.artur114.bananalib.mc.base.tileabs.*;
-import com.artur114.bananalib.mc.register.data.TESRRegData;
-import com.artur114.bananalib.mc.register.data.TileRegData;
-import com.artur114.bananalib.mc.register.interf.IHasTileEntity;
-import com.artur114.bananalib.mc.register.interf.IHasTileSR;
-import com.artur114.bananalib.mc.register.interf.IOptionalRegister;
+import com.artur114.bananalib.mc.registry.data.TESRRegData;
+import com.artur114.bananalib.mc.registry.data.TileRegData;
+import com.artur114.bananalib.mc.registry.interf.IHasTileEntity;
+import com.artur114.bananalib.mc.registry.interf.IHasTileSR;
+import com.artur114.bananalib.mc.registry.interf.IOptionalRegister;
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.MapColor;
@@ -32,13 +32,13 @@ import org.jetbrains.annotations.Nullable;
 import java.util.List;
 
 public abstract class BBlockTileBase<T extends TileEntity> extends BBlockBase implements IHasTileEntity, IHasTileSR, IOptionalRegister {
-    private TileEntitySpecialRenderer<T> tileRender = null;
-    private final boolean isRedstoneConnListener;
-    private final boolean isNeighborListener;
-    private final boolean isMultiBBProvider;
-    private final boolean isBreakListener;
-    private final boolean isPlaceListener;
-    private final boolean isUseListener;
+    protected TileEntitySpecialRenderer<T> tileRender = null;
+    protected final boolean isRedstoneConnListener;
+    protected final boolean isNeighborListener;
+    protected final boolean isMultiBBProvider;
+    protected final boolean isBreakListener;
+    protected final boolean isPlaceListener;
+    protected final boolean isUseListener;
 
     public BBlockTileBase(String name, Material material, MapColor mapColor, float hardness, float resistance, SoundType soundType) {
         super(name, material, mapColor, hardness, resistance, soundType);

@@ -1,7 +1,7 @@
 package com.artur114.bananalib.mc.base;
 
-import com.artur114.bananalib.mc.register.data.ModelRegData;
-import com.artur114.bananalib.mc.register.interf.IHasModel;
+import com.artur114.bananalib.mc.registry.data.ModelRegData;
+import com.artur114.bananalib.mc.registry.interf.IHasModel;
 import net.minecraft.item.Item;
 
 import java.util.Collections;

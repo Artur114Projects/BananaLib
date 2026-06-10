@@ -1,11 +1,11 @@
 package com.artur114.bananalib.mc.base;
 
 import com.artur114.bananalib.mc.base.tileabs.*;
-import com.artur114.bananalib.mc.register.IRegisterBus;
-import com.artur114.bananalib.mc.register.data.ModelRegData;
-import com.artur114.bananalib.mc.register.data.TESRRegData;
-import com.artur114.bananalib.mc.register.data.TileRegData;
-import com.artur114.bananalib.mc.register.interf.*;
+import com.artur114.bananalib.mc.registry.IRegisterBus;
+import com.artur114.bananalib.mc.registry.data.ModelRegData;
+import com.artur114.bananalib.mc.registry.data.TESRRegData;
+import com.artur114.bananalib.mc.registry.data.TileRegData;
+import com.artur114.bananalib.mc.registry.interf.*;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.SoundType;
@@ -14,6 +14,7 @@ import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
+import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -45,8 +46,8 @@ public abstract class BBlockContainerBase<T extends TileEntity> extends BlockCon
     private final boolean isPlaceListener;
     private final boolean isUseListener;
     protected boolean isForCreative = false;
-    private boolean isOpaqueCube = true;
-    private boolean isFullCube = true;
+    protected boolean isOpaqueCube = true;
+    protected boolean isFullCube = true;
     public final @Nullable Item item;
 
     public BBlockContainerBase(String name, Material material, MapColor mapColor, float hardness, float resistance, SoundType soundType) {
@@ -142,6 +143,11 @@ public abstract class BBlockContainerBase<T extends TileEntity> extends BlockCon
     public BBlockContainerBase<T> setForCreative() {
         this.isForCreative = true;
         return this;
+    }
+
+    @Override
+    public @NotNull BBlockBase setCreativeTab(@NotNull CreativeTabs tab) {
+        return (BBlockBase) super.setCreativeTab(tab);
     }
 
     @Override

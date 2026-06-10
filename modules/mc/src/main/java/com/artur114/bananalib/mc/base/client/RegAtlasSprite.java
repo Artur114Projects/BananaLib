@@ -1,6 +1,6 @@
 package com.artur114.bananalib.mc.base.client;
 
-import com.artur114.bananalib.mc.register.interf.IHasAtlasSprite;
+import com.artur114.bananalib.mc.registry.interf.IHasAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.util.ResourceLocation;

@@ -1,6 +1,5 @@
 package com.artur114.bananalib.mc.legacy.math.m3dl.area;
 
-import com.artur114.bananalib.mc.util.EnumRot;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.client.renderer.RenderGlobal;
 import net.minecraft.util.math.BlockPos;

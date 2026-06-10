@@ -1,7 +1,7 @@
 package com.artur114.bananalib.mc.base;
 
-import com.artur114.bananalib.mc.register.data.BiomeRegData;
-import com.artur114.bananalib.mc.register.interf.IHasBiome;
+import com.artur114.bananalib.mc.registry.data.BiomeRegData;
+import com.artur114.bananalib.mc.registry.interf.IHasBiome;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.biome.Biome;
 import net.minecraftforge.common.BiomeDictionary;
@@ -11,9 +11,9 @@ import java.util.Collections;
 import java.util.List;
 
 public class BBiomeBase extends Biome implements IHasBiome {
-    private final BiomeManager.BiomeType biomeType;
-    private final BiomeDictionary.Type[] types;
-    private final int weight;
+    protected final BiomeManager.BiomeType biomeType;
+    protected final BiomeDictionary.Type[] types;
+    protected final int weight;
 
     public BBiomeBase(ResourceLocation name, BiomeProperties properties, IBiomeData data) {
         super(properties);

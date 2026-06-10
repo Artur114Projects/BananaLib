@@ -1,14 +1,15 @@
 package com.artur114.bananalib.mc.base;
 
-import com.artur114.bananalib.mc.register.IRegisterBus;
-import com.artur114.bananalib.mc.register.data.ModelRegData;
-import com.artur114.bananalib.mc.register.interf.IHasModel;
-import com.artur114.bananalib.mc.register.interf.IHasMoreRegisters;
+import com.artur114.bananalib.mc.registry.IRegisterBus;
+import com.artur114.bananalib.mc.registry.data.ModelRegData;
+import com.artur114.bananalib.mc.registry.interf.IHasModel;
+import com.artur114.bananalib.mc.registry.interf.IHasMoreRegisters;
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import org.jetbrains.annotations.NotNull;
@@ -20,8 +21,8 @@ import java.util.Objects;
 
 public abstract class BBlockBase extends Block implements IHasModel, IHasMoreRegisters {
     protected boolean isForCreative = false;
-    private boolean isOpaqueCube = true;
-    private boolean isFullCube = true;
+    protected boolean isOpaqueCube = true;
+    protected boolean isFullCube = true;
     public final @Nullable Item item;
 
     public BBlockBase(String name, Material material, MapColor mapColor, float hardness, float resistance, SoundType soundType) {
@@ -67,6 +68,11 @@ public abstract class BBlockBase extends Block implements IHasModel, IHasMoreReg
     public BBlockBase setForCreative() {
         this.isForCreative = true;
         return this;
+    }
+
+    @Override
+    public @NotNull BBlockBase setCreativeTab(@NotNull CreativeTabs tab) {
+        return (BBlockBase) super.setCreativeTab(tab);
     }
 
     @Override
