@@ -1,4 +1,4 @@
-package com.artur114.bananalib.mc;
+package com.artur114.bananalib.util.graphs;
 
 import java.util.ArrayDeque;
 import java.util.HashSet;

@@ -4,8 +4,10 @@ include ':math'
 include ':mc'
 include ':bme'
 include ':asm'
+include ':util'
 
 project(':mc').projectDir = file('modules/mc')
 project(':math').projectDir = file('modules/math')
 project(':bme').projectDir = file('modules/bme')
 project(':asm').projectDir = file('modules/asm')
+project(':util').projectDir = file('modules/util')
