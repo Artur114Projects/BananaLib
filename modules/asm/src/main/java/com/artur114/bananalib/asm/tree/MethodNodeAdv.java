@@ -1,5 +1,6 @@
 package com.artur114.bananalib.asm.tree;
 
+import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.Type;
 import org.objectweb.asm.commons.Remapper;
 import org.objectweb.asm.tree.*;
@@ -17,7 +18,7 @@ public class MethodNodeAdv extends MethodNode {
     }
 
     public MethodNodeAdv(int access, String name, String descriptor, String signature, String[] exceptions) {
-        super(access, name, descriptor, signature, exceptions);
+        super(Opcodes.ASM5, access, name, descriptor, signature, exceptions);
         super.instructions = this.instructions = new InsnListAdv();
     }
 

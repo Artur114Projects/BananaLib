@@ -104,7 +104,7 @@ public abstract class BBlockContainerBase<T extends TileEntity> extends BlockCon
 
     @Override
     public boolean shouldRegister(Class<?> registerSource) {
-        if (registerSource == TESRRegData.class) {
+        if (registerSource == IHasTileSR.class) {
             return this.tileRender != null;
         }
         return true;
@@ -146,8 +146,8 @@ public abstract class BBlockContainerBase<T extends TileEntity> extends BlockCon
     }
 
     @Override
-    public @NotNull BBlockBase setCreativeTab(@NotNull CreativeTabs tab) {
-        return (BBlockBase) super.setCreativeTab(tab);
+    public @NotNull BBlockContainerBase<T> setCreativeTab(@NotNull CreativeTabs tab) {
+        super.setCreativeTab(tab); return this;
     }
 
     @Override

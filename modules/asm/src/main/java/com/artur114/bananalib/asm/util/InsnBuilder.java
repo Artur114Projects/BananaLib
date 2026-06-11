@@ -10,7 +10,7 @@ import org.objectweb.asm.tree.*;
 import java.util.Collection;
 import java.util.function.Consumer;
 
-public class InsnBuilder implements InsnCodes {
+public class InsnBuilder {
     private InsnListAdv buildHeap = new InsnListAdv();
     private Remapper mapping = null;
 
@@ -107,20 +107,20 @@ public class InsnBuilder implements InsnCodes {
     }
 
     public InsnBuilder invokeStatic(String owner, String name, String desc) {
-        return this.methodInsn(INVOKESTATIC, owner, name, desc, false);
+        return this.methodInsn(InsnCodes.INVOKESTATIC, owner, name, desc, false);
     }
 
     public InsnBuilder invokeVirtual(String owner, String name, String desc, boolean itf) {
-        return this.methodInsn(INVOKEVIRTUAL, owner, name, desc, itf);
+        return this.methodInsn(InsnCodes.INVOKEVIRTUAL, owner, name, desc, itf);
     }
 
     public InsnBuilder invokeSpecial(String owner, String name, String desc) {
-        return this.methodInsn(INVOKESPECIAL, owner, name, desc, false);
+        return this.methodInsn(InsnCodes.INVOKESPECIAL, owner, name, desc, false);
     }
 
     public InsnBuilder ifFalseReturn(int returnOpcode) {
         LabelNode node = new LabelNode();
-        this.then(new JumpInsnNode(IFNE, node));
+        this.then(new JumpInsnNode(InsnCodes.IFNE, node));
         this.insn(returnOpcode);
         this.then(node);
         return this;
@@ -128,7 +128,7 @@ public class InsnBuilder implements InsnCodes {
 
     public InsnBuilder ifTrueReturn(int returnOpcode) {
         LabelNode node = new LabelNode();
-        this.then(new JumpInsnNode(IFEQ, node));
+        this.then(new JumpInsnNode(InsnCodes.IFEQ, node));
         this.insn(returnOpcode);
         this.then(node);
         return this;
@@ -136,7 +136,7 @@ public class InsnBuilder implements InsnCodes {
 
     public InsnBuilder thenIf(Consumer<InsnBuilder> body) {
         LabelNode node = new LabelNode();
-        this.then(new JumpInsnNode(IFEQ, node));
+        this.then(new JumpInsnNode(InsnCodes.IFEQ, node));
         body.accept(this);
         this.then(node);
         return this;
@@ -144,7 +144,7 @@ public class InsnBuilder implements InsnCodes {
 
     public InsnBuilder thenIfNo(Consumer<InsnBuilder> body) {
         LabelNode node = new LabelNode();
-        this.then(new JumpInsnNode(IFNE, node));
+        this.then(new JumpInsnNode(InsnCodes.IFNE, node));
         body.accept(this);
         this.then(node);
         return this;
@@ -170,15 +170,15 @@ public class InsnBuilder implements InsnCodes {
     private VarInsnNode loadVar(char id, int index) {
         switch (id) {
             case 'I':
-                return new VarInsnNode(ILOAD, index);
+                return new VarInsnNode(InsnCodes.ILOAD, index);
             case 'L':
-                return new VarInsnNode(LLOAD, index);
+                return new VarInsnNode(InsnCodes.LLOAD, index);
             case 'F':
-                return new VarInsnNode(FLOAD, index);
+                return new VarInsnNode(InsnCodes.FLOAD, index);
             case 'D':
-                return new VarInsnNode(DLOAD, index);
+                return new VarInsnNode(InsnCodes.DLOAD, index);
             case 'A':
-                return new VarInsnNode(ALOAD, index);
+                return new VarInsnNode(InsnCodes.ALOAD, index);
             default:
                 throw new IllegalArgumentException("Invalid id! id:" + id);
         }

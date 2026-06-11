@@ -75,7 +75,7 @@ public abstract class BBlockTileBase<T extends TileEntity> extends BBlockBase im
 
     @Override
     public boolean shouldRegister(Class<?> registerSource) {
-        if (registerSource == TESRRegData.class) {
+        if (registerSource == IHasTileSR.class) {
             return this.tileRender != null;
         }
         return true;

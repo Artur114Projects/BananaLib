@@ -2,10 +2,11 @@ package com.artur114.bananalib.asm;
 
 import com.artur114.bananalib.asm.tree.ClassNodeAdv;
 import com.artur114.bananalib.asm.util.IASMLogger;
+import com.artur114.bananalib.asm.util.InsnCodes;
 
 import java.io.PrintStream;
 
-public abstract class AbstractASMTransformer implements IASMTransformer {
+public abstract class AbstractASMTransformer implements IASMTransformer, InsnCodes {
     protected final String target;
 
     protected AbstractASMTransformer(String target) {

@@ -2,11 +2,10 @@ package com.artur114.bananalib.asm;
 
 import com.artur114.bananalib.asm.util.IASMLogger;
 
-import java.io.PrintStream;
 import java.util.*;
 import java.util.function.BiConsumer;
 
-public class ASMTransformBuss {
+public class ASMTransformBus {
     private final List<BiConsumer<IASMTransformer, Exception>> downListeners = new ArrayList<>();
     private final List<IASMTransformer> transformers = new ArrayList<>();
 

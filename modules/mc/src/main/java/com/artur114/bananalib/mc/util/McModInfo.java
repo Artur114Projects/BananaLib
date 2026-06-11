@@ -22,7 +22,6 @@ import java.util.Optional;
  */
 public class McModInfo {
     private static final String[] EMPTY_STRING_ARRAY = new String[0];
-    private static final String META_PATH = "assets/%s/mcmod.info";
     private static final JsonParser PARSER = new JsonParser();
 
     /**
@@ -36,7 +35,7 @@ public class McModInfo {
     }
 
     /**
-     * Loads a file from {@code assets/modId/mcmod.info} as json,
+     * Loads a file from {@code /mcmod.info} as json,
      * looks for a JsonObject with key "modid" equal to {@code modId}
      * and builds a new McModInfo instance.
      * @param modId target modId of the array element that will be returned
@@ -44,7 +43,7 @@ public class McModInfo {
      * @see #load(String, String)
      */
     public static Optional<McModInfo> load(String modId) {
-        return load(String.format(META_PATH, modId), modId);
+        return load("/mcmod.info", modId);
     }
 
     /**
@@ -63,13 +62,13 @@ public class McModInfo {
     }
 
     /**
-     * Loads a file from {@code assets/modId/mcmod.info} as json and looks for a JsonObject with a "modid" key equal to {@code modId}
+     * Loads a file from {@code /mcmod.info} as json and looks for a JsonObject with a "modid" key equal to {@code modId}
      * @param modId target modId of the array element that will be returned
      * @return result of method {@link #loadMetaJson(String, String)}
      * @see #loadMetaJson(String, String)
      */
     public static Optional<JsonObject> loadMetaJson(String modId) {
-        return loadMetaJson(String.format(META_PATH, modId), modId);
+        return loadMetaJson("/mcmod.info", modId);
     }
 
     /**

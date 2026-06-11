@@ -12,7 +12,7 @@ import java.util.*;
 
 public final class BananaASM {
     public static ClassNodeAdv createClassNode(byte[] basicClass) {
-        return createClassNode(basicClass, ClassReader.SKIP_FRAMES);
+        return createClassNode(basicClass, 0);
     }
 
     public static ClassNodeAdv createClassNode(byte[] basicClass, int flags) {
