@@ -11,3 +11,10 @@ tasks.register("publishAllToMavenLocal") {
     dependsOn subprojects.collect {it.tasks.named('clean')}
     dependsOn subprojects.collect {it.tasks.named('publishToMavenLocal')}
 }
+
+tasks.register("publishAll") {
+    group = 'publishing'
+    description = 'Publishes all subprojects'
+    dependsOn subprojects.collect {it.tasks.named('clean')}
+    dependsOn subprojects.collect {it.tasks.named('publish')}
+}
