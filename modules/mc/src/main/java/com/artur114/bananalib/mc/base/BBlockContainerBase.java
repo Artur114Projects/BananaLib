@@ -111,7 +111,7 @@ public abstract class BBlockContainerBase<T extends TileEntity> extends BlockCon
     }
 
     protected @Nullable Item createItemBlock() {
-        return new ItemBlock(this).setRegistryName(Objects.requireNonNull(this.getRegistryName()));
+        return new BItemBlockBase(this).setRegistryName(Objects.requireNonNull(this.getRegistryName()));
     }
 
     @NotNull

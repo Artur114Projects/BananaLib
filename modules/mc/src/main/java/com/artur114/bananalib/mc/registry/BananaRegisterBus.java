@@ -233,6 +233,42 @@ public class BananaRegisterBus implements IRegisterBus {
         return object;
     }
 
+    @Override
+    public <T> List<T> entries(Class<T> clazz) {
+        List<RegEntry<T>> entries = this.interfacesMap.findIfHas(clazz);
+
+        if (entries.isEmpty()) {
+            return Collections.emptyList();
+        }
+
+        List<T> list = new ArrayList<>(entries.size());
+        for (RegEntry<T> entry : entries) {
+            list.add(entry.value);
+        }
+
+        return list;
+    }
+
+    @Override
+    public List<SoundEvent> sounds() {
+        return Collections.unmodifiableList(this.soundEvents);
+    }
+
+    @Override
+    public List<Biome> biomes() {
+        return Collections.unmodifiableList(this.biomes);
+    }
+
+    @Override
+    public List<Block> blocks() {
+        return Collections.unmodifiableList(this.blocks);
+    }
+
+    @Override
+    public List<Item> items() {
+        return Collections.unmodifiableList(this.items);
+    }
+
     private void logDoubleReg(Object o) {
         log.warn("Attempt to double register an object {}", o);
     }
@@ -417,6 +453,11 @@ public class BananaRegisterBus implements IRegisterBus {
         @SuppressWarnings("unchecked")
         public <T> List<RegEntry<T>> find(Class<T> clazz) {
             return (List<RegEntry<T>>) (List<?>) this.map.computeIfAbsent(clazz, (k) -> new ArrayList<>());
+        }
+
+        @SuppressWarnings("unchecked")
+        public <T> List<RegEntry<T>> findIfHas(Class<T> clazz) {
+            return (List<RegEntry<T>>) (List<?>) this.map.getOrDefault(clazz, Collections.emptyList());
         }
     }
 

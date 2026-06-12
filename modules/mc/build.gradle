@@ -17,6 +17,7 @@ version = mcVersion
 
 repositories {
     maven { url = 'https://maven.minecraftforge.net/' }
+    mavenCentral()
 }
 
 minecraft {

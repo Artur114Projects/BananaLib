@@ -46,7 +46,7 @@ public abstract class BBlockBase extends Block implements IHasModel, IHasMoreReg
     }
 
     protected @Nullable Item createItemBlock() {
-        return new ItemBlock(this).setRegistryName(Objects.requireNonNull(this.getRegistryName()));
+        return new BItemBlockBase(this).setRegistryName(Objects.requireNonNull(this.getRegistryName()));
     }
 
     public BBlockBase setNotFillAndOpaqueCube() {
