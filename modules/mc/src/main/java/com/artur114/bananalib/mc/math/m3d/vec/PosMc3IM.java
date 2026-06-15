@@ -15,9 +15,11 @@ import com.artur114.bananalib.math.internal.ThreadLocalPool;
 import com.artur114.bananalib.math.m2d.vec.*;
 import com.artur114.bananalib.math.m3d.box.Box3I;
 import com.artur114.bananalib.math.m3d.vec.*;
+import com.artur114.bananalib.mc.math.m2d.vec.PosMc2I;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.Vec3i;
 import org.jetbrains.annotations.NotNull;
@@ -187,6 +189,26 @@ public class PosMc3IM extends BlockPos implements IPosMc3IM {
     @Override
     public PosMc3IM set(IVec2IC vec) {
         return this.set(vec.x(), vec.y(), 0);
+    }
+
+    @Override
+    public IPosMc3IM setChunk(int x, int z) {
+        return this.set(x << 4, this.y, z << 4);
+    }
+
+    @Override
+    public IPosMc3IM setChunk(IVec2IC vec) {
+        return this.set(vec.x() << 4, this.y, vec.y() << 4);
+    }
+
+    @Override
+    public IPosMc3IM setChunk(ChunkPos pos) {
+        return this.set(pos.x << 4, this.y, pos.z << 4);
+    }
+
+    @Override
+    public IPosMc3IM setChunk(PosMc2I pos) {
+        return this.set(pos.x << 4, this.y, pos.z << 4);
     }
 
     public PosMc3IM set(Entity source) {

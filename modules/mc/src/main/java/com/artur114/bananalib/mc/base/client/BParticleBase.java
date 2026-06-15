@@ -19,6 +19,10 @@ public class BParticleBase extends Particle {
         this.sprite = sprite;
     }
 
+    protected void setSprite(RegAtlasSprite... sprite) {
+        this.sprite = RegAtlasSprite.toTextures(sprite);
+    }
+
     protected TextureAtlasSprite[] sprite() {
         return this.sprite;
     }

@@ -1,0 +1,3 @@
+moduleName = bananalib-groovy-mc
+moduleVersion = 1.0.0
+extensionClasses = com.artur114.bananalib.math.m3d.vec.Vec3DExtensions, com.artur114.bananalib.math.m3d.vec.Vec3IExtensions

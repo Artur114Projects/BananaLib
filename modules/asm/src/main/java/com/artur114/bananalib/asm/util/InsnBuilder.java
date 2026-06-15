@@ -118,6 +118,12 @@ public class InsnBuilder {
         return this.methodInsn(InsnCodes.INVOKESPECIAL, owner, name, desc, false);
     }
 
+    public InsnBuilder returnBoolean(boolean ret) {
+        this.insn(ret ? InsnCodes.ICONST_1 : InsnCodes.ICONST_0);
+        this.insn(InsnCodes.IRETURN);
+        return this;
+    }
+
     public InsnBuilder ifFalseReturn(int returnOpcode) {
         LabelNode node = new LabelNode();
         this.then(new JumpInsnNode(InsnCodes.IFNE, node));

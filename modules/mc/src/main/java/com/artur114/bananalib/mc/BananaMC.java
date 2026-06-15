@@ -3,6 +3,7 @@ package com.artur114.bananalib.mc;
 import com.artur114.bananalib.math.core.m2d.vec.IVec2IC;
 import com.artur114.bananalib.math.m2d.box.IBox2I;
 import com.artur114.bananalib.math.m2d.vec.IVec2I;
+import com.artur114.bananalib.math.m3d.box.Box3DM;
 import com.artur114.bananalib.mc.math.m2d.vec.IPosMc2I;
 import com.artur114.bananalib.mc.math.m2d.vec.PosMc2I;
 import com.artur114.bananalib.mc.math.m3d.box.AbbMc3D;
@@ -77,6 +78,10 @@ public class BananaMC {
         return new AbbMc3D(x / 16.0F, y / 16.0F, z / 16.0F, x1 / 16.0F, y1 / 16.0F, z1 / 16.0F);
     }
 
+    public static Box3DM createBox3DMFromPixels(int x, int y, int z, int x1, int y1, int z1) {
+        return new Box3DM(x / 16.0F, y / 16.0F, z / 16.0F, x1 / 16.0F, y1 / 16.0F, z1 / 16.0F);
+    }
+
     public static long chunkPosAsLong(ChunkPos chunkPos) {
         return (long) chunkPos.x & 4294967295L | ((long) chunkPos.z & 4294967295L) << 32;
     }
@@ -131,6 +136,10 @@ public class BananaMC {
         return false;
     }
 
+    public static int findHighestBlock(World world, BlockPos pos) {
+        return findHighestBlock(world, pos.getX(), pos.getZ(), false);
+    }
+
     public static int findHighestBlock(World world, BlockPos pos, boolean ignoreLiquids) {
         return findHighestBlock(world, pos.getX(), pos.getZ(), ignoreLiquids);
     }
@@ -145,6 +154,10 @@ public class BananaMC {
 
     public static int findHighestBlock(World world, BlockPos pos, Predicate<IBlockState> ignore, Block... ignoringBlocks) {
         return findHighestBlock(world, pos.getX(), pos.getZ(), ignore, ignoringBlocks);
+    }
+
+    public static int findHighestBlock(World world, IVec2IC pos) {
+        return findHighestBlock(world, pos.x(), pos.y(), false);
     }
 
     public static int findHighestBlock(World world, IVec2IC pos, boolean ignoreLiquids) {

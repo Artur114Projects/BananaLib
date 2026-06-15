@@ -5,9 +5,11 @@ include ':mc'
 include ':bme'
 include ':asm'
 include ':util'
+include ':math-groovy'
 
 project(':mc').projectDir = file('modules/mc')
 project(':math').projectDir = file('modules/math')
 project(':bme').projectDir = file('modules/bme')
 project(':asm').projectDir = file('modules/asm')
 project(':util').projectDir = file('modules/util')
+project(':math-groovy').projectDir = file('modules/math-groovy')
