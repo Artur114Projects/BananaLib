@@ -1197,6 +1197,11 @@ public class PosMc3IM extends BlockPos implements IPosMc3IM {
     }
 
     @Override
+    public IVec3IM abs() {
+        return this.set(Math.abs(this.x), Math.abs(this.y), Math.abs(this.z));
+    }
+
+    @Override
     public IVec3DM normalize() {
         double l = Math.sqrt(this.x * this.x + this.y * this.y + this.z * this.z);
         return l < 1.0E-4D ? new Vec3DM() : new Vec3DM(this.x / l, this.y / l, this.z / l);

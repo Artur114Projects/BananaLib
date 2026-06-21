@@ -19,6 +19,13 @@ public class OpValue<T> {
         return value;
     }
 
+    public T getOr(T val) {
+        if (this.value == null) {
+            return val;
+        }
+        return value;
+    }
+
     public boolean isPresent() {
         return this.value != null;
     }

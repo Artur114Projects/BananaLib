@@ -841,6 +841,11 @@ public class Vec3D implements IVec3D {
     }
 
     @Override
+    public IVec3D abs() {
+        return new Vec3D(Math.abs(this.x), Math.abs(this.y), Math.abs(this.z));
+    }
+
+    @Override
     public IVec3D normalize() {
         double l = Math.sqrt(this.x * this.x + this.y * this.y + this.z * this.z);
         return l < BananaMath.DOUBLE_EPS ? ZERO : new Vec3D(this.x / l, this.y / l, this.z / l);

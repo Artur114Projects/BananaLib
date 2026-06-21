@@ -7,45 +7,40 @@ import org.objectweb.asm.tree.MethodNode;
 
 public class MethodPattern {
     public static final MethodPattern INSTANCE = new MethodPattern();
-    private final OpValue<Remapper> remapper;
     private final OpValue<String> name;
     private final OpValue<String> desc;
 
     public MethodPattern() {
-        this.remapper = OpValue.empty();
         this.name = OpValue.empty();
         this.desc = OpValue.empty();
     }
 
-    private MethodPattern(OpValue<Remapper> remapper, OpValue<String> name, OpValue<String> desc) {
-        this.remapper = remapper;
+    private MethodPattern(OpValue<String> name, OpValue<String> desc) {
         this.name = name;
         this.desc = desc;
     }
 
     public MethodPattern with(String name, String desc) {
-        return new MethodPattern(this.remapper, OpValue.of(name), OpValue.of(desc));
+        return new MethodPattern(OpValue.of(name), OpValue.of(desc));
     }
 
-    public MethodPattern withRemapper(Remapper remapper) {
-        return new MethodPattern(OpValue.of(remapper), this.name, this.desc);
+    public MethodPattern remap(Remapper remapper, String owner) {
+        return new MethodPattern(
+            this.name.isPresent() ? OpValue.of(remapper.mapMethodName(owner, this.name.get(), this.desc.getOr(""))) : OpValue.empty(),
+            this.desc.isPresent() ? OpValue.of(remapper.mapDesc(this.desc.get())) : OpValue.empty()
+        );
     }
 
     public MethodPattern withName(String name) {
-        return new MethodPattern(this.remapper, OpValue.of(name), this.desc);
+        return new MethodPattern(OpValue.of(name), this.desc);
     }
 
     public MethodPattern withDesc(String desc) {
-        return new MethodPattern(this.remapper, this.name, OpValue.of(desc));
+        return new MethodPattern(this.name, OpValue.of(desc));
     }
 
     public boolean matches(ClassNode clazz, MethodNode method) {
-        if (this.remapper.isPresent()) {
-            Remapper remapper = this.remapper.get();
-            return this.name.ifPEquals(remapper.mapMethodName(clazz.name, method.name, method.desc)) && this.desc.ifPEquals(remapper.mapDesc(method.desc));
-        } else {
-            return this.name.ifPEquals(method.name) && this.desc.ifPEquals(method.desc);
-        }
+        return this.name.ifPEquals(method.name) && this.desc.ifPEquals(method.desc);
     }
 
     public static MethodPattern from(String name, String desc) {

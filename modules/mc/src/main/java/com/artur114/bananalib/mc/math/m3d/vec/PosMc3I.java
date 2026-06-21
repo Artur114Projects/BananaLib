@@ -909,6 +909,11 @@ public class PosMc3I extends BlockPos implements IPosMc3I {
     }
 
     @Override
+    public IVec3I abs() {
+        return new PosMc3I(Math.abs(this.getX()), Math.abs(this.getY()), Math.abs(this.getZ()));
+    }
+
+    @Override
     public IVecMc3D normalize() {
         double l = Math.sqrt(this.getX() * this.getX() + this.getY() * this.getY() + this.getZ() * this.getZ());
         return l < BananaMath.DOUBLE_EPS ? VecMc3D.ZERO : new VecMc3D(this.getX() / l, this.getY() / l, this.getZ() / l);

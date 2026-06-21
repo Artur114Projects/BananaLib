@@ -91,6 +91,14 @@ public class Box3DM implements IBox3DM {
         this(box.minX(), box.minY(), 0, box.maxX(), box.maxY(), 0.0D);
     }
 
+    public Box3DM(IVec3DC boxFrom, IVec3DC boxTo) {
+        this(boxFrom.x(), boxFrom.y(), boxFrom.z(), boxTo.x(), boxTo.y(), boxTo.z());
+    }
+
+    public Box3DM(IVec3IC boxFrom, IVec3IC boxTo) {
+        this(boxFrom.x(), boxFrom.y(), boxFrom.z(), boxTo.x(), boxTo.y(), boxTo.z());
+    }
+
     @Override
     public IBox3DM set(double[] box) {
         if (box.length < 6) {

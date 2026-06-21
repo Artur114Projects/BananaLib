@@ -160,6 +160,8 @@ public interface IVec3I extends IVec3IC {
     IVec3I clamp(int minX, int minY, int minZ, int maxX, int maxY, int maxZ);
     IVec3I clamp(double minX, double minY, double minZ, double maxX, double maxY, double maxZ);
     @Contract("-> new")
+    IVec3I abs();
+    @Contract("-> new")
     IVec3D normalize();
     @Contract("-> new")
     IVec3IM toMutable();

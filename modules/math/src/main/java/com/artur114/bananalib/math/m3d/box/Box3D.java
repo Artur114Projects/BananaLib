@@ -68,6 +68,14 @@ public class Box3D implements IBox3D {
         this(box.minX(), box.minY(), 0, box.maxX(), box.maxY(), 0.0D);
     }
 
+    public Box3D(IVec3DC boxFrom, IVec3DC boxTo) {
+        this(boxFrom.x(), boxFrom.y(), boxFrom.z(), boxTo.x(), boxTo.y(), boxTo.z());
+    }
+
+    public Box3D(IVec3IC boxFrom, IVec3IC boxTo) {
+        this(boxFrom.x(), boxFrom.y(), boxFrom.z(), boxTo.x(), boxTo.y(), boxTo.z());
+    }
+
     @Override
     public double minX() {
         return this.minX;

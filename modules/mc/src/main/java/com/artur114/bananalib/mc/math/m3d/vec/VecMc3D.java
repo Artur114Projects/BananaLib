@@ -888,6 +888,11 @@ public class VecMc3D extends Vec3d implements IVecMc3D {
     }
 
     @Override
+    public IVec3D abs() {
+        return new VecMc3D(Math.abs(this.x), Math.abs(this.y), Math.abs(this.z));
+    }
+
+    @Override
     public @NotNull VecMc3D normalize() {
         double l = Math.sqrt(this.x * this.x + this.y * this.y + this.z * this.z);
         return l < BananaMath.DOUBLE_EPS ? ZERO : new VecMc3D(this.x / l, this.y / l, this.z / l);

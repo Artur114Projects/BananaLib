@@ -91,6 +91,14 @@ public class Box3IM implements IBox3IM {
         this(box.minX(), box.minY(), 0, box.maxX(), box.maxY(), 0.0D);
     }
 
+    public Box3IM(IVec3DC boxFrom, IVec3DC boxTo) {
+        this(boxFrom.x(), boxFrom.y(), boxFrom.z(), boxTo.x(), boxTo.y(), boxTo.z());
+    }
+
+    public Box3IM(IVec3IC boxFrom, IVec3IC boxTo) {
+        this(boxFrom.x(), boxFrom.y(), boxFrom.z(), boxTo.x(), boxTo.y(), boxTo.z());
+    }
+
     @Override
     public IBox3IM set(int[] box) {
         if (box.length < 6) {

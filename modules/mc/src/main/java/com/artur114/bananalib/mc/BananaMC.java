@@ -1,30 +1,37 @@
 package com.artur114.bananalib.mc;
 
+import com.artur114.bananalib.math.BananaMath;
 import com.artur114.bananalib.math.core.m2d.vec.IVec2IC;
 import com.artur114.bananalib.math.m2d.box.IBox2I;
 import com.artur114.bananalib.math.m2d.vec.IVec2I;
 import com.artur114.bananalib.math.m3d.box.Box3DM;
+import com.artur114.bananalib.math.m3d.vec.IVec3DM;
+import com.artur114.bananalib.math.m3d.vec.Vec3DM;
+import com.artur114.bananalib.math.m3d.vec.Vec3IM;
 import com.artur114.bananalib.mc.math.m2d.vec.IPosMc2I;
 import com.artur114.bananalib.mc.math.m2d.vec.PosMc2I;
 import com.artur114.bananalib.mc.math.m3d.box.AbbMc3D;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.WorldClient;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.ChunkPos;
+import net.minecraft.util.math.*;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.storage.ExtendedBlockStorage;
 import net.minecraftforge.common.BiomeDictionary;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Predicate;
 
-public class BananaMC {
+public final class BananaMC {
     public static boolean isChunkLoaded(World world, IVec2I pos) {
         return isChunkLoaded(world, pos.x(), pos.y());
     }
@@ -309,5 +316,47 @@ public class BananaMC {
             }
         }
         return false;
+    }
+
+    // TODO переделать
+    public static boolean isInView(BlockPos pos, Entity entity, float fovAngleDeg, double maxDistance) {
+        Vec3IM vecI = Vec3IM.obtain();
+        Vec3DM vecPos = Vec3DM.obtain();
+        Vec3DM vecLook = Vec3DM.obtain();
+        try {
+            vecI.set(pos.getX(), pos.getY(), pos.getZ());
+            vecPos.set(entity.posX, entity.posY + entity.getEyeHeight(), entity.posZ);
+            Vec3d look = entity.getLookVec();
+            vecLook.set(look.x, look.y, look.z);
+            return BananaMath.isInView(vecI, vecPos, vecLook, fovAngleDeg, maxDistance);
+        } finally {
+            Vec3DM.release(vecLook);
+            Vec3DM.release(vecPos);
+            Vec3IM.release(vecI);
+        }
+    }
+
+    @SideOnly(Side.CLIENT)
+    public static boolean isInPlayerView(BlockPos pos, double maxDistance) {
+        Vec3DM vec = Vec3DM.obtain();
+        EntityPlayer entity = Minecraft.getMinecraft().player;
+        IVec3DM toTarget = vec.set(pos.getX(), pos.getY(), pos.getZ());
+        toTarget.subtract(entity.posX, entity.posY + entity.getEyeHeight(), entity.posZ);
+        if (toTarget.lengthSq() > maxDistance * maxDistance) {
+            Vec3DM.release(vec);
+            return false;
+        }
+        toTarget.normalize();
+        float f = MathHelper.cos(-entity.rotationYaw * ((float)Math.PI / 180F) - (float)Math.PI);
+        float f1 = MathHelper.sin(-entity.rotationYaw * ((float)Math.PI / 180F) - (float)Math.PI);
+        float f2 = -MathHelper.cos(-entity.rotationPitch * ((float)Math.PI / 180F));
+        float f3 = MathHelper.sin(-entity.rotationPitch * ((float)Math.PI / 180F));
+        Vec3DM cameraLook = Vec3DM.obtain();
+        cameraLook.set(f1 * f2, f3, f * f2);
+        double dot = cameraLook.dot(toTarget.x(), toTarget.y(), toTarget.z());
+        double minDot = BananaMath.cos(Math.toRadians(Minecraft.getMinecraft().gameSettings.fovSetting));
+        Vec3DM.release(vec);
+        Vec3DM.release(cameraLook);
+        return dot >= minDot;
     }
 }

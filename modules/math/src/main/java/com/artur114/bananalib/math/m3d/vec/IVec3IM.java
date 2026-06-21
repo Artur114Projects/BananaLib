@@ -127,6 +127,8 @@ public interface IVec3IM extends IVec3I {
     IVec3IM clamp(int minX, int minY, int minZ, int maxX, int maxY, int maxZ);
     IVec3IM clamp(double minX, double minY, double minZ, double maxX, double maxY, double maxZ);
     @Contract("-> this")
+    IVec3IM abs();
+    @Contract("-> this")
     IVec3IM toMutable();
     @Contract("-> new")
     IVec3I toImmutable();

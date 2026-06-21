@@ -126,6 +126,8 @@ public interface IVec3DM extends IVec3D {
     IVec3DM clamp(double x, double y, double z);
     IVec3DM clamp(int minX, int minY, int minZ, int maxX, int maxY, int maxZ);
     IVec3DM clamp(double minX, double minY, double minZ, double maxX, double maxY, double maxZ);
+    @Contract("-> this")
+    IVec3DM abs();
     @Contract("-> new")
     IVec3D toImmutable();
     @Contract("-> this")

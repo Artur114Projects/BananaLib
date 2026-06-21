@@ -1045,6 +1045,11 @@ public class Vec3DM implements IVec3DM {
     }
 
     @Override
+    public IVec3DM abs() {
+        return this.set(Math.abs(this.x), Math.abs(this.y), Math.abs(this.z));
+    }
+
+    @Override
     public IVec3DM normalize() {
         double l = Math.sqrt(this.x * this.x + this.y * this.y + this.z * this.z);
         return l < BananaMath.DOUBLE_EPS ? this.setZero() : this.set(this.x / l, this.y / l, this.z / l);

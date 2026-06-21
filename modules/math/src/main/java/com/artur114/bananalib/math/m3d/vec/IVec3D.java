@@ -160,6 +160,8 @@ public interface IVec3D extends IVec3DC {
     IVec3D clamp(int minX, int minY, int minZ, int maxX, int maxY, int maxZ);
     IVec3D clamp(double minX, double minY, double minZ, double maxX, double maxY, double maxZ);
     @Contract("-> new")
+    IVec3D abs();
+    @Contract("-> new")
     IVec3D normalize();
     @Contract("-> new")
     IVec3DM toMutable();
