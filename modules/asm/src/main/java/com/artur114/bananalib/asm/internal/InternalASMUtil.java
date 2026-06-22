@@ -45,6 +45,11 @@ public class InternalASMUtil {
             }
 
             if (flag) {
+                if (next != null) {
+                    next = next.getPrevious();
+                } else {
+                    next = parentList.getLast();
+                }
                 if (patternIndex != -1) {
                     if (patternIndex == currentId) {
                         ret.add(new InsnInterval(parentList, node, next)); return ret;

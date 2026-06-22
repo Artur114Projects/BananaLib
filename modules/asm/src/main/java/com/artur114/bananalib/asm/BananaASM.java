@@ -11,23 +11,22 @@ import org.objectweb.asm.tree.LabelNode;
 import java.util.*;
 
 public final class BananaASM {
-    public static ClassNodeAdv createClassNode(byte[] basicClass) {
-        return createClassNode(basicClass, 0);
+    public static ClassNodeAdv createClassNode(ClassReader classReader) {
+        return createClassNode(classReader, 0);
     }
 
-    public static ClassNodeAdv createClassNode(byte[] basicClass, int flags) {
-        ClassReader classReader = new ClassReader(basicClass);
+    public static ClassNodeAdv createClassNode(ClassReader classReader, int flags) {
         ClassNodeAdv clazz = new ClassNodeAdv();
         classReader.accept(clazz, flags);
         return clazz;
     }
 
-    public static byte[] bakeBytecode(ClassNode cn) {
-        return bakeBytecode(cn, ClassWriter.COMPUTE_FRAMES);
+    public static byte[] bakeBytecode(ClassNode cn, ClassReader cr) {
+        return bakeBytecode(cn, cr, ClassWriter.COMPUTE_FRAMES);
     }
 
-    public static byte[] bakeBytecode(ClassNode cn, int flags) {
-        ClassWriter writer = new ClassWriter(flags);
+    public static byte[] bakeBytecode(ClassNode cn, ClassReader cr, int flags) {
+        ClassWriter writer = new ClassWriter(cr, flags);
         cn.accept(writer);
         return writer.toByteArray();
     }
