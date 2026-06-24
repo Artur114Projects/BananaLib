@@ -19,7 +19,7 @@ publishing {
             pom.withXml {
                 def depNodes = asNode().appendNode('dependencies')
                 configurations.implementation.allDependencies.each { dep ->
-                    if (dep.group != null && dep.version != null && dep.name != "unspecified") {
+                    if (dep.group != null && dep.group != 'net.minecraftforge' && dep.version != null && dep.name != "unspecified") {
                         def depNode = depNodes.appendNode('dependency')
                         depNode.appendNode('groupId', dep.group)
                         depNode.appendNode('artifactId', dep.name)

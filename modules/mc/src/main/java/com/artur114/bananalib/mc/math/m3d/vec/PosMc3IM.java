@@ -15,13 +15,12 @@ import com.artur114.bananalib.math.internal.ThreadLocalPool;
 import com.artur114.bananalib.math.m2d.vec.*;
 import com.artur114.bananalib.math.m3d.box.Box3I;
 import com.artur114.bananalib.math.m3d.vec.*;
+import com.artur114.bananalib.mc.math.EnumRot;
 import com.artur114.bananalib.mc.math.m2d.vec.PosMc2I;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.ChunkPos;
-import net.minecraft.util.math.Vec3d;
-import net.minecraft.util.math.Vec3i;
+import net.minecraft.util.Rotation;
+import net.minecraft.util.math.*;
 import org.jetbrains.annotations.NotNull;
 
 public class PosMc3IM extends BlockPos implements IPosMc3IM {
@@ -41,6 +40,17 @@ public class PosMc3IM extends BlockPos implements IPosMc3IM {
     public static void release(PosMc3IM vec) {
         pool.release(vec);
     }
+
+    /*------------------MC-BIT-FIELDS-START------------------*/
+    public static final int NUM_X_BITS = 1 + MathHelper.log2(MathHelper.smallestEncompassingPowerOfTwo(30000000));
+    public static final int NUM_Z_BITS = NUM_X_BITS;
+    public static final int NUM_Y_BITS = 64 - NUM_X_BITS - NUM_Z_BITS;
+    public static final int Y_SHIFT = NUM_Z_BITS;
+    public static final int X_SHIFT = Y_SHIFT + NUM_Y_BITS;
+    public static final long X_MASK = (1L << NUM_X_BITS) - 1L;
+    public static final long Y_MASK = (1L << NUM_Y_BITS) - 1L;
+    public static final long Z_MASK = (1L << NUM_Z_BITS) - 1L;
+    /*------------------MC-BIT-FIELDS-END------------------*/
 
     public static final Box3I CHUNK_BOUND = new Box3I(0, 0, 0, 16, 256, 16);
     public static final Box3I EBS_BOUND = new Box3I(0, 0, 0, 16, 16, 16);
@@ -124,6 +134,13 @@ public class PosMc3IM extends BlockPos implements IPosMc3IM {
         this(source.posX, source.posY, source.posZ);
     }
 
+    public PosMc3IM set(long serialized) {
+        int x = (int) (serialized << 64 - X_SHIFT - NUM_X_BITS >> 64 - NUM_X_BITS);
+        int y = (int) (serialized << 64 - NUM_X_BITS - NUM_Y_BITS >> 64 - NUM_Y_BITS);
+        int z = (int) (serialized << 64 - NUM_X_BITS >> 64 - NUM_X_BITS);
+        return this.set(x, y, z);
+    }
+
     @Override
     public PosMc3IM set(int[] pos) {
         if (pos.length < 3) {
@@ -192,22 +209,22 @@ public class PosMc3IM extends BlockPos implements IPosMc3IM {
     }
 
     @Override
-    public IPosMc3IM setChunk(int x, int z) {
+    public PosMc3IM setChunk(int x, int z) {
         return this.set(x << 4, this.y, z << 4);
     }
 
     @Override
-    public IPosMc3IM setChunk(IVec2IC vec) {
+    public PosMc3IM setChunk(IVec2IC vec) {
         return this.set(vec.x() << 4, this.y, vec.y() << 4);
     }
 
     @Override
-    public IPosMc3IM setChunk(ChunkPos pos) {
+    public PosMc3IM setChunk(ChunkPos pos) {
         return this.set(pos.x << 4, this.y, pos.z << 4);
     }
 
     @Override
-    public IPosMc3IM setChunk(PosMc2I pos) {
+    public PosMc3IM setChunk(PosMc2I pos) {
         return this.set(pos.x << 4, this.y, pos.z << 4);
     }
 
@@ -584,6 +601,84 @@ public class PosMc3IM extends BlockPos implements IPosMc3IM {
     public @NotNull PosMc3IM up(int n) {
         this.y += n;
         return this;
+    }
+
+    @Override
+    public @NotNull PosMc3IM down() {
+        return this.down(1);
+    }
+
+    @Override
+    public @NotNull PosMc3IM down(int n) {
+        this.y -= n;
+        return this;
+    }
+
+    @Override
+    public @NotNull PosMc3IM north() {
+        return this.north(1);
+    }
+
+    @Override
+    public @NotNull PosMc3IM north(int n) {
+        return this.offset(EnumFacing.NORTH, n);
+    }
+
+    @Override
+    public @NotNull PosMc3IM south() {
+        return this.south(1);
+    }
+
+    @Override
+    public @NotNull PosMc3IM south(int n) {
+        return this.offset(EnumFacing.SOUTH, n);
+    }
+
+    @Override
+    public @NotNull PosMc3IM west() {
+        return this.west(1);
+    }
+
+    @Override
+    public @NotNull PosMc3IM west(int n) {
+        return this.offset(EnumFacing.WEST, n);
+    }
+
+    @Override
+    public @NotNull PosMc3IM east() {
+        return this.east(1);
+    }
+
+    @Override
+    public @NotNull PosMc3IM east(int n) {
+        return this.offset(EnumFacing.EAST, n);
+    }
+
+    @Override
+    public @NotNull PosMc3IM rotate(Rotation rot) {
+        switch (rot) {
+            case CLOCKWISE_90:
+                return this.set(-this.z, this.y, this.x);
+            case CLOCKWISE_180:
+                return this.set(-this.x, this.y, -this.z);
+            case COUNTERCLOCKWISE_90:
+                return this.set(this.z, this.y, -this.x);
+            default:
+                return this;
+        }
+    }
+
+    public PosMc3IM rotate(EnumRot rot) {
+        switch (rot) {
+            case C90:
+                return this.set(-this.z, this.y, this.x);
+            case C180:
+                return this.set(-this.x, this.y, -this.z);
+            case C270:
+                return this.set(this.z, this.y, -this.x);
+            default:
+                return this;
+        }
     }
 
     @Override
@@ -1223,6 +1318,11 @@ public class PosMc3IM extends BlockPos implements IPosMc3IM {
     }
 
     @Override
+    public long toLong() {
+        return super.toLong();
+    }
+
+    @Override
     public PosMc3IM copy() {
         PosMc3IM pos = new PosMc3IM((IVec3IC) this);
         if (this.stateStack != null) {
@@ -1247,5 +1347,4 @@ public class PosMc3IM extends BlockPos implements IPosMc3IM {
         }
         return super.equals(obj);
     }
-
 }
