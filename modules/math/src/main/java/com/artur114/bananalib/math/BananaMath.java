@@ -226,4 +226,14 @@ public final class BananaMath {
         Vec3DM.release(vec);
         return dot >= minDot;
     }
+
+    public static float snap(float val, float acc) {
+        if (Math.abs(acc) < FLOAT_EPS) return val;
+        return Math.round(val / acc) * acc;
+    }
+
+    public static double snap(double val, double acc) {
+        if (Math.abs(acc) < DOUBLE_EPS) return val;
+        return Math.round(val / acc) * acc;
+    }
 }

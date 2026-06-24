@@ -18,6 +18,9 @@ import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.*;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
@@ -358,5 +361,33 @@ public final class BananaMC {
         Vec3DM.release(vec);
         Vec3DM.release(cameraLook);
         return dot >= minDot;
+    }
+
+    public static boolean inventoryContains(IInventory inventory, ItemStack stack) {
+        for (int i = 0; i != inventory.getSizeInventory(); i++) {
+            if (ItemStack.areItemStacksEqual(inventory.getStackInSlot(i), stack)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+
+    public static boolean inventoryContains(IInventory inventory, Item item) {
+        for (int i = 0; i != inventory.getSizeInventory(); i++) {
+            if (inventory.getStackInSlot(i).getItem() == item) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public static boolean inventoryContains(IInventory inventory, Predicate<ItemStack> predicate) {
+        for (int i = 0; i != inventory.getSizeInventory(); i++) {
+            if (predicate.test(inventory.getStackInSlot(i))) {
+                return true;
+            }
+        }
+        return false;
     }
 }

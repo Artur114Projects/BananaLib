@@ -4,9 +4,13 @@ import com.artur114.bananalib.math.m3d.vec.Vec3D
 
 class Test {
     static void main(String[] args) {
-        Vec3D vec = new Vec3D(3 ,1 , 2)
-        Vec3D v1 = vec * 2
-        println v1
-        println v1[0]
+        for (i in 0..40) {
+            println ""
+            float v = (float) ((new Random().nextFloat() * 2) - 1)
+
+            println "v ${v}"
+            println "my ${BananaMath.snap(v ,0.5)}"
+            println "no my ${BananaMath.snap1(v ,0.5)}"
+        }
     }
 }
