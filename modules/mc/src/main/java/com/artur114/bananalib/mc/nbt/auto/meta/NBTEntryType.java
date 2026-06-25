@@ -1,6 +1,5 @@
 package com.artur114.bananalib.mc.nbt.auto.meta;
 
-import com.artur114.bananalib.mc.nbt.auto.NBTRef;
 import com.artur114.bananalib.util.func.TriConsumer;
 import net.minecraft.nbt.NBTTagCompound;
 import org.jetbrains.annotations.Nullable;
@@ -12,6 +11,7 @@ import java.util.function.BiFunction;
 import java.util.function.Predicate;
 
 public enum NBTEntryType {
+    TAG_COMPOUND(NBTTagCompound.class, NBTTagCompound::setTag, NBTTagCompound::getCompoundTag),
     BYTE_ARR(byte[].class, NBTTagCompound::setByteArray, NBTTagCompound::getByteArray),
     INT_ARR(int[].class, NBTTagCompound::setIntArray, NBTTagCompound::getIntArray),
     BOOLEAN(boolean.class, NBTTagCompound::setBoolean, NBTTagCompound::getBoolean),

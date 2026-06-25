@@ -26,6 +26,9 @@ public class AutoNBTMetaBuilder {
             if (!checkMods(field)) {
                 continue;
             }
+            if (field.isAnnotationPresent(AutoNBTIgnore.class)) {
+                continue;
+            }
             if (!isContainer && !field.isAnnotationPresent(AutoNBTEntry.class)) {
                 continue;
             }
