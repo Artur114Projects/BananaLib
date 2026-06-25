@@ -26,6 +26,7 @@ minecraft {
 
 dependencies {
     implementation project(':math')
+    implementation project(':util')
     testImplementation project(':math')
     minecraft 'net.minecraftforge:forge:1.12.2-14.23.5.2859'
 }
