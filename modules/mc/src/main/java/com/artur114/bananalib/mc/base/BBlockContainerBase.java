@@ -30,15 +30,17 @@ import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
+import java.util.function.Supplier;
 
 public abstract class BBlockContainerBase<T extends TileEntity> extends BlockContainer implements IHasTileEntity, IHasTileSR, IHasModel, IHasMoreRegisters, IOptionalRegister {
-    private TileEntitySpecialRenderer<T> tileRender = null;
     private final boolean isRedstoneConnListener;
     private final boolean isNeighborListener;
     private final boolean isMultiBBProvider;
@@ -76,9 +78,8 @@ public abstract class BBlockContainerBase<T extends TileEntity> extends BlockCon
         this(name, mat.material(), mat.hardness(), mat.resistance(), mat.soundType());
     }
 
-    public void setTileRender(TileEntitySpecialRenderer<T> render) {
-        this.tileRender = render;
-    }
+    @SideOnly(Side.CLIENT)
+    protected @Nullable TileEntitySpecialRenderer<T> createTileRender() {return null;}
 
     @Override
     public TileRegData registerTileData() {
@@ -87,7 +88,7 @@ public abstract class BBlockContainerBase<T extends TileEntity> extends BlockCon
 
     @Override
     public TESRRegData registerTSRData() {
-        return TESRRegData.of(this.tileClass(), this.tileRender);
+        return TESRRegData.of(this.tileClass(), this.createTileRender());
     }
 
     @Override
@@ -105,7 +106,7 @@ public abstract class BBlockContainerBase<T extends TileEntity> extends BlockCon
     @Override
     public boolean shouldRegister(Class<?> registerSource) {
         if (registerSource == IHasTileSR.class) {
-            return this.tileRender != null;
+            return this.createTileRender() != null;
         }
         return true;
     }

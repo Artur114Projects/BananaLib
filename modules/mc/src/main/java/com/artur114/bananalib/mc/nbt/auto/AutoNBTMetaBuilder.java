@@ -11,10 +11,15 @@ import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class AutoNBTMetaBuilder {
-    private static final Map<Class<?>, ClassNBTMeta> cache = new ConcurrentHashMap<>();
+    private static final ConcurrentHashMap<Class<?>, ClassNBTMeta> cache = new ConcurrentHashMap<>();
 
     public static ClassNBTMeta metaFor(Class<?> clazz) {
-        return cache.computeIfAbsent(clazz, AutoNBTMetaBuilder::computeMeta);
+        ClassNBTMeta meta = cache.get(clazz);
+        if (meta == null) {
+            meta = computeMeta(clazz);
+            cache.put(clazz, meta);
+        }
+        return meta;
     }
 
     private static ClassNBTMeta computeMeta(Class<?> clazz) {

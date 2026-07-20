@@ -11,7 +11,6 @@ import net.minecraft.block.SoundType;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
@@ -26,13 +25,15 @@ import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
+import java.util.function.Supplier;
 
 public abstract class BBlockTileBase<T extends TileEntity> extends BBlockBase implements IHasTileEntity, IHasTileSR, IOptionalRegister {
-    protected TileEntitySpecialRenderer<T> tileRender = null;
     protected final boolean isRedstoneConnListener;
     protected final boolean isNeighborListener;
     protected final boolean isMultiBBProvider;
@@ -59,9 +60,8 @@ public abstract class BBlockTileBase<T extends TileEntity> extends BBlockBase im
         this(name, mat.material(), mat.hardness(), mat.resistance(), mat.soundType());
     }
 
-    public void setTileRender(TileEntitySpecialRenderer<T> render) {
-        this.tileRender = render;
-    }
+    @SideOnly(Side.CLIENT)
+    protected @Nullable TileEntitySpecialRenderer<T> createTileRender() {return null;}
 
     @Override
     public TileRegData registerTileData() {
@@ -70,13 +70,13 @@ public abstract class BBlockTileBase<T extends TileEntity> extends BBlockBase im
 
     @Override
     public TESRRegData registerTSRData() {
-        return TESRRegData.of(this.tileClass(), this.tileRender);
+        return TESRRegData.of(this.tileClass(), this.createTileRender());
     }
 
     @Override
     public boolean shouldRegister(Class<?> registerSource) {
         if (registerSource == IHasTileSR.class) {
-            return this.tileRender != null;
+            return this.createTileRender() != null;
         }
         return true;
     }
@@ -103,9 +103,9 @@ public abstract class BBlockTileBase<T extends TileEntity> extends BBlockBase im
 
     @Nullable
     @Override
-    protected RayTraceResult rayTrace(@NotNull BlockPos pos, @NotNull Vec3d start, @NotNull Vec3d end, @NotNull AxisAlignedBB boundingBox) {
+    public RayTraceResult collisionRayTrace(@NotNull IBlockState blockState, @NotNull World worldIn, @NotNull BlockPos pos, @NotNull Vec3d start, @NotNull Vec3d end) {
         if (this.isMultiBBProvider) {
-            TileEntity tile = Minecraft.getMinecraft().world.getTileEntity(pos);
+            TileEntity tile = worldIn.getTileEntity(pos);
             if (this.tileClass().isInstance(tile)) {
                 Vec3d vec3d = start.subtract(pos.getX(), pos.getY(), pos.getZ());
                 Vec3d vec3d1 = end.subtract(pos.getX(), pos.getY(), pos.getZ());
@@ -121,8 +121,7 @@ public abstract class BBlockTileBase<T extends TileEntity> extends BBlockBase im
             }
         }
 
-        return super.rayTrace(pos, start, end, boundingBox);
-
+        return super.collisionRayTrace(blockState, worldIn, pos, start, end);
     }
 
     @Override

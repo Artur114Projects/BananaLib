@@ -328,11 +328,23 @@ public class BananaRegisterBus implements IRegisterBus {
     }
 
     private void onItemRegister(RegistryEvent.Register<Item> event) {
-        event.getRegistry().registerAll(this.items.toArray(new Item[0]));
+        for (Item item : this.items) {
+            if (item instanceof IOptionalRegister) {
+                if (!((IOptionalRegister) item).shouldRegister(Item.class)) continue;
+            }
+
+            event.getRegistry().register(item);
+        }
     }
 
     private void onBlockRegister(RegistryEvent.Register<Block> event) {
-        event.getRegistry().registerAll(this.blocks.toArray(new Block[0]));
+        for (Block block : this.blocks) {
+            if (block instanceof IOptionalRegister) {
+                if (!((IOptionalRegister) block).shouldRegister(Block.class)) continue;
+            }
+
+            event.getRegistry().register(block);
+        }
     }
 
     @SideOnly(Side.CLIENT)
@@ -430,9 +442,11 @@ public class BananaRegisterBus implements IRegisterBus {
 
     public void registerSounds(RegistryEvent.Register<SoundEvent> e) {
         for (SoundEvent soundEvent : this.soundEvents) {
-            if (soundEvent != null) {
-                e.getRegistry().register(soundEvent);
+            if (soundEvent instanceof IOptionalRegister) {
+                if (!((IOptionalRegister) soundEvent).shouldRegister(Block.class)) continue;
             }
+
+            e.getRegistry().register(soundEvent);
         }
     }
 
