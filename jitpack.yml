@@ -1,11 +1,5 @@
 jdk:
   - openjdk8
 
-before_install:
-  - chmod +x ./gradlew
-
-install:
-  - ./gradlew --no-daemon --no-parallel -Dorg.gradle.jvmargs="-Xmx3g" --refresh-dependencies setupCIWorkspace --stacktrace
-
 script:
-  - ./gradlew --no-daemon --no-parallel -Dorg.gradle.jvmargs="-Xmx3g" build publishAllToMavenLocal -x test --stacktrace
+  - ./gradlew --no-daemon --no-parallel -Dorg.gradle.jvmargs="-Xmx3g" setupCIWorkspace build publishAllToMavenLocal -x test --stacktrace
