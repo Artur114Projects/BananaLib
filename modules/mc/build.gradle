@@ -1,16 +1,19 @@
 buildscript {
     repositories {
-        maven { url = 'https://maven.minecraftforge.net/' }
+        mavenCentral()
+        maven {url = "https://maven.minecraftforge.net"}
     }
     dependencies {
-        classpath 'net.minecraftforge.gradle:ForgeGradle:3.+'
+        classpath("com.anatawa12.forge:ForgeGradle:2.3-1.0.+") {
+            changing = true
+        }
     }
 }
 plugins {
     id 'maven-publish'
     id 'java-library'
 }
-apply plugin: 'net.minecraftforge.gradle'
+apply plugin: 'net.minecraftforge.gradle.forge'
 
 group = 'com.artur114.bananalib'
 version = mcVersion
@@ -21,14 +24,14 @@ repositories {
 }
 
 minecraft {
-    mappings channel: 'snapshot', version: '20171003-1.12'
+    version = "1.12.2-14.23.5.2847"
+    mappings = "snapshot_20171003"
 }
 
 dependencies {
     implementation project(':math')
     implementation project(':util')
     testImplementation project(':math')
-    minecraft 'net.minecraftforge:forge:1.12.2-14.23.5.2859'
 }
 
 apply from: rootProject.file("scripts/base.gradle")
