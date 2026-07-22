@@ -8,4 +8,4 @@ install:
   - ./gradlew --no-daemon --no-parallel -Dorg.gradle.jvmargs="-Xmx3g" --refresh-dependencies setupCIWorkspace --stacktrace
 
 script:
-  - ./gradlew --no-daemon --no-parallel -Dorg.gradle.jvmargs="-Xmx3g" clean assemble publishToMavenLocal -x test
+  - ./gradlew --no-daemon --no-parallel -Dorg.gradle.jvmargs="-Xmx3g" build publishAllToMavenLocal -x test --stacktrace
