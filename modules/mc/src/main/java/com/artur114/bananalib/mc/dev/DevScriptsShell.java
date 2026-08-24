@@ -60,7 +60,7 @@ public class DevScriptsShell {
 
         if (FMLLaunchHandler.isDeobfuscatedEnvironment()) {
             try {
-                Class<? extends IGroovyEngine> engine = (Class<? extends IGroovyEngine>) Class.forName("com.artur114.srptowerdefense.common.util.groovy.GroovyScriptsImpl");
+                Class<? extends IGroovyEngine> engine = (Class<? extends IGroovyEngine>) Class.forName("com.artur114.bananalib.mc.dev.GroovyScriptsImpl");
                 return engine.getDeclaredConstructor().newInstance();
             } catch (Exception e) {
                 log.warn("Failed to load groovy engine, using dummy engine...");
